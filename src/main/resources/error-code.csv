@@ -1,0 +1,42 @@
+# 课程包资源站 — 错误码字典
+# 前后端共享，前端根据 code 做差异化 Toast 提示
+# 格式: code,模块,错误名称,提示消息
+
+# ===== 通用错误 10000-10099 =====
+0,通用,SUCCESS,成功
+10001,通用,PARAM_INVALID,参数校验失败
+10002,通用,RESOURCE_NOT_FOUND,资源不存在
+10003,通用,NOT_LOGIN,请先登录
+10004,通用,NO_PERMISSION,无操作权限
+
+# ===== 用户/登录错误 20000-20099 =====
+20001,用户,WX_CODE_INVALID,微信授权码无效
+20002,用户,WX_LOGIN_FAILED,微信登录失败
+20003,用户,TOKEN_EXPIRED,登录已过期
+20004,用户,REFRESH_TOKEN_INVALID,请重新登录
+20005,用户,USER_DISABLED,账号已被禁用
+
+# ===== 课程包错误 30000-30099 =====
+30001,课程包,COURSE_NOT_FOUND,课程包不存在
+30002,课程包,COURSE_OFFLINE,课程包已下架
+30003,课程包,RESOURCE_NOT_FOUND,课程资源不存在
+
+# ===== 视频错误 40000-40099 =====
+40001,视频,VIDEO_NOT_FOUND,视频不存在
+40002,视频,VIDEO_OFFLINE,视频未上架
+
+# ===== AI 对话错误 50000-50099 =====
+50001,AI对话,AI_RATE_LIMIT,提问太频繁，请稍后再试
+50002,AI对话,AI_CALL_FAILED,AI 服务开小差了
+50003,AI对话,AI_CONTEXT_TOO_LONG,对话上下文过长，请开启新对话
+
+# ===== 社区/案例错误 60000-60099 =====
+60001,社区,POST_NOT_FOUND,帖子不存在
+60002,社区,NO_POST_PERMISSION,无发帖权限
+60003,案例,CASE_NOT_FOUND,案例不存在
+
+# ===== 系统错误 90000-90099 =====
+90001,系统,SYSTEM_ERROR,系统繁忙，请稍后重试
+90002,系统,OSS_UPLOAD_FAILED,文件上传失败
+90003,系统,OSS_DOWNLOAD_FAILED,文件下载失败
+90004,系统,REDIS_CONNECTION_FAILED,缓存服务异常
