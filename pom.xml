@@ -34,6 +34,12 @@
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
         <!-- 2. 补充 v2 核心依赖（按需保留原有依赖，新增以下内容） -->
         <!-- Web 基础（原已有，保留） -->
         <dependency>
