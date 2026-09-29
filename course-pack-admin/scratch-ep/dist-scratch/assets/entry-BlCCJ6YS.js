@@ -1,1 +1,0 @@
-import{d as a,E as s,o as n,c as p,w as r,a as c,b as _,e as l,f as m}from"./vendor-Cjn2u7ln.js";const u=a({__name:"Comp",setup(i){return s("hi"),(d,o)=>{const t=_;return n(),p(t,{type:"primary"},{default:r(()=>[...o[0]||(o[0]=[c("按钮",-1)])]),_:1})}}}),e=l(u);e.use(m);e.mount("#app");console.log(e);
