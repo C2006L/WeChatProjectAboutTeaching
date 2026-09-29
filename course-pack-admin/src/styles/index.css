@@ -1,0 +1,401 @@
+/* 伴芽 · 管理端设计 Token（V3 风格修订版）
+ * 对齐 course-pack-docs/01-设计/tokens.md；Japandi + Kawaii 工作台
+ * 语义：燕麦底 Sidebar / 卡片圆角升级 / 衬线仅用于 Logo·H1·StatCard 数字
+ *
+ * V3 变更（Phase A · L1 + L2）：
+ *   L1 新增叶片裁角 token；层次改由描边承担（投影降级）；分隔线归到墨绿低透明
+ *   L2 Element Plus 品牌化集中覆盖，页面模板零改动 */
+
+:root {
+  /* 品牌色 */
+  --brand-primary: #4F8F83;
+  --brand-primary-dark: #3A6E64;
+  --brand-primary-light: #E6F0EE;
+  --brand-secondary: #D99A62;
+  --brand-secondary-light: #F8E9DA;
+  /* V3：墨绿深度阶（收口散落在组件里的 #2F655D / #36524D 字面量） */
+  --brand-deep: #2F655D;             /* 深墨绿：数字与关键强调文字 */
+  --brand-ink: #36524D;              /* 主墨绿：折线主色 / 主角卡底 / 侧栏文字 */
+  --accent-warm: #C08352;            /* 暖橙点缀（每页限 1 处） */
+  /* 功能色（伴芽自有色板，禁用 Ant Design 默认色） */
+  --succ: #5D9B78;
+  --warn: #D99A62;
+  --danger: #C96D68;
+  --info: #8FB7C5;
+  /* 中性色 */
+  --text-primary: #233C36;
+  --text-regular: #4E5969;
+  --text-secondary: #86909C;
+  --text-disabled: #C9CDD4;
+  /* V3：文字补充档（对齐小程序端文字三阶的绿灰 / 弱信息） */
+  --text-muted: #667571;             /* 次级正文（绿灰） */
+  --text-weak: #9AA5A1;              /* 弱信息 / 未激活 */
+
+  /* V3：品牌浅描边与图表坐标轴线 */
+  --border-brand: #CADDDA;           /* 品牌浅绿描边 */
+  --axis-line: rgba(54, 82, 77, 0.24);  /* 图表坐标轴线（墨绿 24%） */
+  --border: rgba(54, 82, 77, 0.14);  /* V3：墨绿低透明描边（替代 V2 暖灰 #E8E3D9） */
+  --border-warm: rgba(54, 82, 77, 0.14);   /* V3：同上，保留 V2 别名供既有引用 */
+  --divider-soft: rgba(54, 82, 77, 0.08);  /* V3：分隔线/网格线专用（规范要求的墨绿 8%） */
+  --card-border: rgba(54, 82, 77, 0.08);   /* V3：看板卡描边（规范要求的墨绿 8%，与分隔线同值） */
+  --bg-page: #F7F6F1;
+  --bg-card: #FFFFFF;
+  --bg-nav: #F7F6F1;
+  --bg-oat: #EDE8DE;                 /* V2：燕麦色（Sidebar/次级卡/标签底/筛选条） */
+  /* V3：柔和状态色（标签底 + 深色字，供 el-tag / 状态徽章引用） */
+  --danger-soft: #F6E7E6;
+  --danger-text: #9E5350;
+  --warn-text: #A2652F;
+  --succ-soft: #E4EFE9;              /* V3：成功 / 成长档淡底 */
+  --info-soft: #EAF2F5;              /* V3：信息 / 尊重档淡底 */
+  --on-brand: #FFFFFF;
+  /* V3：SVG 线稿语义（替代组件内反复写的品牌字面量） */
+  --line-brand: #4F8F83;
+  --line-brand-muted: #8CA39C;
+  --fill-brand-soft: #C9E4DD;
+  /* V3：RGB 分量（供组件按需合成 alpha，替代散落的 rgba 字面量） */
+  --rgb-brand-primary: 79, 143, 131;
+  --rgb-brand-secondary: 217, 154, 98;
+  --rgb-brand-ink: 54, 82, 77;
+  --rgb-text-weak: 154, 165, 161;
+  --rgb-info: 143, 183, 197;
+  --rgb-on-brand: 255, 255, 255;
+  /* 主题分类色（课程封面，综合主题禁止紫色） */
+  --theme-body: #4F8F83;
+  --theme-family: #D99A62;
+  --theme-respect: #8FB7C5;          /* V2：柔蓝（原 #6B9BD0） */
+  --theme-growth: #5D9B78;           /* V2：浅绿（原 #7BB57D） */
+  --theme-general: #A8B5A0;          /* V2：灰绿，禁止紫色 */
+  /* V3：主题 8% 淡底（课程封面 / 主题标签；禁止组件内手写 rgba 或 hex+14） */
+  --theme-body-soft: rgba(79, 143, 131, 0.08);
+  --theme-family-soft: rgba(217, 154, 98, 0.08);
+  --theme-respect-soft: rgba(143, 183, 197, 0.08);
+  --theme-growth-soft: rgba(93, 155, 120, 0.08);
+  --theme-general-soft: rgba(168, 181, 160, 0.08);
+  /* 字体 */
+  --font-family: system-ui, -apple-system, 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
+  --font-serif: 'Noto Serif SC', 'Songti SC', 'STSong', serif;  /* V2：仅 Logo/H1/StatCard 数字 */
+  --font-size-xs: 13px;             /* V2：辅助说明（原 12px） */
+  --font-size-s: 15px;              /* V2：正文基准（原 14px） */
+  --font-size-m: 17px;              /* V2：卡片标题 H3（原 16px） */
+  --font-size-l: 20px;
+  --font-size-xl: 22px;             /* V2：页面 H1 */
+  --font-size-xxl: 32px;            /* StatCard 数字 */
+  --tracking-cn: 0.02em;            /* V3：中文标题字距（日式排印） */
+  /* 间距 / 圆角 / 阴影 */
+  --space-xs: 4px;
+  --space-s: 8px;
+  --space-m: 16px;
+  --space-l: 24px;
+  --space-xl: 32px;
+  --space-2xl: 40px;                /* V3：区块间距（L3 阶段替换 32px 用法） */
+  --space-3xl: 56px;                /* V3：页面级留白 */
+  --radius-s: 8px;
+  --radius-m: 12px;
+  --radius-card: 18px;              /* V2：卡片（原 14px） */
+  --radius-card-lg: 22px;           /* V2：Hero / 大卡（原 18px） */
+  --radius-l: 16px;
+  --radius-pill: 999px;             /* V3：完全胶囊（标签/按钮/tab） */
+  /* V3：叶片裁角（四角不对称 = 品牌记忆点，对齐小程序端 $radius-card-tl）
+   * 反差放大：左上角约为其他角的 1.75 倍，让"叶片"一眼可辨（此前 22/18 仅差 4px 过隐晦） */
+  --radius-leaf: 28px 16px 16px 16px;      /* 卡片 */
+  --radius-leaf-sm: 18px 10px 10px 10px;   /* 小元件 / 标签 */
+  --radius-leaf-lg: 34px 20px 20px 20px;   /* Hero / 大卡 */
+  --shadow-card: 0 1px 3px rgba(35, 60, 54, 0.04);    /* V3：层次改由描边承担（原 0 2px 12px .06） */
+  --shadow-float: 0 4px 14px rgba(35, 60, 54, 0.07);  /* V3：原 0 4px 20px .1 */
+  /* 侧边栏（V2：燕麦底） */
+  --side-width: 240px;
+  --side-bg: #EDE8DE;
+  --side-active-bg: #E2EEE9;        /* V2：激活态浅绿 */
+  --side-active-text: #36524D;      /* V2：激活文字墨绿 */
+  --side-text: #36524D;
+  /* 噪点纹理（2% 透明度，SVG feTurbulence，内联 data-uri） */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E");
+
+  /* ── 动效 token（与小程序端同一条缓动曲线；只动画 transform / opacity） ── */
+  --ease-motion: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-fast: 120ms;    /* 微反馈 */
+  --motion-hover: 180ms;   /* 卡片 hover 上浮 / 路由淡入 */
+  --motion-count: 800ms;   /* StatCard count-up（JS 驱动，此处仅作基准记录） */
+  --motion-stagger: 30ms;  /* 表格行交错步长 */
+  --motion-stagger-max: 9; /* 交错上限：第 11 行起复用最大延迟（9×30ms） */
+
+  /* 覆盖 Element Plus 主题色为伴芽绿 */
+  --el-color-primary: var(--brand-primary);
+  --el-color-primary-light-3: #84B1A8;
+  --el-color-primary-light-5: #A7C7C1;
+  --el-color-primary-light-7: #CADDDA;
+  --el-color-primary-light-8: #DCE9E6;
+  --el-color-primary-light-9: var(--brand-primary-light);
+  --el-color-primary-dark-2: var(--brand-primary-dark);
+  --el-color-success: var(--succ);
+  --el-color-warning: var(--warn);
+  --el-color-danger: var(--danger);
+  --el-color-error: var(--danger);
+  --el-color-info: var(--info);
+  --el-border-radius-base: 12px;    /* V3：原 8px，随圆角体系上调 */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  color: var(--text-primary);
+  background-color: var(--bg-page);
+  background-image: var(--grain);   /* V2：噪点纹理叠加 */
+  background-repeat: repeat;
+  font-size: var(--font-size-s);
+  line-height: 1.6;
+}
+
+/* V2：表格正文 14px */
+.el-table {
+  font-size: 14px;
+}
+
+/* ── 动效基建（阶段二） ─────────────────────────────────────────────
+ * 性能纪律：只动画 transform / opacity；box-shadow 仅用于 hover/按压的
+ * 静态修饰过渡（repaint 不 reflow），禁止 width/top/left 等重排属性。
+ */
+
+/* ① 卡片 hover 上浮 180ms（配合组件/页面卡片根元素使用 .card-float） */
+.card-float {
+  transition:
+    transform var(--motion-hover) var(--ease-motion),
+    box-shadow var(--motion-hover) var(--ease-motion);
+}
+.card-float:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-float);
+}
+
+/* ①-b 叶片裁角（四角不对称 = 品牌记忆点；与 .card-float 并列挂在卡片根元素上） */
+.card-leaf {
+  border-radius: var(--radius-leaf);
+}
+.card-leaf-sm {
+  border-radius: var(--radius-leaf-sm);
+}
+.card-leaf-lg {
+  border-radius: var(--radius-leaf-lg);
+}
+
+/* ①-c 中文标题字距（日式排印；正文与表格不参与） */
+h1,
+h2,
+h3 {
+  letter-spacing: var(--tracking-cn);
+}
+
+/* ② 路由切换内容区淡入 180ms（MainLayout 的 <transition name="route-fade">） */
+.route-fade-enter-active {
+  transition: opacity var(--motion-hover) var(--ease-motion);
+}
+.route-fade-leave-active {
+  transition: opacity var(--motion-fast) var(--ease-motion);
+}
+.route-fade-enter-from,
+.route-fade-leave-to {
+  opacity: 0;
+}
+
+/* ③ 表格行交错淡入：每行延迟 30ms，最多 10 行交错（第 11 行起复用最大延迟） */
+@keyframes row-in {
+  from {
+    opacity: 0;
+  }
+}
+.el-table__row {
+  animation: row-in 240ms var(--ease-motion) backwards;
+}
+.el-table__row:nth-child(1)  { animation-delay: calc(var(--motion-stagger) * 0); }
+.el-table__row:nth-child(2)  { animation-delay: calc(var(--motion-stagger) * 1); }
+.el-table__row:nth-child(3)  { animation-delay: calc(var(--motion-stagger) * 2); }
+.el-table__row:nth-child(4)  { animation-delay: calc(var(--motion-stagger) * 3); }
+.el-table__row:nth-child(5)  { animation-delay: calc(var(--motion-stagger) * 4); }
+.el-table__row:nth-child(6)  { animation-delay: calc(var(--motion-stagger) * 5); }
+.el-table__row:nth-child(7)  { animation-delay: calc(var(--motion-stagger) * 6); }
+.el-table__row:nth-child(8)  { animation-delay: calc(var(--motion-stagger) * 7); }
+.el-table__row:nth-child(9)  { animation-delay: calc(var(--motion-stagger) * 8); }
+.el-table__row:nth-child(10) { animation-delay: calc(var(--motion-stagger) * 9); }
+.el-table__row:nth-child(n + 11) { animation-delay: calc(var(--motion-stagger) * 9); }
+
+/* ── L2 · Element Plus 品牌化覆盖（V3） ──────────────────────────────
+ * 集中在此覆盖 Element 默认形态，页面模板零改动。
+ * 选择器有意重复类名（.el-x.el-x）以抬高特异性到 0-2-0 以上，
+ * 保证覆盖不受 Element 按需样式懒加载顺序影响，且不必用 !important。
+ */
+
+/* ②-1 Tabs：胶囊式切换，去掉默认下划线轨道与滑动条 */
+.el-tabs__nav-wrap.el-tabs__nav-wrap::after {
+  display: none;
+}
+.el-tabs__active-bar.el-tabs__active-bar {
+  display: none;
+}
+.el-tabs__header.el-tabs__header {
+  margin-bottom: var(--space-l);
+}
+.el-tabs__item.el-tabs__item {
+  height: 34px;
+  line-height: 34px;
+  margin: 0 var(--space-xs);
+  padding: 0 var(--space-m);
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-s);
+  color: var(--text-secondary);
+  transition:
+    background-color var(--motion-fast) var(--ease-motion),
+    color var(--motion-fast) var(--ease-motion);
+}
+.el-tabs__item.el-tabs__item:hover {
+  color: var(--brand-primary-dark);
+}
+.el-tabs__item.el-tabs__item.is-active {
+  background: var(--brand-primary-light);
+  color: var(--brand-primary-dark);
+  font-weight: 600;
+}
+
+/* ②-2 Tag：柔和底 + 深色字，统一胶囊，去掉彩色描边 */
+.el-tag.el-tag {
+  height: 22px;
+  padding: 0 10px;
+  border: none;
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-xs);
+  line-height: 22px;
+  background: var(--bg-oat);
+  color: var(--text-regular);
+}
+.el-tag.el-tag--success,
+.el-tag.el-tag--primary {
+  background: var(--brand-primary-light);
+  color: var(--brand-primary-dark);
+}
+.el-tag.el-tag--warning {
+  background: var(--brand-secondary-light);
+  color: var(--warn-text);
+}
+.el-tag.el-tag--danger,
+.el-tag.el-tag--error {
+  background: var(--danger-soft);
+  color: var(--danger-text);
+}
+.el-tag.el-tag--info {
+  background: var(--bg-oat);
+  color: var(--text-regular);
+}
+
+/* ②-3 Button：主按钮胶囊化，次按钮描边墨绿，文字按钮不加底 */
+.el-button.el-button {
+  border-radius: var(--radius-pill);
+  font-weight: 500;
+}
+.el-button.el-button--default:not(.is-text):not(.is-link) {
+  border-color: var(--border);
+  color: var(--text-regular);
+  background: transparent;
+}
+.el-button.el-button--default:not(.is-text):not(.is-link):hover,
+.el-button.el-button--default:not(.is-text):not(.is-link):focus {
+  border-color: var(--brand-primary);
+  color: var(--brand-primary-dark);
+  background: var(--brand-primary-light);
+}
+
+/* ②-4 Table：表头透明、行高放开、分隔线走墨绿 8% */
+.el-table.el-table {
+  --el-table-border-color: var(--divider-soft);
+  --el-table-header-bg-color: transparent;
+  --el-table-row-hover-bg-color: var(--brand-primary-light);
+}
+.el-table.el-table th.el-table__cell {
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  padding: 12px 0;
+}
+.el-table.el-table td.el-table__cell {
+  padding: 15px 0;
+  border-bottom-color: var(--divider-soft);
+}
+.el-table.el-table::before,
+.el-table.el-table--border::after {
+  display: none;
+}
+
+/* ②-5 Input / Textarea：暖底 + 圆角，focus 换墨绿描边 */
+.el-input.el-input .el-input__wrapper {
+  border-radius: var(--radius-m);
+  background: var(--bg-page);
+  box-shadow: 0 0 0 1px var(--border) inset;
+}
+.el-input.el-input .el-input__wrapper.is-focus {
+  box-shadow: 0 0 0 1px var(--brand-primary) inset;
+}
+.el-textarea.el-textarea .el-textarea__inner {
+  border-radius: var(--radius-m);
+  background: var(--bg-page);
+  box-shadow: 0 0 0 1px var(--border) inset;
+}
+.el-textarea.el-textarea .el-textarea__inner:focus {
+  box-shadow: 0 0 0 1px var(--brand-primary) inset;
+}
+
+/* ②-6 Menu：激活项左侧 3px 墨绿竖条（日式标记感） */
+.el-menu-item.el-menu-item {
+  position: relative;
+}
+.el-menu-item.el-menu-item.is-active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 3px;
+  height: 18px;
+  border-radius: 0 3px 3px 0;
+  background: var(--brand-primary);
+  transform: translateY(-50%);
+}
+
+/* ②-7 Dialog / Drawer：叶片裁角 + 燕麦底头 + 24px 内边距 */
+.el-dialog.el-dialog {
+  border-radius: var(--radius-leaf);
+}
+.el-dialog.el-dialog .el-dialog__header {
+  margin: 0;
+  padding: var(--space-l);
+  border-bottom: 1px solid var(--divider-soft);
+}
+.el-dialog.el-dialog .el-dialog__body {
+  padding: var(--space-l);
+}
+.el-drawer.el-drawer .el-drawer__header {
+  margin: 0;
+  padding: var(--space-m) var(--space-l);
+  background: var(--bg-oat);
+  color: var(--text-primary);
+}
+
+/* ④ 降级策略：系统开启"减少动态效果"时，全部动画/过渡立即完成 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
