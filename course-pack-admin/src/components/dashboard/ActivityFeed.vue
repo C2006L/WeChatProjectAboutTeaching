@@ -1,5 +1,5 @@
 <template>
-  <div class="activity-feed card-leaf">
+  <div class="activity-feed">
     <h4 class="title">最新动态</h4>
     <div v-for="(item, i) in items" :key="i" class="activity-item">
       <span class="type-dot" :class="item.type"></span>
@@ -25,8 +25,8 @@ defineProps<Props>();
 .activity-feed {
   padding: var(--space-m);
   background: var(--bg-card);
-  box-shadow: var(--shadow-card);
-  /* 圆角由全局 .card-leaf 叶片裁角提供（V3） */
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
 }
 .title {
   margin: 0 0 var(--space-s);

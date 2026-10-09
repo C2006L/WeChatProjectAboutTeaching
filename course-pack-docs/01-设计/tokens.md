@@ -1,18 +1,18 @@
-# 设计 Token（伴芽品牌 · V1 打样对齐版）
+# 设计 Token（伴芽小站 · V4 工作站版）
 
-> 伴芽 = 面向乡村支教教师的生命教育与安全成长课程赋能平台。主色取自然、沉稳、可信赖的森林绿，辅色取温暖橙，背景取米白纸张质感。
-> 两端前端工程均以此为准，禁止硬编码色值；后续若接入 P5 设计语言，本文件需同步映射。
+> 品牌定位：田野成长感 × 专业教育工具。小程序强调温暖、直接的任务入口，Web 强调清楚、高效的业务处理。
+> 叶片异形圆角是品牌强调形态，仅用于首页主任务、欢迎区和重要空状态；普通卡片、表格与表单使用规整圆角。
 
 ## 1. 色彩
 
 ### 品牌色
 | Token | 值 | 用途 |
 |---|---|---|
-| `--brand-primary` | `#4F8F83` | 主品牌色（伴芽绿），主按钮/tabBar 选中/关键强调 |
-| `--brand-primary-dark` | `#3A6E64` | 主色加深，按压/悬停态 |
-| `--brand-primary-light` | `#E6F0EE` | 主色浅底，标签/选中底/进度条背景 |
-| `--brand-secondary` | `#D99A62` | 辅色（暖橙），收藏/提醒/次要强调 |
-| `--brand-secondary-light` | `#F8E9DA` | 暖橙浅底，提示卡片/勋章背景 |
+| `--brand-primary` | `#238C82` | 主品牌青绿，主按钮/tabBar 选中/关键操作 |
+| `--brand-primary-dark` | `#176B64` | 专业深青绿，主角卡/按压/悬停态 |
+| `--brand-primary-light` | `#E2F1EE` | 选中底/进度背景/轻提示 |
+| `--brand-secondary` | `#EE8B52` | 暖橙，待办/提醒/少量情感强调 |
+| `--brand-secondary-light` | `#FDEBDD` | 暖橙浅底，提醒状态背景 |
 
 ### 功能色
 | Token | 值 | 用途 |
@@ -27,12 +27,12 @@
 ### 中性色（文本/背景）
 | Token | 值 | 用途 |
 |---|---|---|
-| `--text-primary` | `#233C36` | 主文本（深森绿） |
-| `--text-regular` | `#4E5969` | 常规文本 |
-| `--text-secondary` | `#86909C` | 次要文本/tabBar 未选中 |
+| `--text-primary` | `#1F3431` | 主文本（深青墨色） |
+| `--text-regular` | `#52625F` | 常规文本 |
+| `--text-secondary` | `#7B8986` | 次要文本/tabBar 未选中 |
 | `--text-disabled` | `#C9CDD4` | 禁用文本 |
 | `--border` | `#E5E6EB` | 边框/分隔线 |
-| `--bg-page` | `#F7F6F1` | 页面背景（米白纸张色） |
+| `--bg-page` | `#F5F7F3` | 页面背景（轻暖灰绿） |
 | `--bg-card` | `#FFFFFF` | 卡片/内容背景 |
 | `--bg-nav` | `#F7F6F1` | 导航栏背景（与页面背景一致） |
 
@@ -67,26 +67,27 @@
 | `--space-xl` | `32px` | 大模块间距 |
 | `--radius-s` | `8px` | 小圆角（按钮/标签） |
 | `--radius-m` | `12px` | 中圆角 |
-| `--radius-card` | `14px` | 卡片圆角（打样图统一值） |
+| `--radius-card` | `10–12px` | 普通业务卡片、表格容器 |
 | `--radius-l` | `16px` | 大圆角/弹层 |
-| `--shadow-card` | `0 2px 12px rgba(35, 60, 54, 0.06)` | 卡片阴影 |
+| `--radius-leaf` | `24px 10px 10px 10px` | 品牌重点区域，禁止全页面滥用 |
+| `--shadow-card` | `none` | 常规卡片依靠边框和留白分层 |
 | `--shadow-float` | `0 4px 20px rgba(35, 60, 54, 0.1)` | 悬浮阴影 |
 
 ## 4. 小程序专用 Token
 | Token | 值 | 用途 |
 |---|---|---|
 | `--tab-bar-height` | `98rpx` | 底部 tabBar 高度 |
-| `--tab-active` | `#4F8F83` | tabBar 选中色 |
-| `--tab-inactive` | `#86909C` | tabBar 未选中色 |
+| `--tab-active` | `#238C82` | tabBar 选中色 |
+| `--tab-inactive` | `#7B8986` | tabBar 未选中色 |
 | `--nav-bar-height` | `88rpx` | 导航栏高度 |
 
 ## 5. Web 端专用 Token
 | Token | 值 | 用途 |
 |---|---|---|
-| `--side-width` | `220px` | 左侧菜单宽度 |
-| `--side-bg` | `#FFFFFF` | 侧边栏背景 |
-| `--side-active-bg` | `#4F8F83` | 侧边栏选中项背景 |
-| `--side-active-text` | `#FFFFFF` | 侧边栏选中项文字 |
+| `--side-width` | `216px` | 左侧菜单宽度 |
+| `--side-bg` | `#F0F3EE` | 侧边栏背景 |
+| `--side-active-bg` | `#DDEDE9` | 侧边栏选中项背景 |
+| `--side-active-text` | `#176B64` | 侧边栏选中项文字 |
 
 ## 6. 命名约定
 - 命名采用 `--模块-语义-状态`，表意清晰。

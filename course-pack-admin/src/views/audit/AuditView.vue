@@ -1,11 +1,24 @@
 <template>
   <div class="page">
+    <div class="audit-summary card-leaf">
+      <div>
+        <span class="summary-kicker">审核工作台</span>
+        <h2>先处理阻塞发布的内容</h2>
+        <p>按提交时间检查课程内容，并查看各专业环节留下的意见。</p>
+      </div>
+      <div class="summary-metrics">
+        <div><strong>{{ audits.length }}</strong><span>待处理</span></div>
+        <div><strong>{{ completedStageCount }}</strong><span>已完成环节</span></div>
+        <div class="urgent"><strong>{{ urgentCount }}</strong><span>超过 3 天</span></div>
+      </div>
+    </div>
+
     <div class="layout">
       <!-- 左：待审核列表 -->
-      <div class="list-panel card-leaf">
+      <div class="list-panel">
         <div class="list-head">
-          <span class="lh-title">待审核课程</span>
-          <span class="lh-count">{{ audits.length }} 条</span>
+          <div><span class="lh-title">审核队列</span><span class="lh-sub">按提交时间排序</span></div>
+          <span class="lh-count">{{ audits.length }}</span>
         </div>
         <div
           v-for="a in audits"
@@ -20,15 +33,22 @@
             <span class="item-time">{{ a.submittedAt }}</span>
             <span class="item-progress">{{ a.progress }}%</span>
           </div>
+          <div class="mini-progress"><i :style="{ width: `${a.progress}%` }"></i></div>
         </div>
       </div>
 
       <!-- 右：审核详情 -->
-      <div v-if="active" class="detail-panel card-leaf">
-        <div class="detail-title">{{ active.title }}</div>
-        <div class="detail-meta">
-          <span>申请人：{{ active.applicant }}</span>
-          <span>提交时间：{{ active.submittedAt }}</span>
+      <div v-if="active" class="detail-panel">
+        <div class="detail-head">
+          <div>
+            <span class="detail-kicker">课程审核</span>
+            <div class="detail-title">{{ active.title }}</div>
+            <div class="detail-meta">
+              <span>申请人：{{ active.applicant }}</span>
+              <span>提交时间：{{ active.submittedAt }}</span>
+            </div>
+          </div>
+          <span class="review-status">审核中 · {{ active.progress }}%</span>
         </div>
 
         <!-- 拟物化流程条 -->
@@ -59,8 +79,14 @@
 
         <!-- 操作区：通过 / 驳回 -->
         <div class="action-box">
-          <el-button type="primary" class="approve-btn" @click="handleApprove">通过审核</el-button>
-          <el-button class="reject-btn" @click="handleReject">驳回</el-button>
+          <div class="action-copy">
+            <strong>完成本次决策</strong>
+            <span>通过后课程将进入发布流程；驳回时需要填写明确原因。</span>
+          </div>
+          <div class="action-buttons">
+            <el-button class="reject-btn" @click="handleReject">退回修改</el-button>
+            <el-button type="primary" class="approve-btn" @click="handleApprove">通过审核</el-button>
+          </div>
         </div>
       </div>
       <div v-else class="detail-empty">
@@ -71,7 +97,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { fetchAuditList, approveAudit, rejectAudit } from '@/api/audit';
 import type { AuditItem } from '@/types/dashboard';
@@ -82,6 +108,8 @@ import EmptyState from '@/components/common/EmptyState.vue';
 
 const audits = ref<AuditItem[]>([]);
 const active = ref<AuditItem | null>(null);
+const completedStageCount = computed(() => audits.value.reduce((sum, item) => sum + item.stages.filter((stage) => stage.done).length, 0));
+const urgentCount = computed(() => audits.value.filter((item) => item.progress < 50).length);
 
 onMounted(load);
 
@@ -124,16 +152,36 @@ async function handleReject() {
 </script>
 
 <style scoped>
+.page { display: flex; flex-direction: column; gap: 18px; }
+.audit-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 24px 28px;
+  background: var(--brand-ink);
+  color: #fff;
+}
+.summary-kicker { font-size: 11px; font-weight: 600; color: rgba(255,255,255,.58); letter-spacing: .12em; }
+.audit-summary h2 { margin: 5px 0 0; font-size: 22px; }
+.audit-summary p { margin: 6px 0 0; font-size: 13px; color: rgba(255,255,255,.68); }
+.summary-metrics { display: grid; grid-template-columns: repeat(3, 110px); flex-shrink: 0; }
+.summary-metrics > div { padding: 4px 18px; border-left: 1px solid rgba(255,255,255,.14); }
+.summary-metrics strong, .summary-metrics span { display: block; }
+.summary-metrics strong { font-size: 25px; line-height: 1.2; }
+.summary-metrics span { margin-top: 5px; font-size: 11px; color: rgba(255,255,255,.58); }
+.summary-metrics .urgent strong { color: #FFAD78; }
 .layout {
   display: grid;
-  grid-template-columns: 320px 1fr;
-  gap: var(--space-l);
-  align-items: start;
+  grid-template-columns: 310px minmax(0, 1fr);
+  gap: 16px;
+  align-items: stretch;
 }
 /* 左列表 */
 .list-panel {
   background: var(--bg-card);
-  border: 1px solid var(--border-warm);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
   overflow: hidden;
   /* 圆角由全局 .card-leaf 叶片裁角提供（V3） */
 }
@@ -141,20 +189,32 @@ async function handleReject() {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 20px;
+  min-height: 66px;
+  padding: 12px 18px;
   border-bottom: 1px solid var(--divider-soft);
 }
 .lh-title {
+  display: block;
   font-size: var(--font-size-m);
   font-weight: 600;
   color: var(--text-primary);
 }
+.lh-sub { display: block; margin-top: 2px; font-size: 11px; color: var(--text-secondary); }
 .lh-count {
-  font-size: 13px;
-  color: var(--text-secondary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  height: 24px;
+  border-radius: 12px;
+  background: var(--brand-primary-light);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--brand-primary-dark);
 }
 .audit-item {
-  padding: 14px 20px;
+  position: relative;
+  padding: 15px 18px 13px;
   border-bottom: 1px solid var(--divider-soft);
   cursor: pointer;
 }
@@ -162,7 +222,17 @@ async function handleReject() {
   border-bottom: none;
 }
 .audit-item.active {
-  background: var(--brand-primary-light);
+  background: #EDF6F3;
+}
+.audit-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 12px;
+  bottom: 12px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--brand-primary);
 }
 .item-title {
   display: block;
@@ -186,18 +256,30 @@ async function handleReject() {
   color: var(--text-secondary);
 }
 .item-progress {
-  font-family: var(--font-serif);
-  font-size: 15px;
-  font-weight: 650;
+  font-size: 13px;
+  font-weight: 700;
   color: var(--brand-deep);
 }
+.mini-progress { height: 3px; margin-top: 9px; overflow: hidden; border-radius: 3px; background: var(--brand-primary-light); }
+.mini-progress i { display: block; height: 100%; border-radius: inherit; background: var(--brand-primary); }
 /* 右详情 */
 .detail-panel {
   background: var(--bg-card);
-  border: 1px solid var(--border-warm);
-  padding: var(--space-l);
-  /* 圆角由全局 .card-leaf 叶片裁角提供（V3） */
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
+  padding: 0;
+  overflow: hidden;
 }
+.detail-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px 26px 20px;
+  border-bottom: 1px solid var(--divider-soft);
+}
+.detail-kicker { display: block; margin-bottom: 5px; font-size: 11px; font-weight: 600; color: var(--brand-primary); letter-spacing: .12em; }
+.review-status { flex-shrink: 0; padding: 5px 9px; border-radius: 5px; background: var(--brand-primary-light); font-size: 12px; font-weight: 600; color: var(--brand-primary-dark); }
 .detail-title {
   font-size: var(--font-size-l);
   font-weight: 600;
@@ -218,7 +300,15 @@ async function handleReject() {
 }
 .stepper-box,
 .comment-box {
-  margin-top: var(--space-l);
+  margin: 0;
+  padding: 22px 26px;
+}
+.stepper-box {
+  background: #F8FAF7;
+  border-bottom: 1px solid var(--divider-soft);
+}
+.comment-box {
+  padding-bottom: 8px;
 }
 .comment {
   display: flex;
@@ -254,10 +344,21 @@ async function handleReject() {
 }
 /* 操作区 */
 .action-box {
-  margin-top: var(--space-l);
+  position: sticky;
+  bottom: 0;
   display: flex;
-  gap: var(--space-m);
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 16px 26px;
+  border-top: 1px solid var(--divider-soft);
+  background: rgba(255,255,255,.96);
 }
+.action-copy { min-width: 0; display: flex; flex-direction: column; }
+.action-copy strong { font-size: 13px; color: var(--text-primary); }
+.action-copy span { margin-top: 2px; font-size: 11px; color: var(--text-secondary); }
+.action-buttons { flex-shrink: 0; display: flex; gap: 8px; }
+.action-buttons .el-button + .el-button { margin-left: 0; }
 .approve-btn {
   --el-button-bg-color: var(--brand-primary);
   --el-button-border-color: var(--brand-primary);
@@ -273,5 +374,10 @@ async function handleReject() {
   display: flex;
   justify-content: center;
   padding: 80px 0;
+}
+@media (max-width: 1100px) {
+  .audit-summary { align-items: flex-start; }
+  .summary-metrics { grid-template-columns: repeat(3, 88px); }
+  .layout { grid-template-columns: 270px minmax(0, 1fr); }
 }
 </style>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#36524D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+  <!-- 备课工具：圆角方框 + 瘦身斜置铅笔（尖头+窄身+圆擦头带分隔线，笔尖朝左下）+ 右侧短线 + 底线（对照 reference/prepare.png） -->
+  <rect x="3" y="3" width="18" height="18" rx="4.5"/>
+  <path d="M6.3 16.7 7.2 13 14.4 5.7A2 2 0 0 1 17.3 8.6L10 15.9 6.3 16.7Z"/>
+  <path d="M12.9 7.4 15.8 10.2"/>
+  <path d="M15.6 14.8h2.4"/>
+  <path d="M9.8 18.4h8.2"/>
+</svg>

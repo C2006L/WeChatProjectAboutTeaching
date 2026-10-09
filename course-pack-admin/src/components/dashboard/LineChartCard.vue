@@ -1,5 +1,5 @@
 <template>
-  <div class="chart-card card-leaf">
+  <div class="chart-card">
     <h4 class="title">{{ title }}</h4>
     <div ref="chartRef" class="chart"></div>
   </div>
@@ -112,8 +112,8 @@ watch(() => props.data, renderChart);
 .chart-card {
   padding: var(--space-m);
   background: var(--bg-card);
-  box-shadow: var(--shadow-card);
-  /* 圆角由全局 .card-leaf 叶片裁角提供（V3） */
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
 }
 .title {
   margin: 0 0 var(--space-s);

@@ -1,11 +1,13 @@
 <template>
-  <div class="stat-card card-float card-leaf">
-    <span class="value">{{ displayValue }}<span class="unit">{{ unit }}</span></span>
-    <span class="label">{{ label }}</span>
-    <span class="trend" :class="trendClass">
+  <div class="stat-card">
+    <div class="stat-head">
+      <span class="label">{{ label }}</span>
+      <span class="trend" :class="trendClass">
       <span class="arrow">{{ trend.includes('↑') ? '↑' : trend.includes('↓') ? '↓' : '' }}</span>
       {{ trend.replace(/较上月\s*[↑↓]?\s*/, '较上月 ') }}
-    </span>
+      </span>
+    </div>
+    <span class="value">{{ displayValue }}<span class="unit">{{ unit }}</span></span>
   </div>
 </template>
 
@@ -39,20 +41,24 @@ const trendClass = computed(() =>
 .stat-card {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 6px;
-  padding: 24px;                        /* 卡片内边距统一 24px */
-  background: var(--bg-card);           /* #FBF9F4（看板作用域覆盖） */
-  border: 1px solid var(--card-border);  /* 墨绿 8% 描边 */
-  box-shadow: var(--shadow-card);       /* 墨绿低透明投影，禁纯白+灰投影 */
-  /* 圆角由全局 .card-leaf 叶片裁角提供（V3），此处不再自行声明 */
-  min-height: 132px;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
+  min-height: 112px;
+}
+.stat-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 /* V2：数字为大号衬线墨绿主视觉，卡内禁图标；精修：34px 强化视觉锚点 */
 .value {
-  font-family: var(--font-serif);
-  font-size: 34px;
-  font-weight: 650;
+  font-size: 30px;
+  font-weight: 700;
   color: var(--brand-deep);
   line-height: 1.1;
 }
@@ -64,11 +70,12 @@ const trendClass = computed(() =>
   margin-left: 4px;
 }
 .label {
-  font-size: var(--font-size-s);
+  font-size: 14px;
+  font-weight: 500;
   color: var(--text-regular);
 }
 .trend {
-  font-size: var(--font-size-xs);
+  font-size: 12px;
   color: var(--succ);
 }
 .trend.down {

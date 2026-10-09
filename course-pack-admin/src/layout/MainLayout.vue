@@ -3,26 +3,38 @@
     <!-- 左侧固定 Sidebar：燕麦底 -->
     <aside class="sidebar">
       <div class="logo">
-        <span class="logo-badge">芽</span>
-        <span class="logo-text">伴芽</span>
+        <span class="logo-badge" aria-hidden="true"><i></i></span>
+        <span class="logo-copy">
+          <span class="logo-text">伴芽小站</span>
+          <span class="logo-sub">教育工作台</span>
+        </span>
       </div>
 
       <el-scrollbar class="menu-scroll">
-        <el-menu :default-active="activeMenu" router class="menu">
-          <el-menu-item v-for="m in menuRoutes" :key="m.path" :index="m.path">
-            <el-icon><component :is="menuIcons[m.path]" /></el-icon>
-            <span>{{ m.title }}</span>
-          </el-menu-item>
-        </el-menu>
+        <div v-for="group in menuGroups" :key="group.label" class="menu-group">
+          <div class="menu-label">{{ group.label }}</div>
+          <el-menu :default-active="activeMenu" router class="menu">
+            <el-menu-item v-for="m in group.items" :key="m.path" :index="m.path">
+              <el-icon><component :is="menuIcons[m.path]" /></el-icon>
+              <span>{{ m.title }}</span>
+            </el-menu-item>
+          </el-menu>
+        </div>
       </el-scrollbar>
 
-      <div class="version">V1.0 · 伴芽项目组</div>
+      <div class="version">伴芽小站 · 项目运营端</div>
     </aside>
 
     <!-- 右侧：Header + 内容区 -->
     <div class="main-wrap">
       <header class="header">
-        <h1 class="page-title">{{ currentTitle }}</h1>
+        <div class="page-heading">
+          <span class="page-kicker">伴芽小站 / 工作台</span>
+          <div class="title-line">
+            <h1 class="page-title">{{ currentTitle }}</h1>
+            <span class="page-description">{{ currentDescription }}</span>
+          </div>
+        </div>
         <div class="header-actions">
           <button type="button" class="bell" aria-label="待办事项" @click="bellOpen = true">
             <el-badge :value="todoCount" :hidden="todoCount === 0">
@@ -104,6 +116,20 @@ const auth = useAuthStore();
 
 const activeMenu = computed(() => route.path);
 const currentTitle = computed(() => (route.meta.title as string) || '伴芽');
+const PAGE_DESCRIPTIONS: Record<string, string> = {
+  '/dashboard': '掌握项目进展，优先处理今天的工作',
+  '/course': '维护课程内容、版本与发布状态',
+  '/training': '查看必修进度与培训课程',
+  '/case': '沉淀一线教学实践',
+  '/seed-teacher': '维护种子教师认证与荣誉',
+  '/team': '查看支教队伍及服务情况',
+  '/teacher': '管理教师账号与学习状态',
+  '/feedback': '回应教师问题与平台反馈',
+  '/audit': '集中处理内容审核任务',
+  '/resource': '维护可下载的标准化教学素材',
+  '/setting': '配置平台与演示账号',
+};
+const currentDescription = computed(() => PAGE_DESCRIPTIONS[route.path] || '伴芽小站项目工作区');
 
 /** 按角色渲染 Sidebar 菜单（ADMIN 全量 / AUDITOR 仅审核中心 / TEACHER 工作台） */
 const AD_MENU = [
@@ -124,6 +150,19 @@ const menuRoutes = computed(() => {
   if (auth.role === 'AUDITOR') return [{ path: '/audit', title: '审核中心' }];
   if (auth.role === 'TEACHER') return [{ path: '/teacher/workbench', title: '教师工作台' }];
   return AD_MENU;
+});
+
+const menuGroups = computed(() => {
+  const visible = menuRoutes.value;
+  if (auth.role !== 'ADMIN') return [{ label: '工作区', items: visible }];
+  const paths = (items: string[]) => visible.filter((item) => items.includes(item.path));
+  return [
+    { label: '总览', items: paths(['/dashboard']) },
+    { label: '内容运营', items: paths(['/course', '/training', '/case', '/resource']) },
+    { label: '人员与组织', items: paths(['/seed-teacher', '/team', '/teacher']) },
+    { label: '任务处理', items: paths(['/feedback', '/audit']) },
+    { label: '平台', items: paths(['/setting']) },
+  ];
 });
 
 const userRoleLabel = computed(() => {
@@ -186,7 +225,7 @@ function goTodo(path: string) {
 .sidebar {
   width: var(--side-width);
   background: var(--side-bg);
-  border-right: 1px solid var(--border-warm);
+  border-right: 0;
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
@@ -195,54 +234,112 @@ function goTodo(path: string) {
   display: flex;
   align-items: center;
   gap: 10px;
-  height: 64px;
+  height: 72px;
   padding: 0 20px;
   flex-shrink: 0;
 }
 .logo-badge {
-  width: 32px;
-  height: 32px;
-  border-radius: 10px;
-  background: var(--brand-primary);
-  color: var(--on-brand);
+  position: relative;
+  width: 34px;
+  height: 34px;
+  border-radius: 15px 8px 8px 8px;
+  background: #2EA69B;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
+}
+.logo-badge::before,
+.logo-badge::after {
+  content: '';
+  position: absolute;
+  top: 9px;
+  width: 10px;
+  height: 7px;
+  border: 2px solid #fff;
+  border-bottom: 0;
+}
+.logo-badge::before {
+  left: 7px;
+  border-radius: 10px 2px 0 2px;
+  transform: rotate(28deg);
+}
+.logo-badge::after {
+  right: 7px;
+  border-radius: 2px 10px 2px 0;
+  transform: rotate(-28deg);
+}
+.logo-badge i {
+  width: 2px;
+  height: 12px;
+  margin-top: 9px;
+  border-radius: 2px;
+  background: #fff;
+}
+.logo-copy {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
 }
 .logo-text {
-  font-family: var(--font-serif);   /* V2：Logo 衬线 */
-  font-size: var(--font-size-m);
-  font-weight: 650;
-  color: var(--side-text);
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.25;
+}
+.logo-sub {
+  margin-top: 2px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.52);
+  letter-spacing: 0.08em;
 }
 .menu-scroll {
   flex: 1;
+  padding: 8px 0 16px;
+}
+.menu-group + .menu-group {
+  margin-top: 14px;
+}
+.menu-label {
+  padding: 0 20px 6px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.36);
+  letter-spacing: 0.12em;
 }
 .menu {
   border-right: none;
   background: transparent;
   --el-menu-bg-color: transparent;
-  --el-menu-hover-bg-color: rgba(var(--rgb-brand-primary), 0.08);
-  --el-menu-text-color: var(--side-text);
+  --el-menu-hover-bg-color: rgba(255, 255, 255, 0.07);
+  --el-menu-text-color: rgba(255, 255, 255, 0.68);
 }
 .menu :deep(.el-menu-item) {
-  height: 46px;
-  line-height: 46px;
-  margin: 2px 10px;
-  border-radius: 10px;
+  height: 42px;
+  line-height: 42px;
+  margin: 1px 12px;
+  border-radius: 8px;
 }
 .menu :deep(.el-menu-item.is-active) {
-  background-color: var(--side-active-bg);
-  color: var(--side-active-text);
+  position: relative;
+  background-color: rgba(255, 255, 255, 0.12);
+  color: #fff;
   font-weight: 600;
+}
+.menu :deep(.el-menu-item.is-active)::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 11px;
+  width: 3px;
+  height: 20px;
+  border-radius: 0 4px 4px 0;
+  background: var(--brand-secondary);
 }
 .version {
   flex-shrink: 0;
   padding: 16px 20px;
   font-size: 13px;
-  color: var(--text-secondary);
-  border-top: 1px solid var(--divider-soft);
+  color: rgba(255, 255, 255, 0.42);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 /* ===== 主区域 ===== */
@@ -251,23 +348,46 @@ function goTodo(path: string) {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  background: var(--bg-page);
 }
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 64px;
-  padding: 0 32px;
-  background: var(--bg-card);
-  border-bottom: 1px solid var(--divider-soft);
+  height: 86px;
+  padding: 18px 32px 12px;
+  background: transparent;
+  border-bottom: 0;
   flex-shrink: 0;
+}
+.page-heading {
+  min-width: 0;
+}
+.page-kicker {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--brand-primary);
+  letter-spacing: 0.1em;
+}
+.title-line {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
 }
 .page-title {
   margin: 0;
-  font-family: var(--font-serif);   /* V2：页面 H1 衬线 */
-  font-size: var(--font-size-xl);
-  font-weight: 650;
+  font-size: 23px;
+  font-weight: 700;
   color: var(--text-primary);
+}
+.page-description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  color: var(--text-secondary);
 }
 .header-actions {
   display: flex;
@@ -381,7 +501,7 @@ function goTodo(path: string) {
   flex: 1;
   overflow: auto;
   /* 留白节奏（V3）：上 40px / 左右 32px / 下 40px，页面级留白用 --space-3xl 语义档 */
-  padding: var(--space-2xl) var(--space-xl);
+  padding: 8px 32px 40px;
 }
 .content > * {
   max-width: 1280px;

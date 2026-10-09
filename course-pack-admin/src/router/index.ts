@@ -138,7 +138,7 @@ router.beforeEach((to) => {
 });
 
 router.afterEach((to) => {
-  document.title = to.meta.title ? `${String(to.meta.title)} · 伴芽后台` : '伴芽管理后台';
+  document.title = to.meta.title ? `${String(to.meta.title)} · 伴芽小站` : '伴芽小站工作台';
 });
 
 export default router;

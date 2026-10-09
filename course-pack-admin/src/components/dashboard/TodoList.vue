@@ -1,6 +1,9 @@
 <template>
-  <div class="todo-list">
-    <h4 class="title">待办事项</h4>
+  <div class="todo-list card-leaf">
+    <div class="list-head">
+      <h4 class="title">待办事项</h4>
+      <span class="hint">点击进入处理</span>
+    </div>
     <div
       v-for="item in items"
       :key="item.title"
@@ -25,22 +28,32 @@ defineProps<Props>();
 
 <style scoped>
 .todo-list {
-  padding: var(--space-m);
+  min-height: 174px;
+  padding: 20px 22px;
   background: var(--bg-card);
-  border-radius: var(--radius-card);
-  box-shadow: var(--shadow-card);
+  border: 1px solid var(--card-border);
+}
+.list-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
 }
 .title {
-  margin: 0 0 var(--space-s);
+  margin: 0 0 8px;
   font-size: var(--font-size-m);
   font-weight: 600;
   color: var(--text-primary);
+}
+.hint {
+  font-size: 12px;
+  color: var(--text-secondary);
 }
 .todo-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--space-s) var(--space-xs);
+  padding: 9px var(--space-xs);
   border-bottom: 1px solid var(--border);
   cursor: pointer;
 }

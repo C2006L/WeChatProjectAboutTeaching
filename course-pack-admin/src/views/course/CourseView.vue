@@ -1,70 +1,76 @@
 <template>
   <div class="page">
-    <!-- 顶部操作条：新建课程主按钮（右上） -->
     <div class="page-head">
-      <div></div>
-      <el-button type="primary" size="large" @click="openCreate">+ 新建课程</el-button>
-    </div>
-
-    <!-- 筛选区：燕麦底圆角条卡 -->
-    <div class="filter-bar card-leaf">
-      <el-input
-        v-model="query.keyword"
-        placeholder="搜索课程名称"
-        clearable
-        class="f-keyword"
-        @input="applyFilter"
-      />
-      <el-segmented
-        v-model="query.version"
-        :options="versionOptions"
-        class="f-version"
-      />
-      <el-select v-model="query.grade" placeholder="全部学段" clearable class="f-grade" @change="applyFilter">
-        <el-option label="小学1-3年级" value="小学1-3年级" />
-        <el-option label="小学4-6年级" value="小学4-6年级" />
-      </el-select>
-      <el-select v-model="query.themeLabel" placeholder="全部主题" clearable class="f-theme" @change="applyFilter">
-        <el-option v-for="t in themeOptions" :key="t" :label="t" :value="t" />
-      </el-select>
-    </div>
-
-    <!-- Bento 三列卡片网格 -->
-    <div v-loading="loading" class="grid">
-      <div v-for="c in paged" :key="c.id" class="course-card card-float card-leaf" @click="openDetail()">
-        <!-- 封面区：主题色纯色底 + 白色线条小芽 + 版本角标 -->
-        <div class="cover" :style="{ background: themeColor(c.themeLabel) }">
-          <svg class="cover-sprout" viewBox="0 0 80 80" fill="none" aria-hidden="true">
-            <path d="M40 64V34" style="stroke: var(--on-brand)" stroke-width="2.5" stroke-linecap="round" />
-            <path d="M40 36c-10 0-17-6-17-14 10 0 17 6 17 14Z" style="stroke: var(--on-brand)" stroke-width="2.5" stroke-linejoin="round" />
-            <path d="M40 36c10-1 17-6 17-15-10-1-17 5-17 15Z" style="stroke: var(--on-brand)" stroke-width="2.5" stroke-linejoin="round" />
-          </svg>
-          <span class="version-badge">{{ c.version }}</span>
-        </div>
-        <!-- 内容区 -->
-        <div class="body">
-          <span class="theme-tag" :style="{ background: themeSoft(c.themeLabel), color: themeColor(c.themeLabel) }">
-            {{ c.themeLabel }}
-          </span>
-          <h3 class="title">{{ c.title }}</h3>
-          <p class="summary">{{ c.summary }}</p>
-          <div class="meta-row">
-            <span class="meta">{{ c.grade }} · {{ c.duration }}分钟</span>
-            <span class="go-btn">查看详情<ArrowIcon /></span>
-          </div>
-        </div>
+      <div>
+        <span class="eyebrow">内容资产</span>
+        <h2>课程库</h2>
+        <p>统一维护课程内容、适用学段、材料完整度和发布状态。</p>
       </div>
+      <el-button type="primary" size="large" @click="openCreate">新建课程</el-button>
     </div>
 
-    <!-- 分页器 -->
-    <div class="pager">
-      <el-pagination
-        layout="prev, pager, next, total"
-        :total="filtered.length"
-        :page-size="pageSize"
-        :current-page="page"
-        @current-change="(p: number) => (page = p)"
-      />
+    <div class="overview-strip">
+      <div class="overview-item"><span>课程总数</span><strong>{{ all.length }}</strong></div>
+      <div class="overview-item"><span>已发布</span><strong>{{ publishedCount }}</strong></div>
+      <div class="overview-item"><span>教学材料</span><strong>{{ materialCount }}</strong></div>
+      <div class="overview-note">建议优先补齐材料不完整的课程，再提交内容审核。</div>
+    </div>
+
+    <div class="work-panel">
+      <div class="filter-bar">
+        <div class="filter-main">
+          <el-input v-model="query.keyword" placeholder="搜索课程名称或简介" clearable class="f-keyword" @input="applyFilter" />
+          <el-select v-model="query.grade" placeholder="全部学段" clearable class="f-grade" @change="applyFilter">
+            <el-option label="小学1-3年级" value="小学1-3年级" />
+            <el-option label="小学4-6年级" value="小学4-6年级" />
+          </el-select>
+          <el-select v-model="query.themeLabel" placeholder="全部主题" clearable class="f-theme" @change="applyFilter">
+            <el-option v-for="t in themeOptions" :key="t" :label="t" :value="t" />
+          </el-select>
+        </div>
+        <el-segmented v-model="query.version" :options="versionOptions" class="f-version" @change="applyFilter" />
+      </div>
+
+      <el-table v-loading="loading" :data="paged" row-key="id" class="course-table">
+        <el-table-column label="课程" min-width="310">
+          <template #default="{ row }">
+            <div class="course-cell" @click="openDetail()">
+              <span class="course-mark" :style="{ background: themeColor(row.themeLabel) }"></span>
+              <div class="course-copy">
+                <strong>{{ row.title }}</strong>
+                <span>{{ row.summary }}</span>
+              </div>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="主题" width="126">
+          <template #default="{ row }">
+            <span class="theme-tag" :style="{ background: themeSoft(row.themeLabel), color: themeColor(row.themeLabel) }">{{ row.themeLabel }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="grade" label="适用学段" width="130" />
+        <el-table-column prop="version" label="版本" width="90" />
+        <el-table-column label="课时" width="78"><template #default="{ row }">{{ row.duration }} 分</template></el-table-column>
+        <el-table-column label="材料" width="78" align="center">
+          <template #default="{ row }"><span class="material-count">{{ materialTotal(row) }}/4</span></template>
+        </el-table-column>
+        <el-table-column label="状态" width="90">
+          <template #default="{ row }"><span class="status-dot" :class="row.status ? 'online' : 'offline'">{{ row.status ? '已发布' : '未发布' }}</span></template>
+        </el-table-column>
+        <el-table-column prop="updatedAt" label="最近更新" width="112" />
+        <el-table-column label="操作" width="160" fixed="right">
+          <template #default="{ row }">
+            <el-button link type="primary" @click="openEdit(row)">编辑</el-button>
+            <el-button link @click="openDetail()">详情</el-button>
+            <el-button link type="danger" @click="confirmDelete(row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+
+      <div class="table-footer">
+        <span>共 {{ filtered.length }} 门课程</span>
+        <el-pagination layout="prev, pager, next" :total="filtered.length" :page-size="pageSize" :current-page="page" @current-change="(p: number) => (page = p)" />
+      </div>
     </div>
 
     <!-- 新增/编辑弹框 -->
@@ -112,7 +118,6 @@
 import { ref, reactive, computed } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import type { FormInstance } from 'element-plus';
-import ArrowIcon from '@/components/common/ArrowIcon.vue';
 import { fetchCourseList, createCourse, updateCourse, deleteCourse } from '@/api/course';
 import type { CourseAdminItem } from '@/types/dashboard';
 
@@ -160,6 +165,13 @@ const filtered = computed(() =>
 const paged = computed(() =>
   filtered.value.slice((page.value - 1) * pageSize, page.value * pageSize),
 );
+const publishedCount = computed(() => all.value.filter((item) => item.status).length);
+const materialCount = computed(() => all.value.reduce((sum, item) => sum + materialTotal(item), 0));
+
+function materialTotal(row: Record<string, any>) {
+  const materials = row.materials as Record<string, number>;
+  return Object.values(materials).filter((count) => count > 0).length;
+}
 
 function applyFilter() {
   page.value = 1;
@@ -209,7 +221,8 @@ function openCreate() {
   dialogVisible.value = true;
 }
 
-function openEdit(row: CourseAdminItem) {
+function openEdit(source: Record<string, any>) {
+  const row = source as CourseAdminItem;
   editingId.value = row.id;
   Object.assign(form, {
     title: row.title,
@@ -263,7 +276,8 @@ async function onSubmit() {
   dialogVisible.value = false;
 }
 
-async function confirmDelete(row: CourseAdminItem) {
+async function confirmDelete(source: Record<string, any>) {
+  const row = source as CourseAdminItem;
   await ElMessageBox.confirm(`确定删除课程《${row.title}》吗？`, '删除确认', {
     confirmButtonText: '删除',
     cancelButtonText: '取消',
@@ -281,132 +295,67 @@ loadAll();
 .page {
   display: flex;
   flex-direction: column;
-  gap: var(--space-l);
+  gap: 18px;
   padding-bottom: var(--space-l);
 }
 .page-head {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
+  gap: 24px;
 }
-/* 筛选区：燕麦底圆角条卡 */
+.eyebrow { font-size: 11px; font-weight: 600; color: var(--brand-primary); letter-spacing: .12em; }
+.page-head h2 { margin: 4px 0 0; font-size: 22px; color: var(--text-primary); }
+.page-head p { margin: 5px 0 0; font-size: 13px; color: var(--text-secondary); }
+.overview-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 150px) 1fr;
+  align-items: stretch;
+  overflow: hidden;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
+  background: var(--bg-card);
+}
+.overview-item { padding: 16px 20px; border-right: 1px solid var(--divider-soft); }
+.overview-item span { display: block; font-size: 12px; color: var(--text-secondary); }
+.overview-item strong { display: block; margin-top: 5px; font-size: 24px; color: var(--brand-ink); }
+.overview-note { display: flex; align-items: center; justify-content: flex-end; padding: 16px 22px; font-size: 13px; color: var(--text-secondary); }
+.work-panel { overflow: hidden; border: 1px solid var(--card-border); border-radius: var(--radius-card); background: var(--bg-card); }
 .filter-bar {
   display: flex;
   align-items: center;
-  gap: var(--space-m);
-  padding: 16px 20px;
-  background: var(--bg-oat);
-  border: 1px solid var(--border-warm);
-  flex-wrap: wrap;
-  /* 圆角由全局 .card-leaf 叶片裁角提供（V3） */
-}
-.f-keyword {
-  width: 240px;
-}
-.f-version {
-  flex-shrink: 0;
-}
-.f-grade,
-.f-theme {
-  width: 150px;
-}
-/* Bento 三列网格 */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-l);
-}
-.course-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-warm);
-  overflow: hidden;
-  cursor: pointer;
-  /* 圆角由全局 .card-leaf 叶片裁角提供（V3） */
-  /* hover 上浮统一走全局 .card-float（180ms 缓动 token） */
-}
-.cover {
-  position: relative;
-  height: 120px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.cover-sprout {
-  width: 72px;
-  height: 72px;
-  opacity: 0.9;
-}
-.version-badge {
-  position: absolute;
-  right: 12px;
-  bottom: 12px;
-  padding: 2px 10px;
-  border-radius: 999px;
-  background: rgba(var(--rgb-on-brand), 0.88);
-  color: var(--text-regular);
-  font-size: 13px;
-}
-.body {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 8px;
-}
-.theme-tag {
-  padding: 3px 10px;
-  border-radius: 6px;
-  font-size: 13px;
-}
-.title {
-  margin: 0;
-  font-size: var(--font-size-m);
-  font-weight: 600;
-  color: var(--text-primary);
-  line-height: 1.4;
-}
-.summary {
-  margin: 0;
-  font-size: 14px;
-  color: var(--text-muted);
-  line-height: 1.6;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  min-height: 45px;
-}
-.meta-row {
-  width: 100%;
-  display: flex;
-  align-items: center;
   justify-content: space-between;
-  margin-top: 4px;
+  gap: var(--space-m);
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--divider-soft);
+  flex-wrap: wrap;
 }
-.meta {
-  font-size: 13px;
-  color: var(--text-weak);
-}
-.go-btn {
-  display: inline-flex;
-  align-items: center;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--brand-primary);
-}
-.pager {
-  display: flex;
-  justify-content: center;
-  padding: 8px 0;
-}
+.filter-main { display: flex; align-items: center; gap: 10px; }
+.course-table { width: 100%; }
+.course-cell { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+.course-mark { flex-shrink: 0; width: 8px; height: 38px; border-radius: 5px; }
+.course-copy { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.course-copy strong { overflow: hidden; color: var(--text-primary); font-size: 14px; text-overflow: ellipsis; white-space: nowrap; }
+.course-copy span { overflow: hidden; color: var(--text-secondary); font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+.theme-tag { display: inline-flex; padding: 3px 8px; border-radius: 5px; font-size: 12px; }
+.material-count { color: var(--brand-primary-dark); font-weight: 600; }
+.status-dot { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; }
+.status-dot::before { content: ''; width: 7px; height: 7px; border-radius: 50%; }
+.status-dot.online { color: var(--brand-primary-dark); }
+.status-dot.online::before { background: var(--succ); }
+.status-dot.offline { color: var(--text-secondary); }
+.status-dot.offline::before { background: var(--text-disabled); }
+.table-footer { display: flex; align-items: center; justify-content: space-between; min-height: 58px; padding: 0 16px; border-top: 1px solid var(--divider-soft); font-size: 12px; color: var(--text-secondary); }
+.course-table :deep(.el-table__header th) { height: 46px; background: #F7F9F6; color: var(--text-secondary); font-size: 12px; font-weight: 600; }
+.course-table :deep(.el-table__row td) { padding: 11px 0; }
+.course-table :deep(.el-table__inner-wrapper::before) { display: none; }
+.course-table :deep(.el-button + .el-button) { margin-left: 6px; }
+.course-table :deep(.el-table__body tr:hover > td) { background: rgba(var(--rgb-brand-primary), .035); }
+.f-keyword { width: 280px; }
+.f-version { flex-shrink: 0; }
+.f-grade, .f-theme { width: 150px; }
 @media (max-width: 1100px) {
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-@media (max-width: 720px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
+  .overview-strip { grid-template-columns: repeat(3, 1fr); }
+  .overview-note { display: none; }
 }
 </style>

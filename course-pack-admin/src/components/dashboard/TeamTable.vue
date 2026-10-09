@@ -1,5 +1,5 @@
 <template>
-  <div class="team-table card-leaf">
+  <div class="team-table">
     <h4 class="title">活跃支教队</h4>
     <el-table :data="teams" size="default" :show-header="true">
       <el-table-column prop="name" label="队伍名称" min-width="140" />
@@ -39,8 +39,7 @@ defineProps<Props>();
   padding: 24px;                        /* 卡片内边距统一 24px */
   background: var(--bg-card);           /* #FBF9F4 */
   border: 1px solid var(--card-border);
-  box-shadow: var(--shadow-card);
-  /* 圆角由全局 .card-leaf 叶片裁角提供（V3） */
+  border-radius: var(--radius-card);
   /* 表格行分隔线/表头下划线统一墨绿低透明度（覆盖 Element Plus 中性灰） */
   --el-table-border-color: var(--divider-soft);
 }

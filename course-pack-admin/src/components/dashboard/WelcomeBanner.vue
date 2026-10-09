@@ -7,13 +7,14 @@
       <path d="M32 30c9-1 15-6 15-14-8-1-15 4-15 14Z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" />
     </svg>
     <div class="welcome-text">
-      <h3 class="title">欢迎回来，{{ props.data.userName }}</h3>
-      <p class="sub">今天有 {{ props.data.pendingReview }} 节课程待审核 · {{ props.data.date }}</p>
+      <span class="eyebrow">今日工作</span>
+      <h3 class="title">{{ props.data.userName }}，今天有 {{ props.data.pendingReview }} 节课程待审核</h3>
+      <p class="sub">{{ props.data.date }} · 优先处理审核与教师反馈</p>
     </div>
     <div class="banner-right">
       <div class="todo-entry" @click="$router.push('/audit')">
-        <span class="todo-label">全部待办</span>
-        <span class="todo-num">{{ props.data.todoCount }} 项</span>
+        <span class="todo-label">进入审核中心</span>
+        <span class="todo-num">{{ props.data.todoCount }} 项待办</span>
       </div>
       <svg class="sprout" viewBox="0 0 64 64" fill="none" aria-hidden="true">
         <path d="M32 56V28" style="stroke: var(--line-brand)" stroke-width="2.5" stroke-linecap="round" />
@@ -40,10 +41,10 @@ const props = defineProps<Props>();
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 96px;
-  padding: 20px 28px;
-  background: var(--bg-oat);            /* 燕麦底大卡 */
-  border: 1px solid var(--border-warm);
+  min-height: 174px;
+  padding: 30px 32px;
+  background: var(--brand-ink);
+  border: 0;
   /* 圆角由全局 .card-leaf-lg 叶片裁角提供（V3） */
   gap: var(--space-l);
   overflow: hidden;                     /* 水印露出 2/3，裁掉出界部分 */
@@ -54,21 +55,29 @@ const props = defineProps<Props>();
   right: -14px;
   width: 160px;
   height: 160px;
-  color: var(--brand-ink);
-  opacity: 0.06;
+  color: #fff;
+  opacity: 0.08;
   pointer-events: none;
+}
+.eyebrow {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.62);
+  letter-spacing: 0.12em;
 }
 .title {
   margin: 0;
-  font-family: var(--font-serif);       /* H1 衬线 */
-  font-size: var(--font-size-xl);
-  font-weight: 650;
-  color: var(--text-primary);
+  max-width: 620px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
 }
 .sub {
   margin: 6px 0 0;
   font-size: var(--font-size-s);
-  color: var(--text-regular);
+  color: rgba(255, 255, 255, 0.7);
 }
 .banner-right {
   display: flex;
@@ -81,16 +90,23 @@ const props = defineProps<Props>();
   flex-direction: column;
   align-items: flex-end;
   cursor: pointer;
+  padding: 12px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  transition: background-color var(--motion-hover) var(--ease-motion);
+}
+.todo-entry:hover {
+  background: rgba(255, 255, 255, 0.14);
 }
 .todo-label {
   font-size: 13px;
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.62);
 }
 .todo-num {
-  font-family: var(--font-serif);
-  font-size: var(--font-size-xxl);
-  font-weight: 700;                     /* 精修：加粗强化待办锚点 */
-  color: var(--accent-warm);             /* 精修：暖橙点缀（每页限 1 处） */
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
   line-height: 1.2;
 }
 .sprout {
@@ -98,5 +114,6 @@ const props = defineProps<Props>();
   height: 56px;
   flex-shrink: 0;
   opacity: 0.9;
+  filter: brightness(0) invert(1);
 }
 </style>

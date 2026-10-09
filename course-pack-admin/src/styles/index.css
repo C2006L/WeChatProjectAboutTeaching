@@ -8,40 +8,40 @@
 
 :root {
   /* 品牌色 */
-  --brand-primary: #4F8F83;
-  --brand-primary-dark: #3A6E64;
-  --brand-primary-light: #E6F0EE;
-  --brand-secondary: #D99A62;
-  --brand-secondary-light: #F8E9DA;
+  --brand-primary: #238C82;
+  --brand-primary-dark: #176B64;
+  --brand-primary-light: #E2F1EE;
+  --brand-secondary: #EE8B52;
+  --brand-secondary-light: #FDEBDD;
   /* V3：墨绿深度阶（收口散落在组件里的 #2F655D / #36524D 字面量） */
-  --brand-deep: #2F655D;             /* 深墨绿：数字与关键强调文字 */
-  --brand-ink: #36524D;              /* 主墨绿：折线主色 / 主角卡底 / 侧栏文字 */
-  --accent-warm: #C08352;            /* 暖橙点缀（每页限 1 处） */
+  --brand-deep: #174B46;
+  --brand-ink: #173D39;
+  --accent-warm: #E9783F;
   /* 功能色（伴芽自有色板，禁用 Ant Design 默认色） */
   --succ: #5D9B78;
   --warn: #D99A62;
   --danger: #C96D68;
   --info: #8FB7C5;
   /* 中性色 */
-  --text-primary: #233C36;
-  --text-regular: #4E5969;
-  --text-secondary: #86909C;
+  --text-primary: #1F3431;
+  --text-regular: #52625F;
+  --text-secondary: #7B8986;
   --text-disabled: #C9CDD4;
   /* V3：文字补充档（对齐小程序端文字三阶的绿灰 / 弱信息） */
-  --text-muted: #667571;             /* 次级正文（绿灰） */
-  --text-weak: #9AA5A1;              /* 弱信息 / 未激活 */
+  --text-muted: #647370;
+  --text-weak: #98A39F;
 
   /* V3：品牌浅描边与图表坐标轴线 */
-  --border-brand: #CADDDA;           /* 品牌浅绿描边 */
-  --axis-line: rgba(54, 82, 77, 0.24);  /* 图表坐标轴线（墨绿 24%） */
-  --border: rgba(54, 82, 77, 0.14);  /* V3：墨绿低透明描边（替代 V2 暖灰 #E8E3D9） */
-  --border-warm: rgba(54, 82, 77, 0.14);   /* V3：同上，保留 V2 别名供既有引用 */
-  --divider-soft: rgba(54, 82, 77, 0.08);  /* V3：分隔线/网格线专用（规范要求的墨绿 8%） */
-  --card-border: rgba(54, 82, 77, 0.08);   /* V3：看板卡描边（规范要求的墨绿 8%，与分隔线同值） */
-  --bg-page: #F7F6F1;
+  --border-brand: #B9D9D4;
+  --axis-line: rgba(23, 61, 57, 0.22);
+  --border: rgba(31, 52, 49, 0.14);
+  --border-warm: rgba(31, 52, 49, 0.12);
+  --divider-soft: rgba(31, 52, 49, 0.09);
+  --card-border: rgba(31, 52, 49, 0.11);
+  --bg-page: #F5F7F3;
   --bg-card: #FFFFFF;
-  --bg-nav: #F7F6F1;
-  --bg-oat: #EDE8DE;                 /* V2：燕麦色（Sidebar/次级卡/标签底/筛选条） */
+  --bg-nav: #FFFFFF;
+  --bg-oat: #EDF2EC;
   /* V3：柔和状态色（标签底 + 深色字，供 el-tag / 状态徽章引用） */
   --danger-soft: #F6E7E6;
   --danger-text: #9E5350;
@@ -74,7 +74,7 @@
   --theme-general-soft: rgba(168, 181, 160, 0.08);
   /* 字体 */
   --font-family: system-ui, -apple-system, 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
-  --font-serif: 'Noto Serif SC', 'Songti SC', 'STSong', serif;  /* V2：仅 Logo/H1/StatCard 数字 */
+  --font-serif: var(--font-family);
   --font-size-xs: 13px;             /* V2：辅助说明（原 12px） */
   --font-size-s: 15px;              /* V2：正文基准（原 14px） */
   --font-size-m: 17px;              /* V2：卡片标题 H3（原 16px） */
@@ -92,23 +92,23 @@
   --space-3xl: 56px;                /* V3：页面级留白 */
   --radius-s: 8px;
   --radius-m: 12px;
-  --radius-card: 18px;              /* V2：卡片（原 14px） */
-  --radius-card-lg: 22px;           /* V2：Hero / 大卡（原 18px） */
-  --radius-l: 16px;
+  --radius-card: 12px;
+  --radius-card-lg: 16px;
+  --radius-l: 14px;
   --radius-pill: 999px;             /* V3：完全胶囊（标签/按钮/tab） */
   /* V3：叶片裁角（四角不对称 = 品牌记忆点，对齐小程序端 $radius-card-tl）
    * 反差放大：左上角约为其他角的 1.75 倍，让"叶片"一眼可辨（此前 22/18 仅差 4px 过隐晦） */
-  --radius-leaf: 28px 16px 16px 16px;      /* 卡片 */
-  --radius-leaf-sm: 18px 10px 10px 10px;   /* 小元件 / 标签 */
-  --radius-leaf-lg: 34px 20px 20px 20px;   /* Hero / 大卡 */
-  --shadow-card: 0 1px 3px rgba(35, 60, 54, 0.04);    /* V3：层次改由描边承担（原 0 2px 12px .06） */
-  --shadow-float: 0 4px 14px rgba(35, 60, 54, 0.07);  /* V3：原 0 4px 20px .1 */
+  --radius-leaf: 24px 10px 10px 10px;
+  --radius-leaf-sm: 16px 8px 8px 8px;
+  --radius-leaf-lg: 32px 14px 14px 14px;
+  --shadow-card: none;
+  --shadow-float: 0 8px 24px rgba(23, 61, 57, 0.10);
   /* 侧边栏（V2：燕麦底） */
-  --side-width: 240px;
-  --side-bg: #EDE8DE;
-  --side-active-bg: #E2EEE9;        /* V2：激活态浅绿 */
-  --side-active-text: #36524D;      /* V2：激活文字墨绿 */
-  --side-text: #36524D;
+  --side-width: 216px;
+  --side-bg: #123F3B;
+  --side-active-bg: #DDEDE9;
+  --side-active-text: #176B64;
+  --side-text: #314A46;
   /* 噪点纹理（2% 透明度，SVG feTurbulence，内联 data-uri） */
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E");
 
@@ -152,8 +152,6 @@ body {
   font-family: var(--font-family);
   color: var(--text-primary);
   background-color: var(--bg-page);
-  background-image: var(--grain);   /* V2：噪点纹理叠加 */
-  background-repeat: repeat;
   font-size: var(--font-size-s);
   line-height: 1.6;
 }
@@ -175,8 +173,7 @@ body {
     box-shadow var(--motion-hover) var(--ease-motion);
 }
 .card-float:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-float);
+  border-color: rgba(var(--rgb-brand-primary), 0.28);
 }
 
 /* ①-b 叶片裁角（四角不对称 = 品牌记忆点；与 .card-float 并列挂在卡片根元素上） */

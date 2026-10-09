@@ -1,0 +1,137 @@
+{
+  "pages": [
+    {
+      "path": "pages/home/home",
+      "style": {
+        "navigationBarTitleText": "伴芽小站"
+      }
+    },
+    {
+      "path": "pages/course/list",
+      "style": {
+        "navigationBarTitleText": "课程"
+      }
+    },
+    {
+      "path": "pages/course/detail",
+      "style": {
+        "navigationBarTitleText": "课程详情"
+      }
+    },
+    {
+      "path": "pages/course/favorites",
+      "style": {
+        "navigationBarTitleText": "我的收藏"
+      }
+    },
+    {
+      "path": "pages/training/index",
+      "style": {
+        "navigationBarTitleText": "培训"
+      }
+    },
+    {
+      "path": "pages/training/play",
+      "style": {
+        "navigationBarTitleText": "培训课程"
+      }
+    },
+    {
+      "path": "pages/tool/index",
+      "style": {
+        "navigationBarTitleText": "教师工具箱"
+      }
+    },
+    {
+      "path": "pages/mine/mine",
+      "style": {
+        "navigationBarTitleText": "我的"
+      }
+    },
+    {
+      "path": "pages/mine/about",
+      "style": {
+        "navigationBarTitleText": "关于伴芽小站"
+      }
+    },
+    {
+      "path": "pages/mine/help",
+      "style": {
+        "navigationBarTitleText": "帮助与反馈"
+      }
+    }
+  ],
+  "subPackages": [
+    {
+      "root": "subpkg/tools",
+      "name": "tools",
+      "pages": [
+        {
+          "path": "qa",
+          "style": {
+            "navigationBarTitleText": "问答支持"
+          }
+        },
+        {
+          "path": "ask",
+          "style": {
+            "navigationBarTitleText": "我要提问"
+          }
+        },
+        {
+          "path": "prepare",
+          "style": {
+            "navigationBarTitleText": "备课助手"
+          }
+        },
+        {
+          "path": "family",
+          "style": {
+            "navigationBarTitleText": "家校沟通"
+          }
+        },
+        {
+          "path": "activities",
+          "style": {
+            "navigationBarTitleText": "课堂活动库"
+          }
+        }
+      ]
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "伴芽小站",
+    "navigationBarBackgroundColor": "#F5F7F3",
+    "backgroundColor": "#F5F7F3"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#7B8986",
+    "selectedColor": "#238C82",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/course/list",
+        "text": "课程"
+      },
+      {
+        "pagePath": "pages/training/index",
+        "text": "培训"
+      },
+      {
+        "pagePath": "pages/tool/index",
+        "text": "工具"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "text": "我的"
+      }
+    ]
+  }
+}

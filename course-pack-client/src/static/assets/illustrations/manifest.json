@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 2,
+  "note": "伴芽 · 图标/插画资产清单。图标双规：宫格 4 个 2.5px 图标（icons/，形状对照 reference/ 原图重绘）；其余全 app 图标一律 1.5px 线性墨绿 #36524D（页面内 data-uri）。reference/ 原图仅作对照，不得直接引用。文件名一律英文，禁止中文。",
+  "iconSpec": {
+    "grid": { "stroke": "#36524D", "strokeWidth": 2.5, "cap": "round", "join": "round", "background": "transparent", "viewBox": "0 0 24 24" },
+    "global": { "stroke": "#36524D", "strokeWidth": 1.5, "cap": "round", "join": "round", "background": "transparent", "viewBox": "0 0 24 24" }
+  },
+  "icons": [
+    {
+      "key": "icon-course",
+      "file": "icon-course.svg",
+      "location": "src/static/assets/icons/icon-course.svg",
+      "shape": "黑板：板框 + 两条内容线 + 外撇支架腿",
+      "reference": "reference/course.png",
+      "usage": "找课程 宫格卡图标",
+      "assetStatus": "已到位，首页宫格已引用"
+    },
+    {
+      "key": "icon-training",
+      "file": "icon-training.svg",
+      "location": "src/static/assets/icons/icon-training.svg",
+      "shape": "学位帽：菱形帽顶 + 帽身 + 流苏（线 + 圆珠）",
+      "reference": "reference/training.png",
+      "usage": "学培训 宫格卡图标",
+      "assetStatus": "已到位，首页宫格已引用"
+    },
+    {
+      "key": "icon-tool",
+      "file": "icon-tool.svg",
+      "location": "src/static/assets/icons/icon-tool.svg",
+      "shape": "备课工具：圆角方框 + 瘦身斜置铅笔（尖头+窄身+圆擦头带分隔线，尖朝左下）+ 右侧短线 + 底线",
+      "reference": "reference/prepare.png",
+      "usage": "备课工具 宫格卡图标",
+      "assetStatus": "已到位，首页宫格已引用"
+    },
+    {
+      "key": "icon-qa",
+      "file": "icon-qa.svg",
+      "location": "src/static/assets/icons/icon-qa.svg",
+      "shape": "问答支持：前对话气泡（加号，尾朝左下）+ 后气泡（尾朝右下）",
+      "reference": "reference/qa.png",
+      "usage": "问答支持 宫格卡图标",
+      "assetStatus": "已到位，首页宫格已引用"
+    }
+  ],
+  "reference": [
+    { "file": "course.png", "from": "用户提供原图（黑板）", "usage": "仅作重绘对照，禁止直接引用" },
+    { "file": "training.png", "from": "用户提供原图（学位帽）", "usage": "仅作重绘对照，禁止直接引用" },
+    { "file": "prepare.png", "from": "用户提供原图（圆框铅笔）", "usage": "仅作重绘对照，禁止直接引用" },
+    { "file": "qa.png", "from": "用户提供原图（对话加号）", "usage": "仅作重绘对照，禁止直接引用" }
+  ],
+  "illustrations": [
+    {
+      "key": "illu-recommend-hero",
+      "file": "illu-recommend-hero.png",
+      "usage": "今日推荐 HERO 卡右侧课程主题插画",
+      "assetStatus": "暂无，以白芽水印占位，资产到位后替换"
+    },
+    {
+      "key": "illu-empty",
+      "file": "illu-empty.png",
+      "usage": "文案空态占位卡插画",
+      "assetStatus": "待资产到位"
+    }
+  ]
+}
