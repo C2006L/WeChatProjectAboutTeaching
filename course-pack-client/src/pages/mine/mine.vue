@@ -20,14 +20,14 @@
       <!-- 学习进度 -->
       <view class="progress-card pressable" hover-class="hv-press" :hover-stay-time="80" @tap="goTraining">
         <view class="progress-info">
-          <text class="progress-title">培训学习进度</text>
+          <view class="progress-heading">
+            <text class="progress-title">培训进度</text>
+            <text class="progress-percent">{{ percent }}%</text>
+          </view>
           <text class="progress-desc">已完成 {{ user.trainingProgress.completed }}/{{ user.trainingProgress.total }} 节</text>
-          <text class="progress-encourage">继续加油</text>
+          <view class="progress-bar"><GrowProgress :percent="percent" :height="8" /></view>
         </view>
-        <view class="progress-bar">
-          <GrowProgress :percent="percent" :height="10" />
-        </view>
-        <text class="progress-percent">{{ percent }}%</text>
+        <view class="progress-next">继续学习</view>
       </view>
 
       <!-- 我的内容 -->
@@ -195,19 +195,17 @@ function onMenuNavigate(item: MineMenuItem) {
   padding: $space-m $space-m calc($tab-bar-height + 32rpx);
   display: flex;
   flex-direction: column;
-  gap: $space-m;
+  gap: 24rpx;
 }
 
 .progress-card {
   display: flex;
   align-items: center;
-  gap: $space-m;
-  padding: $space-m;
+  gap: 24rpx;
+  padding: 26rpx $space-m;
   background: $bg-card;
   border: $border-card;
   border-radius: $radius-card;
-  border-top-left-radius: $radius-card-tl; // 叶片裁角（左上 40rpx）
-  box-shadow: $shadow-card;
 }
 
 .progress-info {
@@ -217,6 +215,8 @@ function onMenuNavigate(item: MineMenuItem) {
   flex-direction: column;
   gap: 6rpx;
 }
+
+.progress-heading { display: flex; align-items: baseline; justify-content: space-between; }
 
 .progress-title {
   font-size: $font-size-s;
@@ -229,14 +229,8 @@ function onMenuNavigate(item: MineMenuItem) {
   color: $text-secondary;
 }
 
-.progress-encourage {
-  font-size: $font-size-xs;
-  color: $brand-primary;
-}
-
 .progress-bar {
-  flex: 1;
-  /* 轨道由 GrowProgress 自带（浅绿底 + scaleX 生长 + 末端小芽淡入） */
+  margin-top: 8rpx;
 }
 
 .progress-percent {
@@ -246,21 +240,21 @@ function onMenuNavigate(item: MineMenuItem) {
   color: $brand-primary;
 }
 
+.progress-next { flex-shrink: 0; padding: 14rpx 20rpx; border-radius: 28rpx; background: $brand-primary-light; color: $brand-primary-dark; font-size: $font-size-xs; font-weight: $font-weight-bold; }
+
 .logout-btn {
   --press-shadow: none; /* 描边按钮无投影：按压仅缩放 */
-  margin-top: $space-s;
-  height: 88rpx;
-  border-radius: $radius-card;
+  margin: 4rpx auto 0;
+  height: 64rpx;
+  padding: 0 36rpx;
   background: transparent;
-  border: 2rpx solid $brand-primary; /* 墨绿 1px 描边 */
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .logout-text {
-  font-size: $font-size-m;
-  color: $brand-primary;
-  font-weight: $font-weight-bold;
+  font-size: $font-size-s;
+  color: $text-secondary;
 }
 </style>

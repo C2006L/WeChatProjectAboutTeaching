@@ -11,7 +11,11 @@
         @tap="onTap(item)"
       >
         <view class="item-icon" :class="'i-' + item.icon"></view>
-        <text class="item-label">{{ item.label }}</text>
+        <view class="item-copy">
+          <text class="item-label">{{ item.label }}</text>
+          <text v-if="item.meta" class="item-meta">{{ item.meta }}</text>
+        </view>
+        <view class="item-arrow"></view>
       </view>
     </view>
   </view>
@@ -36,9 +40,9 @@ function onTap(item: MineMenuItem) {
 <style scoped lang="scss">
 .menu-grid {
   background: $bg-card;
+  border: $border-card;
   border-radius: $radius-card;
-  box-shadow: $shadow-card;
-  padding: $space-m;
+  padding: 28rpx $space-m 4rpx;
 }
 
 .grid-title {
@@ -46,21 +50,21 @@ function onTap(item: MineMenuItem) {
   font-size: $font-size-s;
   font-weight: $font-weight-bold;
   color: $text-primary;
-  margin-bottom: $space-m;
+  margin-bottom: 12rpx;
 }
 
-.grid {
-  display: flex;
-  flex-wrap: wrap;
-}
+.grid { display: flex; flex-direction: column; }
 
 .grid-item {
-  width: 50%;
+  width: 100%;
+  min-height: 104rpx;
   display: flex;
   align-items: center;
   gap: $space-s;
-  padding: $space-s 0;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid $border;
 }
+.grid-item:last-child { border-bottom: 0; }
 
 /* 图标方砖：56rpx 方形容器（墨绿单色线性图标） */
 .item-icon {
@@ -74,9 +78,22 @@ function onTap(item: MineMenuItem) {
   background-size: 32rpx 32rpx;
 }
 
+.item-copy { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4rpx; }
+
 .item-label {
   font-size: $font-size-s;
+  font-weight: $font-weight-medium;
   color: $text-primary;
+}
+
+.item-meta { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: $font-size-xs; color: $text-secondary; }
+
+.item-arrow {
+  flex-shrink: 0;
+  width: 28rpx;
+  height: 28rpx;
+  background: center / contain no-repeat;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237B8986' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E");
 }
 
 /* 线稿 icon（CSS background-data-uri SVG，禁用 emoji）。描边色为文本二级等价值 */

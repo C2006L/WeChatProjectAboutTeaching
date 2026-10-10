@@ -3,7 +3,7 @@
     <!-- 头像（白描边）+ 种子徽章 -->
     <view class="avatar-wrap">
       <view class="avatar">
-        <text class="avatar-text">{{ user.name.slice(0, 1) }}</text>
+        <text class="avatar-text">{{ user.name?.slice(0, 1) || '伴' }}</text>
       </view>
       <view v-if="isSeed" class="seed-badge">
         <view class="seed-ico"></view>
@@ -39,7 +39,7 @@ const isSeed = computed(() => Number(props.user.is_seed || 0) === 1);
   display: flex;
   align-items: center;
   gap: $space-m;
-  padding: $space-l $space-m;
+  padding: 36rpx $space-m;
   border-radius: $radius-card-lg;
   border-top-left-radius: $radius-card-tl;
   background: $bg-hero;
@@ -51,10 +51,10 @@ const isSeed = computed(() => Number(props.user.is_seed || 0) === 1);
 }
 
 .avatar {
-  width: 128rpx;
-  height: 128rpx;
-  border-radius: 50%;
-  border: 6rpx solid rgba(255, 255, 255, 1); /* 白色描边 */
+  width: 112rpx;
+  height: 112rpx;
+  border-radius: 44rpx 44rpx 44rpx 18rpx;
+  border: 4rpx solid rgba(255, 255, 255, .88);
   background: rgba(255, 255, 255, 0.18);
   display: flex;
   align-items: center;
@@ -71,7 +71,7 @@ const isSeed = computed(() => Number(props.user.is_seed || 0) === 1);
 .seed-badge {
   position: absolute;
   left: 50%;
-  bottom: -20rpx;
+  bottom: -18rpx;
   transform: translateX(-50%);
   display: inline-flex;
   align-items: center;
@@ -91,7 +91,7 @@ const isSeed = computed(() => Number(props.user.is_seed || 0) === 1);
 }
 
 .seed-text {
-  font-size: 20rpx;
+  font-size: 22rpx;
   font-weight: $font-weight-bold;
   color: $accent-warm;
 }
@@ -109,7 +109,7 @@ const isSeed = computed(() => Number(props.user.is_seed || 0) === 1);
 }
 
 .name {
-  font-size: $font-size-l;
+  font-size: 36rpx;
   font-weight: $font-weight-bold;
   color: #FFFFFF;
 }

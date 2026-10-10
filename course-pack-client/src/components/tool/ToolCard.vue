@@ -1,8 +1,11 @@
 <template>
-  <view class="tool-card" @tap="onTap">
+  <view class="tool-card pressable" :class="{ 'tool-wide': wide }" hover-class="hv-press" :hover-stay-time="80" @tap="onTap">
     <view class="icon-wrap" :class="'i-' + entry.icon + ' ' + (entry.tile === 'g' ? 'tile-g' : 'tile-m')"></view>
-    <text class="title">{{ entry.title }}</text>
-    <text class="desc">{{ entry.desc }}</text>
+    <view class="copy">
+      <text class="title">{{ entry.title }}</text>
+      <text class="desc">{{ entry.desc }}</text>
+    </view>
+    <view class="arrow"></view>
   </view>
 </template>
 
@@ -11,6 +14,7 @@ import type { ToolEntry } from '@/types/mock';
 
 interface Props {
   entry: ToolEntry;
+  wide?: boolean;
 }
 
 const props = defineProps<Props>();
@@ -24,27 +28,29 @@ function onTap() {
 <style scoped lang="scss">
 /* 卡片材质 token */
 .tool-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: $space-s;
-  padding: $space-m;
+  gap: 18rpx;
+  padding: 28rpx;
   background: $bg-card;
   border: $border-card;
   border-radius: $radius-card;
-  border-top-left-radius: $radius-card-tl;
-  box-shadow: $shadow-card;
-  min-height: 200rpx;
+  min-height: 174rpx;
 }
+
+.tool-card.tool-wide { min-height: 150rpx; flex-direction: row; align-items: center; border-top-left-radius: $radius-card-tl; background: $brand-primary-light; }
 
 /* 图标方砖：72rpx 方形容器，米/浅绿交替 */
 .icon-wrap {
-  width: 72rpx;
-  height: 72rpx;
+  flex-shrink: 0;
+  width: 64rpx;
+  height: 64rpx;
   border-radius: $radius-m;
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 40rpx 40rpx;
+  background-size: 36rpx 36rpx;
 
   &.tile-m {
     background-color: $tile-m;
@@ -54,6 +60,10 @@ function onTap() {
   }
 }
 
+.copy { min-width: 0; display: flex; flex-direction: column; gap: 6rpx; }
+.tool-wide .copy { flex: 1; }
+.tool-wide .title { color: $brand-primary-dark; }
+
 .title {
   font-size: $font-size-s;
   font-weight: $font-weight-bold;
@@ -61,10 +71,17 @@ function onTap() {
 }
 
 .desc {
-  font-size: $font-size-xs;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font-size: 24rpx;
   color: $text-secondary;
   line-height: 1.5;
 }
+
+.arrow { position: absolute; right: 22rpx; top: 24rpx; width: 26rpx; height: 26rpx; opacity: .7; background: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237B8986' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E"); }
+.tool-wide .arrow { top: 50%; transform: translateY(-50%); }
 
 /* 线稿 icon（CSS background-data-uri SVG，禁用 emoji）。描边色为品牌绿等价值（data-uri 内无法引用变量） */
 .icon-wrap.i-qa {
@@ -78,5 +95,8 @@ function onTap() {
 }
 .icon-wrap.i-activity {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2336524D' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 9.5h6.5V5H4.5A.5.5 0 0 0 4 5.5v4Z'/%3E%3Cpath d='M14 9.5h6V5.5a.5.5 0 0 0-.5-.5H14v4.5Z'/%3E%3Cpath d='M4 19h6.5v-4.5H4.5a.5.5 0 0 0-.5.5v4Z'/%3E%3Cpath d='M14 19h6v-4.5h-6V19Z'/%3E%3C/svg%3E");
+}
+.icon-wrap.i-case {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2336524D' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5v-16Z'/%3E%3Cpath d='M4 18.5A2.5 2.5 0 0 1 6.5 16H20M8 7h8M8 10.5h6'/%3E%3C/svg%3E");
 }
 </style>

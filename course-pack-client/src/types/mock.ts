@@ -147,6 +147,8 @@ export interface HomeData {
 export interface MineMenuItem {
   icon: string;
   label: string;
+  /** 入口状态或用途说明，帮助用户在进入前判断内容 */
+  meta?: string;
   /** 为空表示 V1 占位（toast 提示） */
   path: string;
 }
@@ -224,3 +226,30 @@ export interface FeedbackTicket {
   time: string;
   reply?: TicketReply;
 }
+
+/** 教学案例：教师提交后进入审核，审核通过后进入公共案例库 */
+export type TeachingCaseStatus = 'DRAFT' | 'PENDING' | 'APPROVED' | 'REJECTED';
+
+export interface TeachingCase {
+  id: number;
+  title: string;
+  grade: '小学1-3年级' | '小学4-6年级';
+  theme: '身体与安全' | '家庭与合作' | '人际与尊重' | '成长与变化' | '综合主题';
+  courseTitle: string;
+  summary: string;
+  content: string;
+  reflection: string;
+  author: string;
+  team: string;
+  status: TeachingCaseStatus;
+  featured: boolean;
+  isMine: boolean;
+  createdAt: string;
+  updatedAt: string;
+  reviewComment?: string;
+}
+
+export type TeachingCasePayload = Pick<
+  TeachingCase,
+  'title' | 'grade' | 'theme' | 'courseTitle' | 'summary' | 'content' | 'reflection'
+>;

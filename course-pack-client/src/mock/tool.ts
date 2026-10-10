@@ -1,7 +1,7 @@
 import type { ToolEntry } from '@/types/mock';
 
 /**
- * 教师工具箱四宫格入口（V2：2×2 宫格，线稿 icon）。
+ * 教师工具箱入口（两列宫格，线稿 icon）。
  * icon 为语义 key，由 ToolCard 通过 CSS background-data-uri 绘制线稿 SVG（禁用 emoji）。
  */
 export const toolEntries: ToolEntry[] = [
@@ -32,5 +32,12 @@ export const toolEntries: ToolEntry[] = [
     desc: '破冰与主题活动集',
     path: '/subpkg/tools/activities',
     tile: 'g',
+  },
+  {
+    icon: 'case',
+    title: '教学案例库',
+    desc: '查看一线实践，也可以提交自己的课堂案例',
+    path: '/subpkg/case/list',
+    tile: 'm',
   },
 ];

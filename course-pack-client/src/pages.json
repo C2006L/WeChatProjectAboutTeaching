@@ -97,6 +97,30 @@
           }
         }
       ]
+    },
+    {
+      "root": "subpkg/case",
+      "name": "case",
+      "pages": [
+        {
+          "path": "list",
+          "style": {
+            "navigationBarTitleText": "教学案例库"
+          }
+        },
+        {
+          "path": "detail",
+          "style": {
+            "navigationBarTitleText": "案例详情"
+          }
+        },
+        {
+          "path": "submit",
+          "style": {
+            "navigationBarTitleText": "提交案例"
+          }
+        }
+      ]
     }
   ],
   "globalStyle": {

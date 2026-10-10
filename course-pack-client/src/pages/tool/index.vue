@@ -7,9 +7,11 @@
 
     <view class="grid" v-if="entries.length">
       <ToolCard
-        v-for="entry in entries"
+        v-for="(entry, index) in entries"
         :key="entry.title"
         :entry="entry"
+        :wide="entries.length % 2 === 1 && index === entries.length - 1"
+        :class="{ 'tool-wide': entries.length % 2 === 1 && index === entries.length - 1 }"
         @navigate="onNavigate"
       />
     </view>
@@ -69,20 +71,24 @@ function onNavigate(entry: ToolEntry) {
 }
 
 .head-title {
-  font-size: $font-size-xl;
+  font-size: 44rpx;
   font-weight: $font-weight-bold;
   color: $text-primary;
 }
 
 .head-desc {
-  font-size: $font-size-xs;
+  font-size: 26rpx;
   color: $text-secondary;
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: $space-m;
+  gap: 22rpx;
+}
+
+.tool-wide {
+  grid-column: 1 / -1;
 }
 
 .empty-wrap {
