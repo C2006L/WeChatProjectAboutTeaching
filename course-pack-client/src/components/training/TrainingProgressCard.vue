@@ -12,7 +12,7 @@
       </view>
       <view class="bar-area">
         <!-- 进度条：与首页统一复用 GrowProgress（scaleX 生长 600ms + 末端小芽淡入） -->
-        <GrowProgress :percent="percent" :height="16" />
+        <GrowProgress :percent="percent" :height="12" tone="light" />
         <view
           class="btn-continue pressable"
           hover-class="hv-press"
@@ -112,7 +112,6 @@ const percentDisplay = useCountUp(computed(() => props.percent));
   padding: 10rpx 28rpx;
   border-radius: 26rpx;
   background: #fff;
-  box-shadow: 0 8rpx 18rpx rgba(8,55,50,.18);
 }
 
 .btn-text {

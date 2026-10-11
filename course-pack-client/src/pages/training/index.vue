@@ -127,9 +127,8 @@ function goCurrent() {
   top: 34rpx;
   bottom: 34rpx;
   left: 44rpx;
-  width: 4rpx;
+  width: 3rpx;
   border-radius: 2rpx;
-  background: $brand-primary;
-  opacity: .35;
+  background: rgba(23, 111, 102, .2);
 }
 </style>

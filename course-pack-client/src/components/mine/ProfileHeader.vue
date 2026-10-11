@@ -1,19 +1,21 @@
 <template>
   <view class="profile-header">
-    <!-- 头像（白描边）+ 种子徽章 -->
+    <!-- 头像与身份信息分区，徽章跟随姓名避免挤压头像。 -->
     <view class="avatar-wrap">
       <view class="avatar">
         <text class="avatar-text">{{ user.name?.slice(0, 1) || '伴' }}</text>
-      </view>
-      <view v-if="isSeed" class="seed-badge">
-        <view class="seed-ico"></view>
-        <text class="seed-text">种子教师</text>
       </view>
     </view>
 
     <view class="info">
       <text class="profile-kicker">教师工作台</text>
-      <text class="name">{{ user.name }}</text>
+      <view class="name-row">
+        <text class="name">{{ user.name }}</text>
+        <view v-if="isSeed" class="seed-badge">
+          <view class="seed-ico"></view>
+          <text class="seed-text">种子教师</text>
+        </view>
+      </view>
       <text class="org">{{ user.org }} · {{ user.team }}</text>
       <text class="stage">{{ user.stage }}</text>
     </view>
@@ -24,7 +26,7 @@
         <text class="training-count">{{ completed }}/{{ total }} 节</text>
       </view>
       <view class="training-line">
-        <view class="training-fill" :style="{ transform: 'scaleX(' + percent / 100 + ')' }"></view>
+        <view class="training-fill" :style="{ transform: 'scaleX(' + percent / 100 + ')' }"><view class="training-tip" /></view>
       </view>
       <view class="training-foot">
         <text class="training-percent">{{ percent }}%</text>
@@ -89,31 +91,27 @@ const isSeed = computed(() => Number(props.user.is_seed || 0) === 1);
 
 /* 种子教师：暖橙描边徽章 */
 .seed-badge {
-  position: absolute;
-  left: 50%;
-  bottom: -18rpx;
-  transform: translateX(-50%);
   display: inline-flex;
   align-items: center;
   gap: 4rpx;
   white-space: nowrap;
-  padding: 6rpx 16rpx;
+  padding: 5rpx 12rpx;
   border-radius: 999rpx;
-  border: 2rpx solid rgba(192, 131, 82, 1); /* 暖橙描边 */
-  background: $bg-hero;
+  border: 1rpx solid rgba(242, 160, 107, .72);
+  background: rgba(255, 255, 255, .08);
 }
 
 .seed-ico {
   width: 24rpx;
   height: 24rpx;
   background: center / contain no-repeat;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C08352' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M13 4 4.5 17.5a2.5 2.5 0 0 0 4 1.2L13 15'/%3E%3Cpath d='M13 4c3.8 1.6 6.2 4.7 6.7 9.1a3.5 3.5 0 0 1-5.6 2.7L13 15'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23F2A06B' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M13 4 4.5 17.5a2.5 2.5 0 0 0 4 1.2L13 15'/%3E%3Cpath d='M13 4c3.8 1.6 6.2 4.7 6.7 9.1a3.5 3.5 0 0 1-5.6 2.7L13 15'/%3E%3C/svg%3E");
 }
 
 .seed-text {
-  font-size: 22rpx;
+  font-size: 20rpx;
   font-weight: $font-weight-bold;
-  color: $accent-warm;
+  color: $brand-secondary;
 }
 
 .left-pad {
@@ -129,6 +127,7 @@ const isSeed = computed(() => Number(props.user.is_seed || 0) === 1);
 }
 
 .profile-kicker { font-size: 21rpx; font-weight: 600; color: rgba(255,255,255,.58); letter-spacing: 2rpx; }
+.name-row { display: flex; align-items: center; flex-wrap: wrap; gap: 10rpx; }
 
 .name {
   font-size: 36rpx;
@@ -149,8 +148,9 @@ const isSeed = computed(() => Number(props.user.is_seed || 0) === 1);
 .training { grid-column: 1 / -1; margin-top: 14rpx; padding-top: 16rpx; border-top: 1rpx solid rgba(255,255,255,.14); }
 .training-head, .training-foot { display: flex; align-items: center; justify-content: space-between; }
 .training-label, .training-count { font-size: 24rpx; color: rgba(255,255,255,.72); }
-.training-line { height: 8rpx; margin-top: 12rpx; overflow: hidden; border-radius: 4rpx; background: rgba(255,255,255,.18); }
-.training-fill { width: 100%; height: 100%; border-radius: 4rpx; background: $brand-secondary; transform-origin: 0 50%; }
+.training-line { height: 8rpx; margin: 14rpx 5rpx 0 0; border-radius: 4rpx; background: rgba(255,255,255,.18); }
+.training-fill { position: relative; width: 100%; height: 100%; border-radius: 4rpx; background: $brand-sprout; transform-origin: 0 50%; }
+.training-tip { position: absolute; right: -6rpx; top: -4rpx; width: 14rpx; height: 14rpx; border: 3rpx solid $bg-hero; border-radius: 50%; background: $brand-secondary; }
 .training-foot { margin-top: 10rpx; }
 .training-percent { font-size: 28rpx; font-weight: 700; color: #fff; }
 .training-action { padding: 8rpx 16rpx; border-radius: 22rpx; background: rgba(255,255,255,.12); font-size: 23rpx; color: #fff; }

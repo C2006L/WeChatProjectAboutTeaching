@@ -1,5 +1,6 @@
 <template>
   <view class="tool-card pressable" :class="{ featured }" hover-class="hv-press" :hover-stay-time="80" @tap="onTap">
+    <GrowthMark v-if="featured" class="case-watermark" stage="grow" tone="muted" />
     <view class="icon-wrap" :class="'i-' + entry.icon + ' ' + (entry.tile === 'g' ? 'tile-g' : 'tile-m')"></view>
     <view class="copy">
       <text class="title">{{ entry.title }}</text>
@@ -12,6 +13,7 @@
 
 <script setup lang="ts">
 import type { ToolEntry } from '@/types/mock';
+import GrowthMark from '@/components/common/GrowthMark.vue';
 
 interface Props {
   entry: ToolEntry;
@@ -40,7 +42,9 @@ function onTap() {
   border-radius: 30rpx 14rpx 30rpx 14rpx;
   min-height: 112rpx;
 }
-.tool-card.featured { min-height: 152rpx; border-top-left-radius: $radius-card-tl; background: $brand-primary-light; }
+.tool-card.featured { min-height: 152rpx; overflow: hidden; border-top-left-radius: $radius-card-tl; background: $brand-primary-light; }
+.case-watermark { position: absolute; right: 28rpx; bottom: -12rpx; width: 106rpx; height: 98rpx; opacity: .55; pointer-events: none; }
+.featured .icon-wrap, .featured .copy, .featured .arrow { position: relative; z-index: 1; }
 
 /* 图标方砖：72rpx 方形容器，米/浅绿交替 */
 .icon-wrap {
@@ -84,18 +88,18 @@ function onTap() {
 
 /* 线稿 icon（CSS background-data-uri SVG，禁用 emoji）。描边色为品牌绿等价值（data-uri 内无法引用变量） */
 .icon-wrap.i-qa {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2336524D' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3a8 8 0 0 0-8 8 8 8 0 0 0 3 6.2V21l4.5-1A8 8 0 1 0 12 3Z'/%3E%3Cpath d='M9 9.5a3 3 0 1 1 5 2.3c-.9.7-1.5 1-1.5 2.2'/%3E%3Ccircle cx='12' cy='16.5' r='.6'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23253C37' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3a8 8 0 0 0-8 8 8 8 0 0 0 3 6.2V21l4.5-1A8 8 0 1 0 12 3Z'/%3E%3Cpath d='M9 9.5a3 3 0 1 1 5 2.3c-.9.7-1.5 1-1.5 2.2'/%3E%3Ccircle cx='12' cy='16.5' r='.6'/%3E%3C/svg%3E");
 }
 .icon-wrap.i-prepare {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2336524D' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 5h11M9 12h11M9 19h11'/%3E%3Cpath d='m4.5 4.5 1.5 1.5 2.5-2.5M4.5 11.5 6 13l2.5-2.5M4.5 18.5 6 20l2.5-2.5'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23253C37' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 5h11M9 12h11M9 19h11'/%3E%3Cpath d='m4.5 4.5 1.5 1.5 2.5-2.5M4.5 11.5 6 13l2.5-2.5M4.5 18.5 6 20l2.5-2.5'/%3E%3C/svg%3E");
 }
 .icon-wrap.i-family {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2336524D' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 11 12 4l8 7'/%3E%3Cpath d='M6 9.8V20h12V9.8'/%3E%3Cpath d='M9.5 20v-5.5h5V20'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23253C37' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 11 12 4l8 7'/%3E%3Cpath d='M6 9.8V20h12V9.8'/%3E%3Cpath d='M9.5 20v-5.5h5V20'/%3E%3C/svg%3E");
 }
 .icon-wrap.i-activity {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2336524D' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 9.5h6.5V5H4.5A.5.5 0 0 0 4 5.5v4Z'/%3E%3Cpath d='M14 9.5h6V5.5a.5.5 0 0 0-.5-.5H14v4.5Z'/%3E%3Cpath d='M4 19h6.5v-4.5H4.5a.5.5 0 0 0-.5.5v4Z'/%3E%3Cpath d='M14 19h6v-4.5h-6V19Z'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23253C37' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 9.5h6.5V5H4.5A.5.5 0 0 0 4 5.5v4Z'/%3E%3Cpath d='M14 9.5h6V5.5a.5.5 0 0 0-.5-.5H14v4.5Z'/%3E%3Cpath d='M4 19h6.5v-4.5H4.5a.5.5 0 0 0-.5.5v4Z'/%3E%3Cpath d='M14 19h6v-4.5h-6V19Z'/%3E%3C/svg%3E");
 }
 .icon-wrap.i-case {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2336524D' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5v-16Z'/%3E%3Cpath d='M4 18.5A2.5 2.5 0 0 1 6.5 16H20M8 7h8M8 10.5h6'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23253C37' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5v-16Z'/%3E%3Cpath d='M4 18.5A2.5 2.5 0 0 1 6.5 16H20M8 7h8M8 10.5h6'/%3E%3C/svg%3E");
 }
 </style>

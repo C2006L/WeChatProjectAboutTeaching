@@ -1,5 +1,5 @@
 <template>
-  <view class="gp-track" :style="{ height: height + 'rpx', borderRadius: height / 2 + 'rpx' }">
+  <view class="gp-track" :class="'tone-' + tone" :style="{ height: height + 'rpx', borderRadius: height / 2 + 'rpx' }">
     <!-- 生长动画：scaleX 0→目标（600ms 统一缓动，不用 width，不触发重排） -->
     <view class="gp-fill" :style="{ transform: 'scaleX(' + ratio + ')', borderRadius: height / 2 + 'rpx' }"></view>
     <!-- 末端小芽：进度长满后淡入 -->
@@ -14,9 +14,11 @@ interface Props {
   percent: number;
   /** 轨道高度（rpx），首页 8 / 培训页 16 */
   height?: number;
+  /** 深色品牌卡片使用 light，普通白底保持默认 brand。 */
+  tone?: 'brand' | 'light';
 }
 
-const props = withDefaults(defineProps<Props>(), { height: 8 });
+const props = withDefaults(defineProps<Props>(), { height: 8, tone: 'brand' });
 
 const clamped = computed(() => Math.min(100, Math.max(0, props.percent)));
 const ratio = computed(() => clamped.value / 100);
@@ -36,6 +38,9 @@ const ratio = computed(() => clamped.value / 100);
   transform-origin: 0 50%;
   animation: gp-grow $motion-slow $motion-ease both;
 }
+.tone-light { background: rgba(255,255,255,.18); }
+.tone-light .gp-fill { background: $brand-sprout; }
+.tone-light .gp-sprout { opacity: .78; }
 
 @keyframes gp-grow {
   from {

@@ -100,7 +100,7 @@ function onKeywordInput(e: Event) {
   width: 34rpx;
   height: 34rpx;
   /* 线性搜索图标（data-uri，小程序不支持 svg 标签） */
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Ccircle cx='11' cy='11' r='6.5' stroke='%2336524D' stroke-width='1.5'/%3E%3Cpath d='m16 16 4.5 4.5' stroke='%2336524D' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Ccircle cx='11' cy='11' r='6.5' stroke='%23253C37' stroke-width='1.5'/%3E%3Cpath d='m16 16 4.5 4.5' stroke='%23253C37' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
 }
 
 .search-input {

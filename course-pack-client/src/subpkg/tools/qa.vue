@@ -1,5 +1,7 @@
 <template>
   <view class="page">
+    <PageIntro kicker="课堂支持" title="敏感问题应答" description="先理解情境，再选择专业、温和的回应" />
+    <view class="qa-content">
     <!-- Tab 切换：问答库（标准应答） / 我的提问（工单状态） -->
     <view class="tab-row">
       <view
@@ -87,6 +89,7 @@
       </view>
       <EmptyState v-else class="empty" text="还没有提问，点击下方按钮向项目组提问" />
     </view>
+    </view>
 
     <!-- 去提问 -->
     <view class="ask-bar">
@@ -102,6 +105,7 @@ import { ref, computed } from 'vue';
 import { onLoad, onShow } from '@dcloudio/uni-app';
 import QAListItem from '@/components/qa/QAListItem.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
+import PageIntro from '@/components/common/PageIntro.vue';
 import { fetchQaList } from '@/api/qa';
 import { fetchMyTickets } from '@/api/feedback';
 import type { QA, FeedbackTicket } from '@/types/mock';
@@ -156,15 +160,20 @@ function onAsk() {
 <style scoped lang="scss">
 .page {
   min-height: 100vh;
-  padding: $space-m $space-m calc(env(safe-area-inset-bottom) + 140rpx);
+  padding-bottom: calc(env(safe-area-inset-bottom) + 140rpx);
   background: $bg-page;
 }
+.qa-content { padding: 0 $space-m; }
 
 /* ── 顶部 Tab ── */
 .tab-row {
   display: flex;
-  gap: $space-s;
+  gap: 4rpx;
   margin-bottom: $space-m;
+  padding: 4rpx;
+  border: $border-card;
+  border-radius: 30rpx 12rpx 30rpx 12rpx;
+  background: $bg-card;
 }
 
 .tab {
@@ -173,15 +182,13 @@ function onAsk() {
   align-items: center;
   justify-content: center;
   flex: 1;
-  height: 72rpx;
-  border-radius: 36rpx;
-  background: $bg-card;
-  box-shadow: $shadow-card;
+  height: 64rpx;
+  border-radius: 25rpx 9rpx 25rpx 25rpx;
+  background: transparent;
 }
 
 .tab.active {
-  background: $brand-primary;
-  box-shadow: none;
+  background: $brand-primary-light;
 }
 
 .tab-text {
@@ -190,9 +197,7 @@ function onAsk() {
   color: $text-regular;
 }
 
-.tab.active .tab-text {
-  color: #FFFFFF;
-}
+.tab.active .tab-text { color: $brand-primary; }
 
 .tab-badge {
   margin-left: 8rpx;
@@ -207,19 +212,17 @@ function onAsk() {
   text-align: center;
 }
 
-.tab.active .tab-badge {
-  background: rgba(255, 255, 255, 0.25);
-}
+.tab.active .tab-badge { background: $brand-secondary; }
 
 .search-box {
   display: flex;
   align-items: center;
   gap: $space-s;
   padding: 0 $space-m;
-  height: 72rpx;
-  border-radius: 36rpx;
+  height: 76rpx;
+  border: $border-card;
+  border-radius: 26rpx 12rpx 26rpx 26rpx;
   background: $bg-card;
-  box-shadow: $shadow-card;
 }
 
 /* 搜索图标：1.5px 线性墨绿（data-uri，禁 emoji） */
@@ -227,7 +230,7 @@ function onAsk() {
   flex-shrink: 0;
   width: 34rpx;
   height: 34rpx;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Ccircle cx='11' cy='11' r='6.5' stroke='%2336524D' stroke-width='1.5'/%3E%3Cpath d='m16 16 4.5 4.5' stroke='%2336524D' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Ccircle cx='11' cy='11' r='6.5' stroke='%23253C37' stroke-width='1.5'/%3E%3Cpath d='m16 16 4.5 4.5' stroke='%23253C37' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
 }
 
 .search-input {
@@ -249,13 +252,13 @@ function onAsk() {
 .chip {
   display: inline-flex;
   align-items: center;
-  height: 56rpx;
-  padding: 0 $space-m;
+  height: 52rpx;
+  padding: 0 20rpx;
+  border: 1rpx solid rgba(37, 60, 55, .08);
   border-radius: 28rpx;
   font-size: $font-size-xs;
   color: $text-regular;
   background: $bg-card;
-  box-shadow: $shadow-card;
 
   &.active {
     background: $brand-primary-light;
@@ -287,7 +290,6 @@ function onAsk() {
   border: $border-card;
   border-radius: $radius-card;
   border-top-left-radius: $radius-card-tl;
-  box-shadow: $shadow-card;
   padding: $card-padding;
 }
 
@@ -379,7 +381,7 @@ function onAsk() {
   bottom: 0;
   padding: $space-s $space-m calc(env(safe-area-inset-bottom) + $space-s);
   background: $bg-card;
-  box-shadow: $shadow-float;
+  border-top: 1rpx solid $border;
 }
 
 .ask-btn {

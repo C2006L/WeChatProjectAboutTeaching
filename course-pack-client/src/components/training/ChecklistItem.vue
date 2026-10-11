@@ -6,11 +6,14 @@
     :hover-stay-time="80"
     @tap="onTap"
   >
-    <!-- 垂直生长线 + 节点（done=实线实心墨绿 / current=虚线空心 / lock=浅灰） -->
+    <!-- 连续轴由父列表绘制；此处只负责三个状态的成长节点。 -->
     <view class="grow-track">
-      <view class="track-line" :class="'ln-' + status"></view>
       <view class="track-node" :class="'nd-' + status">
-        <view v-if="status === 'done'" class="node-dot"></view>
+        <GrowthMark
+          :stage="status === 'done' ? 'grow' : status === 'current' ? 'sprout' : 'seed'"
+          :tone="status === 'lock' ? 'muted' : 'brand'"
+          compact
+        />
       </view>
     </view>
 
@@ -34,6 +37,8 @@
 </template>
 
 <script setup lang="ts">
+import GrowthMark from '@/components/common/GrowthMark.vue';
+
 interface Props {
   index: number;
   title: string;
@@ -73,7 +78,7 @@ function onTap() {
 }
 .checklist-item:not(.locked):active { background: $brand-primary-light; }
 
-/* ── 左侧垂直生长线 ── */
+/* ── 左侧成长节点；主轴仅由列表绘制，避免卡片之间出现断裂和双线 ── */
 .grow-track {
   align-self: stretch;
   width: 40rpx;
@@ -84,50 +89,30 @@ function onTap() {
   flex-shrink: 0;
 }
 
-.track-line {
-  position: absolute;
-  top: -22rpx;
-  bottom: -22rpx;
-  width: 4rpx;
-  border-radius: 2rpx;
-
-  &.ln-done {
-    background: $brand-primary;      /* 实线：墨绿 */
-  }
-  &.ln-current {
-    border-left: 4rpx dashed $brand-primary;   /* 虚线：墨绿 */
-    background: transparent;
-  }
-  &.ln-lock {
-    background: rgba(54, 82, 77, 0.1);  /* 浅灰 */
-  }
-}
-
 .track-node {
   position: relative;
   z-index: 2;
-  width: 28rpx;
-  height: 28rpx;
-  border-radius: 50%;
+  width: 34rpx;
+  height: 38rpx;
   display: flex;
   align-items: center;
   justify-content: center;
 
   &.nd-done {
-    background: $brand-primary;   /* 实心墨绿 */
-    .node-dot {
-      width: 10rpx;
-      height: 10rpx;
-      border-radius: 50%;
-      background: #FFFFFF;
-    }
+    padding: 4rpx;
+    border-radius: 16rpx 7rpx 16rpx 7rpx;
+    background: $brand-primary-light;
   }
   &.nd-current {
-    border: 4rpx solid $brand-primary;   /* 空心墨绿 */
+    padding: 4rpx;
+    border: 2rpx solid $brand-primary;
+    border-radius: 16rpx 7rpx 16rpx 7rpx;
     background: #FFFFFF;
   }
   &.nd-lock {
-    border: 4rpx solid rgba(54, 82, 77, 0.2);
+    padding: 5rpx;
+    border: 2rpx solid rgba(37, 60, 55, 0.14);
+    border-radius: 50%;
     background: #FFFFFF;
   }
 }
@@ -179,17 +164,17 @@ function onTap() {
 
 .mini-bar {
   flex: 1;
-  height: 10rpx;
-  border-radius: 5rpx;
-  background: $brand-primary-light;
+  height: 6rpx;
+  border-radius: 3rpx;
+  background: $brand-sky-light;
   overflow: hidden;
 }
 
 .mini-inner {
   width: 100%;
   height: 100%;
-  border-radius: 5rpx;
-  background: $brand-primary;
+  border-radius: 3rpx;
+  background: $brand-sky;
   transform-origin: 0 50%;
   animation: mini-grow $motion-slow $motion-ease both;
 }
@@ -208,7 +193,7 @@ function onTap() {
   flex-shrink: 0;
   font-size: 22rpx;
 }
-.status-current { color: $brand-primary-dark; background: $brand-primary-light; }
-.status-done { color: $succ; background: rgba(93,155,120,.12); }
+.status-current { color: $brand-primary-dark; background: $brand-sky-light; }
+.status-done { color: $succ; background: rgba(111,159,120,.12); }
 .status-lock { color: $text-secondary; background: $bg-oat; }
 </style>
