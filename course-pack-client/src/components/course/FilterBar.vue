@@ -12,24 +12,38 @@
       />
     </view>
 
-    <view v-for="group in filterGroups" :key="group.key" class="filter-row">
-      <text class="filter-label">{{ group.label }}</text>
-      <scroll-view scroll-x :show-scrollbar="false" class="chip-scroll">
-        <view class="chip-row">
-          <view
-            v-for="option in group.options"
-            :key="option"
-            class="chip"
-            :class="{ active: filter[group.key] === option }"
-            @tap="tapChip({ key: group.key, label: option })"
-          >{{ option }}</view>
-        </view>
-      </scroll-view>
+    <view class="filter-triggers">
+      <view
+        v-for="group in filterGroups"
+        :key="group.key"
+        class="filter-trigger pressable"
+        :class="{ active: expanded === group.key || filter[group.key] !== '全部' }"
+        hover-class="hv-press"
+        @tap="toggleGroup(group.key)"
+      >
+        <text>{{ group.label }}</text>
+        <text class="trigger-value">{{ filter[group.key] }}</text>
+        <view class="trigger-arrow" :class="{ open: expanded === group.key }"></view>
+      </view>
+    </view>
+
+    <view v-if="activeGroup" class="option-panel">
+      <text class="option-label">{{ activeGroup.label }}</text>
+      <view class="chip-row">
+        <view
+          v-for="option in activeGroup.options"
+          :key="option"
+          class="chip"
+          :class="{ active: filter[activeGroup.key] === option }"
+          @tap="tapChip({ key: activeGroup.key, label: option })"
+        >{{ option }}</view>
+      </view>
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
+import { computed, ref } from 'vue';
 import type { CourseFilter } from '@/api/course';
 
 interface Props {
@@ -44,10 +58,17 @@ const filterGroups: { key: 'version' | 'grade' | 'theme'; label: string; options
   { key: 'grade', label: '年级', options: ['全部', '1-3年级', '4-6年级'] },
   { key: 'theme', label: '主题', options: ['全部', '身体与安全', '家庭与合作', '人际与尊重', '成长与变化', '综合主题'] },
 ];
+const expanded = ref<'version' | 'grade' | 'theme' | ''>('');
+const activeGroup = computed(() => filterGroups.find((group) => group.key === expanded.value));
+
+function toggleGroup(key: 'version' | 'grade' | 'theme') {
+  expanded.value = expanded.value === key ? '' : key;
+}
 
 function tapChip(c: { key: 'version' | 'grade' | 'theme'; label: string }) {
   const patch: Partial<CourseFilter> = { [c.key]: c.label };
   emit('change', { ...props.filter, ...patch });
+  expanded.value = '';
 }
 
 function onKeywordInput(e: Event) {
@@ -60,12 +81,7 @@ function onKeywordInput(e: Event) {
 
 <style scoped lang="scss">
 .filter-panel {
-  position: sticky;
-  top: 0;
-  z-index: 5;
-  padding: 20rpx $space-m 18rpx;
-  background: rgba(245, 247, 243, 0.96);
-  border-bottom: 1rpx solid rgba(31, 52, 49, 0.09);
+  padding: 0 $space-m;
 }
 
 .search-box {
@@ -93,36 +109,28 @@ function onKeywordInput(e: Event) {
   color: $text-primary;
 }
 
-.chip-scroll {
-  flex: 1;
-  min-width: 0;
-  white-space: nowrap;
-}
-
-.filter-row {
-  display: flex;
-  align-items: center;
-  margin-top: 16rpx;
-}
-.filter-label {
-  flex-shrink: 0;
-  width: 72rpx;
-  font-size: 22rpx;
-  color: $text-secondary;
-}
+.filter-triggers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10rpx; margin-top: 12rpx; }
+.filter-trigger { min-width: 0; height: 58rpx; padding: 0 14rpx; display: flex; align-items: center; gap: 5rpx; border-radius: 29rpx; border: $border-card; background: $bg-card; font-size: 23rpx; color: $text-secondary; }
+.filter-trigger.active { border-color: rgba(35,140,130,.2); background: $brand-primary-light; color: $brand-primary-dark; }
+.trigger-value { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+.trigger-arrow { width: 20rpx; height: 20rpx; background: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237B8986' stroke-width='1.7' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); transition: transform $motion-fast $motion-ease; }
+.trigger-arrow.open { transform: rotate(180deg); }
+.option-panel { margin-top: 14rpx; padding: 20rpx; border: $border-card; border-radius: $radius-card; background: $bg-card; }
+.option-label { display: block; margin-bottom: 12rpx; font-size: 24rpx; font-weight: 600; color: $text-primary; }
 
 .chip-row {
-  display: inline-flex;
-  gap: 8rpx;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
 }
 
 .chip {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 50rpx;
-  padding: 0 18rpx;
-  border-radius: 8rpx;
+  height: 54rpx;
+  padding: 0 20rpx;
+  border-radius: 27rpx;
   font-size: $font-size-xs;
   color: $text-regular;
   background: transparent;

@@ -1,24 +1,20 @@
 <template>
   <view class="course-card pressable" hover-class="hv-press" :hover-stay-time="80" @tap="onTap">
-    <view class="course-main">
+    <view class="course-head">
+      <view class="course-cover" :style="{ background: themeColorLight }"><view class="cover-ico" :class="'cover-' + course.theme"></view></view>
       <view class="course-meta">
-        <text class="theme-tag" :style="{ background: themeColorLight, color: themeColor }">{{ course.themeLabel }}</text>
-        <text class="course-grade">{{ course.grade }} · {{ course.duration }}分钟 · {{ course.version }}</text>
-        <!-- 收藏：贴右对齐，点击阻止冒泡不触发卡片跳转 -->
-        <view class="course-fav">
-          <FavButton :course-id="course.id" :box="48" :icon="28" />
-        </view>
+        <text class="theme-tag" :style="{ color: themeColor }">{{ course.themeLabel }}</text>
+        <text class="course-grade">{{ course.grade }} · {{ course.duration }}分钟</text>
       </view>
-      <text class="course-title">{{ course.title }}</text>
-      <text class="course-summary">{{ course.summary }}</text>
-      <slot name="action">
-        <view class="course-action" @tap.stop="onAction">
-          <text class="action-text">去备课</text>
-        </view>
-      </slot>
+      <view class="course-fav"><FavButton :course-id="course.id" :box="52" :icon="27" /></view>
     </view>
-    <view class="course-cover">
-      <view class="cover-ico" :class="'cover-' + course.theme"></view>
+    <text class="course-title">{{ course.title }}</text>
+    <text class="course-summary">{{ course.summary }}</text>
+    <view class="course-foot">
+      <text class="version-tag">{{ course.version }}</text>
+      <slot name="action">
+        <view class="course-action" @tap.stop="onAction"><text class="action-text">开始备课</text><view class="action-arrow"></view></view>
+      </slot>
     </view>
   </view>
 </template>
@@ -59,34 +55,18 @@ function onAction() {
 <style scoped lang="scss">
 .course-card {
   position: relative;
-  margin: 0 $space-m;
-  padding: 28rpx 0;
-  border-radius: $radius-card;
-  border-bottom: 1rpx solid rgba(31, 52, 49, 0.1);
-  background: transparent;
-  display: flex;
-  justify-content: space-between;
+  padding: 22rpx 24rpx 20rpx;
+  border: $border-card;
+  border-radius: 32rpx 14rpx 32rpx 14rpx;
+  background: $bg-card;
   overflow: hidden;
 }
-
-.course-main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.course-meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: $space-xs;
-}
+.course-card::before { content: ''; position: absolute; top: 0; bottom: 0; left: 0; width: 6rpx; background: $brand-sprout; }
+.course-head { display: flex; align-items: center; gap: 14rpx; }
+.course-meta { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10rpx; }
 
 .theme-tag {
-  padding: 4rpx 12rpx;
-  border-radius: $radius-s;
-  font-size: 20rpx;
+  font-size: 23rpx;
   font-weight: $font-weight-bold;
 }
 
@@ -95,47 +75,45 @@ function onAction() {
   color: $text-secondary;
 }
 
-.course-fav {
-  margin-left: auto;
-  align-self: center;
-}
+.course-fav { flex-shrink: 0; }
 
 .course-title {
-  margin-top: $space-s;
-  font-size: 30rpx;
+  display: block;
+  overflow: hidden;
+  margin-top: 16rpx;
+  font-size: 32rpx;
   font-weight: $font-weight-bold;
   color: $text-primary;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .course-summary {
-  margin-top: $space-xs;
-  font-size: $font-size-xs;
+  margin-top: 5rpx;
+  font-size: 24rpx;
   color: $text-regular;
-  line-height: 1.5;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  line-height: 1.45;
+  display: block;
   overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.course-action {
-  margin-top: 18rpx;
-  align-self: flex-start;
-  padding: 0;
-}
+.course-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 14rpx; }
+.version-tag { padding: 4rpx 12rpx; border-radius: 18rpx; background: $bg-oat; font-size: 21rpx; color: $text-secondary; }
+.course-action { display: flex; align-items: center; gap: 2rpx; padding: 9rpx 14rpx; border-radius: 24rpx 9rpx 24rpx 24rpx; background: $brand-primary; }
 
 .action-text {
-  font-size: $font-size-xs;
-  color: $brand-primary; // 描边钮文字用墨绿，不填实底
+  font-size: 24rpx;
+  color: #fff;
   font-weight: $font-weight-bold;
 }
+.action-arrow { width: 22rpx; height: 22rpx; background: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E"); }
 
 .course-cover {
-  width: 104rpx;
-  height: 104rpx;
-  margin-left: $space-m;
-  border-radius: 18rpx;
-  background: $brand-primary-light;
+  width: 66rpx;
+  height: 66rpx;
+  border-radius: 24rpx 9rpx 18rpx 9rpx;
   border: 0;
   box-sizing: border-box;
   flex-shrink: 0;
@@ -147,8 +125,8 @@ function onAction() {
 }
 
 .cover-ico {
-  width: 48rpx;
-  height: 48rpx;
+  width: 34rpx;
+  height: 34rpx;
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;

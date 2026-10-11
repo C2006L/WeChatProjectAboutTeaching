@@ -1,5 +1,6 @@
 <template>
   <view class="page">
+    <PageIntro kicker="课程资源" title="选择一节适合今天的课" description="按学段、主题与课堂时间快速找到课程" />
     <FilterBar :filter="filter" @change="onFilterChange" />
 
     <view v-if="list.length" class="list">
@@ -21,6 +22,7 @@ import { ref, reactive, computed } from 'vue';
 import { onLoad } from '@dcloudio/uni-app';
 import FilterBar from '@/components/course/FilterBar.vue';
 import CourseCard from '@/components/course/CourseCard.vue';
+import PageIntro from '@/components/common/PageIntro.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
 import { fetchCourses, defaultCourseFilter } from '@/api/course';
 import type { CourseFilter } from '@/api/course';
@@ -64,12 +66,15 @@ function goPrepare() {
 <style scoped lang="scss">
 .page {
   min-height: 100vh;
-  padding-bottom: calc($tab-bar-height + 32rpx);
+  padding-bottom: calc($tab-bar-height + env(safe-area-inset-bottom) + 48rpx);
   background: $bg-page;
 }
 
 .list {
-  margin-top: 8rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+  margin: 22rpx $space-m 0;
 }
 
 .empty {

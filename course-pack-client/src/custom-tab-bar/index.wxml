@@ -2,7 +2,7 @@
   <view
     wx:for="{{list}}"
     wx:key="path"
-    class="tabbar-item"
+    class="tabbar-item {{selected === index ? 'active' : ''}}"
     data-path="{{item.path}}"
     bindtap="switchTab"
   >

@@ -15,20 +15,15 @@
 
     <!-- 已登录 -->
     <view v-else class="logged">
-      <ProfileHeader :user="user" />
-
-      <!-- 学习进度 -->
-      <view class="progress-card pressable" hover-class="hv-press" :hover-stay-time="80" @tap="goTraining">
-        <view class="progress-info">
-          <view class="progress-heading">
-            <text class="progress-title">培训进度</text>
-            <text class="progress-percent">{{ percent }}%</text>
-          </view>
-          <text class="progress-desc">已完成 {{ user.trainingProgress.completed }}/{{ user.trainingProgress.total }} 节</text>
-          <view class="progress-bar"><GrowProgress :percent="percent" :height="8" /></view>
-        </view>
-        <view class="progress-next">继续学习</view>
-      </view>
+      <PageIntro kicker="个人中心" title="我的成长手记" description="学习、备课与一线实践都在这里沉淀" />
+      <view class="logged-body">
+        <ProfileHeader
+          :user="user"
+          :percent="percent"
+          :completed="user.trainingProgress?.completed || 0"
+          :total="user.trainingProgress?.total || 0"
+          @continue="goTraining"
+        />
 
       <!-- 我的内容 -->
       <MenuGrid title="我的内容" :items="menus.content" @navigate="onMenuNavigate" />
@@ -36,9 +31,14 @@
       <!-- 我的服务 -->
       <MenuGrid title="我的服务" :items="menus.service" @navigate="onMenuNavigate" />
 
-      <!-- 退出登录 -->
-      <view class="logout-btn pressable" hover-class="hv-press" :hover-stay-time="80" @tap="onLogout">
-        <text class="logout-text">退出登录</text>
+        <view class="account-card">
+          <text class="account-title">账号</text>
+          <view class="logout-row pressable" hover-class="hv-press" :hover-stay-time="80" @tap="onLogout">
+            <view class="logout-icon"></view>
+            <text class="logout-text">退出登录</text>
+            <view class="logout-arrow"></view>
+          </view>
+        </view>
       </view>
     </view>
   </view>
@@ -49,7 +49,7 @@ import { ref, reactive, computed } from 'vue';
 import { onLoad } from '@dcloudio/uni-app';
 import ProfileHeader from '@/components/mine/ProfileHeader.vue';
 import MenuGrid from '@/components/mine/MenuGrid.vue';
-import GrowProgress from '@/components/common/GrowProgress.vue';
+import PageIntro from '@/components/common/PageIntro.vue';
 import { fetchCurrentUser, fetchMineMenus } from '@/api/user';
 import type { UserProfile, MineMenuItem } from '@/types/mock';
 import { useTabBarSync } from '@/utils/tabbar';
@@ -192,68 +192,24 @@ function onMenuNavigate(item: MineMenuItem) {
 }
 
 .logged {
-  padding: $space-m $space-m calc($tab-bar-height + 32rpx);
+  padding-bottom: calc($tab-bar-height + env(safe-area-inset-bottom) + 56rpx);
+}
+
+.logged-body {
+  padding: 0 $space-m;
   display: flex;
   flex-direction: column;
-  gap: 24rpx;
+  gap: 18rpx;
 }
 
-.progress-card {
-  display: flex;
-  align-items: center;
-  gap: 24rpx;
-  padding: 26rpx $space-m;
-  background: $bg-card;
-  border: $border-card;
-  border-radius: $radius-card;
-}
-
-.progress-info {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 6rpx;
-}
-
-.progress-heading { display: flex; align-items: baseline; justify-content: space-between; }
-
-.progress-title {
-  font-size: $font-size-s;
-  font-weight: $font-weight-bold;
-  color: $text-primary;
-}
-
-.progress-desc {
-  font-size: $font-size-xs;
-  color: $text-secondary;
-}
-
-.progress-bar {
-  margin-top: 8rpx;
-}
-
-.progress-percent {
-  flex-shrink: 0;
-  font-size: $font-size-m;
-  font-weight: $font-weight-bold;
-  color: $brand-primary;
-}
-
-.progress-next { flex-shrink: 0; padding: 14rpx 20rpx; border-radius: 28rpx; background: $brand-primary-light; color: $brand-primary-dark; font-size: $font-size-xs; font-weight: $font-weight-bold; }
-
-.logout-btn {
-  --press-shadow: none; /* 描边按钮无投影：按压仅缩放 */
-  margin: 4rpx auto 0;
-  height: 64rpx;
-  padding: 0 36rpx;
-  background: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+.account-card { padding: 28rpx $space-m 4rpx; border: $border-card; border-radius: $radius-card; background: $bg-card; }
+.account-title { display: block; margin-bottom: 12rpx; font-size: $font-size-s; font-weight: 600; color: $text-primary; }
+.logout-row { min-height: 100rpx; display: flex; align-items: center; gap: $space-s; border-top: 1rpx solid $border; }
+.logout-icon { width: 56rpx; height: 56rpx; border-radius: $radius-s; background: $bg-oat center / 32rpx 32rpx no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237B8986' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 5H5v14h5M14 8l4 4-4 4M8 12h10'/%3E%3C/svg%3E"); }
+.logout-arrow { width: 28rpx; height: 28rpx; background: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237B8986' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E"); }
 
 .logout-text {
+  flex: 1;
   font-size: $font-size-s;
   color: $text-secondary;
 }

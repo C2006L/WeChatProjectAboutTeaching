@@ -25,10 +25,10 @@
           <!-- 生长动画：scaleX 0→目标（600ms，与 GrowProgress 同参数，不用 width） -->
           <view class="mini-inner" :style="{ transform: 'scaleX(' + (progress || 0) / 100 + ')' }"></view>
         </view>
-        <text class="current-label">学习中 {{ progress }}%</text>
+        <text class="status-label status-current">学习中 {{ progress }}%</text>
       </view>
-      <text v-else-if="status === 'done'" class="done-label">已完成</text>
-      <text v-else class="lock-label">完成上一节后解锁</text>
+      <text v-else-if="status === 'done'" class="status-label status-done">已完成</text>
+      <text v-else class="status-label status-lock">完成上一节后解锁</text>
     </view>
   </view>
 </template>
@@ -55,23 +55,23 @@ function onTap() {
 </script>
 
 <style scoped lang="scss">
-/* 卡片材质 token：圆角24/左上40裁角/墨绿8%描边/墨绿6%投影/暖米白卡底 */
 .checklist-item {
   position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   gap: $space-m;
-  padding: $space-m;
+  min-height: 108rpx;
+  padding: 20rpx 22rpx;
   background: $bg-card;
   border: $border-card;
-  border-radius: $radius-card;
-  border-top-left-radius: $radius-card-tl;
-  box-shadow: $shadow-card;
+  border-radius: 30rpx 14rpx 30rpx 14rpx;
 
   &.locked {
     opacity: 0.6;
   }
 }
+.checklist-item:not(.locked):active { background: $brand-primary-light; }
 
 /* ── 左侧垂直生长线 ── */
 .grow-track {
@@ -86,8 +86,8 @@ function onTap() {
 
 .track-line {
   position: absolute;
-  top: 0;
-  bottom: 0;
+  top: -22rpx;
+  bottom: -22rpx;
   width: 4rpx;
   border-radius: 2rpx;
 
@@ -104,6 +104,8 @@ function onTap() {
 }
 
 .track-node {
+  position: relative;
+  z-index: 2;
   width: 28rpx;
   height: 28rpx;
   border-radius: 50%;
@@ -122,11 +124,11 @@ function onTap() {
   }
   &.nd-current {
     border: 4rpx solid $brand-primary;   /* 空心墨绿 */
-    background: $bg-card;
+    background: #FFFFFF;
   }
   &.nd-lock {
     border: 4rpx solid rgba(54, 82, 77, 0.2);
-    background: $bg-card;
+    background: #FFFFFF;
   }
 }
 
@@ -164,7 +166,7 @@ function onTap() {
 .duration {
   flex-shrink: 0;
   margin-left: $space-s;
-  font-size: 20rpx;
+  font-size: 24rpx;
   color: $text-secondary;
 }
 
@@ -198,23 +200,15 @@ function onTap() {
   }
 }
 
-.current-label {
+.status-label {
+  display: inline-flex;
+  margin-top: 8rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 18rpx;
   flex-shrink: 0;
-  font-size: 20rpx;
-  color: $brand-primary;
+  font-size: 22rpx;
 }
-
-.done-label {
-  display: block;
-  margin-top: 4rpx;
-  font-size: 20rpx;
-  color: $text-secondary;
-}
-
-.lock-label {
-  display: block;
-  margin-top: 4rpx;
-  font-size: 20rpx;
-  color: $text-disabled;
-}
+.status-current { color: $brand-primary-dark; background: $brand-primary-light; }
+.status-done { color: $succ; background: rgba(93,155,120,.12); }
+.status-lock { color: $text-secondary; background: $bg-oat; }
 </style>

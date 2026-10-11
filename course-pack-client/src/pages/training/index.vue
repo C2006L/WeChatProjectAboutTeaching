@@ -1,11 +1,14 @@
 <template>
   <view class="page" v-if="loaded">
-    <TrainingProgressCard
-      :percent="percent"
-      :completed="user.trainingProgress.completed"
-      :total="user.trainingProgress.total"
-      @continue="goCurrent"
-    />
+    <PageIntro kicker="教师成长" title="把准备变成课堂底气" description="完成核心培训，再按需要学习专题课程" />
+    <view class="progress-wrap">
+      <TrainingProgressCard
+        :percent="percent"
+        :completed="user.trainingProgress.completed"
+        :total="user.trainingProgress.total"
+        @continue="goCurrent"
+      />
+    </view>
 
     <view class="section">
       <text class="section-title">必修课程（{{ required.length }}节）</text>
@@ -46,6 +49,7 @@ import { ref, computed } from 'vue';
 import { onLoad } from '@dcloudio/uni-app';
 import TrainingProgressCard from '@/components/training/TrainingProgressCard.vue';
 import ChecklistItem from '@/components/training/ChecklistItem.vue';
+import PageIntro from '@/components/common/PageIntro.vue';
 import { fetchTrainingList } from '@/api/training';
 import { currentUser } from '@/mock/user';
 import type { Training } from '@/types/mock';
@@ -91,25 +95,41 @@ function goCurrent() {
 <style scoped lang="scss">
 .page {
   min-height: 100vh;
-  padding: $space-m $space-m calc($tab-bar-height + 32rpx);
+  padding-bottom: calc($tab-bar-height + env(safe-area-inset-bottom) + 48rpx);
   background: $bg-page;
 }
 
+.progress-wrap, .section { margin-left: $space-m; margin-right: $space-m; }
+
 .section {
-  margin-top: $space-m;
+  margin-top: 28rpx;
 }
 
 .section-title {
   display: block;
-  margin-bottom: $space-s;
-  font-size: $font-size-s;
+  margin-bottom: 14rpx;
+  font-size: 30rpx;
   font-weight: $font-weight-bold;
   color: $text-primary;
 }
 
 .list {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: $space-s;
+  gap: 14rpx;
+}
+
+.list::before {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  top: 34rpx;
+  bottom: 34rpx;
+  left: 44rpx;
+  width: 4rpx;
+  border-radius: 2rpx;
+  background: $brand-primary;
+  opacity: .35;
 }
 </style>

@@ -1,6 +1,6 @@
 /* 伴芽 · 自定义 tabBar 样式（微信原生，uni-app 原样拷贝至 dist）
  * 颜色取值对齐 course-pack-docs/01-设计/tokens.md：
- *   --tab-active: #4F8F83  --tab-inactive: #9AA5A1
+ *   --tab-active: #176F66  --tab-inactive: #82918D
  *   --bg-card: #FFFFFF     --border: #E5E6EB
  * 注：SVG data URI 内无法引用 CSS 变量，图标描边色为 Token 等价值（仅此处出现） */
 
@@ -18,12 +18,26 @@
 }
 
 .tabbar-item {
+  position: relative;
   flex: 1;
   height: 100rpx; /* --tab-bar-height */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+/* 与网页端激活菜单的暖橙标记同源：移动端转换为顶部短线 */
+.tabbar-item.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 34rpx;
+  height: 5rpx;
+  border-radius: 0 0 5rpx 5rpx;
+  background: #F2A06B;
+  transform: translateX(-50%);
 }
 
 .tabbar-icon {
@@ -33,19 +47,6 @@
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100% 100%;
-}
-
-/* 选中态：图标下方 4px 小圆点（V2） */
-.tabbar-icon.active::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  bottom: -6rpx;
-  transform: translateX(-50%);
-  width: 8rpx; /* 4px */
-  height: 8rpx;
-  border-radius: 50%;
-  background: #238C82;
 }
 
 /* 未选中态 */
@@ -65,30 +66,30 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237B8986' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='8.2' r='3.7'/%3E%3Cpath d='M5 20.5c1.1-3.3 3.8-5.2 7-5.2s5.9 1.9 7 5.2'/%3E%3C/svg%3E");
 }
 
-/* 选中态（--tab-active: #4F8F83） */
+/* 选中态（--tab-active: #176F66） */
 .tabbar-icon.icon-home.active {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23238C82' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.5 10.5 12 3.5l8.5 7'/%3E%3Cpath d='M5.5 9.3V20.5h13V9.3'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23176F66' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.5 10.5 12 3.5l8.5 7'/%3E%3Cpath d='M5.5 9.3V20.5h13V9.3'/%3E%3C/svg%3E");
 }
 .tabbar-icon.icon-course.active {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23238C82' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 6.3C10.4 4.7 8.2 4 4.5 4v13.6c3.7 0 5.9.7 7.5 2.3 1.6-1.6 3.8-2.3 7.5-2.3V4c-3.7 0-5.9.7-7.5 2.3Z'/%3E%3Cpath d='M12 6.3v13.6'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23176F66' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 6.3C10.4 4.7 8.2 4 4.5 4v13.6c3.7 0 5.9.7 7.5 2.3 1.6-1.6 3.8-2.3 7.5-2.3V4c-3.7 0-5.9.7-7.5 2.3Z'/%3E%3Cpath d='M12 6.3v13.6'/%3E%3C/svg%3E");
 }
 .tabbar-icon.icon-training.active {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23238C82' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 4 2.5 8.8l9.5 4.7 9.5-4.7Z'/%3E%3Cpath d='M6.2 11.4v4.4c0 1.6 2.6 2.9 5.8 2.9s5.8-1.3 5.8-2.9v-4.4'/%3E%3Cpath d='M21.5 8.8v5.3'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23176F66' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 4 2.5 8.8l9.5 4.7 9.5-4.7Z'/%3E%3Cpath d='M6.2 11.4v4.4c0 1.6 2.6 2.9 5.8 2.9s5.8-1.3 5.8-2.9v-4.4'/%3E%3Cpath d='M21.5 8.8v5.3'/%3E%3C/svg%3E");
 }
 .tabbar-icon.icon-tool.active {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23238C82' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3.5' y='8' width='17' height='11.5' rx='2'/%3E%3Cpath d='M8.5 8V5.5h7V8'/%3E%3Cpath d='M9.7 12.5h4.6v3H9.7z'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23176F66' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3.5' y='8' width='17' height='11.5' rx='2'/%3E%3Cpath d='M8.5 8V5.5h7V8'/%3E%3Cpath d='M9.7 12.5h4.6v3H9.7z'/%3E%3C/svg%3E");
 }
 .tabbar-icon.icon-mine.active {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23238C82' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='8.2' r='3.7'/%3E%3Cpath d='M5 20.5c1.1-3.3 3.8-5.2 7-5.2s5.9 1.9 7 5.2'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23176F66' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='8.2' r='3.7'/%3E%3Cpath d='M5 20.5c1.1-3.3 3.8-5.2 7-5.2s5.9 1.9 7 5.2'/%3E%3C/svg%3E");
 }
 
 .tabbar-text {
   margin-top: 4rpx;
-  font-size: 20rpx; /* --font-size-xs: 24rpx 略缩以适配 tabBar */
+  font-size: 22rpx;
   color: #7B8986;
 }
 
 .tabbar-text.active {
-  color: #238C82;
+  color: #176F66;
   font-weight: 600; /* --font-weight-bold */
 }

@@ -1,9 +1,10 @@
 <template>
-  <view class="tool-card pressable" :class="{ 'tool-wide': wide }" hover-class="hv-press" :hover-stay-time="80" @tap="onTap">
+  <view class="tool-card pressable" :class="{ featured }" hover-class="hv-press" :hover-stay-time="80" @tap="onTap">
     <view class="icon-wrap" :class="'i-' + entry.icon + ' ' + (entry.tile === 'g' ? 'tile-g' : 'tile-m')"></view>
     <view class="copy">
       <text class="title">{{ entry.title }}</text>
       <text class="desc">{{ entry.desc }}</text>
+      <text v-if="featured" class="case-meta">公开案例 · 我的草稿 · 审核进度</text>
     </view>
     <view class="arrow"></view>
   </view>
@@ -14,7 +15,7 @@ import type { ToolEntry } from '@/types/mock';
 
 interface Props {
   entry: ToolEntry;
-  wide?: boolean;
+  featured?: boolean;
 }
 
 const props = defineProps<Props>();
@@ -30,27 +31,26 @@ function onTap() {
 .tool-card {
   position: relative;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  flex-direction: row;
+  align-items: center;
   gap: 18rpx;
-  padding: 28rpx;
+  padding: 22rpx 24rpx;
   background: $bg-card;
   border: $border-card;
-  border-radius: $radius-card;
-  min-height: 174rpx;
+  border-radius: 30rpx 14rpx 30rpx 14rpx;
+  min-height: 112rpx;
 }
-
-.tool-card.tool-wide { min-height: 150rpx; flex-direction: row; align-items: center; border-top-left-radius: $radius-card-tl; background: $brand-primary-light; }
+.tool-card.featured { min-height: 152rpx; border-top-left-radius: $radius-card-tl; background: $brand-primary-light; }
 
 /* 图标方砖：72rpx 方形容器，米/浅绿交替 */
 .icon-wrap {
   flex-shrink: 0;
-  width: 64rpx;
-  height: 64rpx;
+  width: 60rpx;
+  height: 60rpx;
   border-radius: $radius-m;
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 36rpx 36rpx;
+  background-size: 32rpx 32rpx;
 
   &.tile-m {
     background-color: $tile-m;
@@ -60,9 +60,8 @@ function onTap() {
   }
 }
 
-.copy { min-width: 0; display: flex; flex-direction: column; gap: 6rpx; }
-.tool-wide .copy { flex: 1; }
-.tool-wide .title { color: $brand-primary-dark; }
+.copy { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6rpx; }
+.featured .title { color: $brand-primary-dark; font-size: 31rpx; }
 
 .title {
   font-size: $font-size-s;
@@ -80,8 +79,8 @@ function onTap() {
   line-height: 1.5;
 }
 
-.arrow { position: absolute; right: 22rpx; top: 24rpx; width: 26rpx; height: 26rpx; opacity: .7; background: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237B8986' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E"); }
-.tool-wide .arrow { top: 50%; transform: translateY(-50%); }
+.case-meta { margin-top: 6rpx; font-size: 22rpx; color: $brand-primary-dark; }
+.arrow { flex-shrink: 0; width: 26rpx; height: 26rpx; opacity: .7; background: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237B8986' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E"); }
 
 /* 线稿 icon（CSS background-data-uri SVG，禁用 emoji）。描边色为品牌绿等价值（data-uri 内无法引用变量） */
 .icon-wrap.i-qa {

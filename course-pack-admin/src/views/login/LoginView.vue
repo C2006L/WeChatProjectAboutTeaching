@@ -2,7 +2,7 @@
   <div class="login-page">
     <section class="brand-panel">
       <div class="brand-lockup">
-        <div class="brand-mark light" aria-hidden="true"><i></i></div>
+        <img class="brand-mark light" src="/brand-logo.png" alt="" aria-hidden="true" />
         <div><strong>伴芽小站</strong><span>乡村生命教育支持计划</span></div>
       </div>
       <div class="brand-message">
@@ -22,7 +22,7 @@
     <section class="auth-panel">
       <div class="login-card">
         <div class="mobile-brand">
-          <div class="brand-mark" aria-hidden="true"><i></i></div>
+          <img class="brand-mark" src="/brand-logo.png" alt="" aria-hidden="true" />
           <span>伴芽小站</span>
         </div>
         <span class="auth-kicker">WELCOME BACK</span>
@@ -106,12 +106,7 @@ async function handleLogin() {
 .auth-kicker { font-size: 11px; font-weight: 700; color: var(--brand-primary); letter-spacing: .15em; }
 .title { margin: 10px 0 0; font-size: 28px; color: var(--text-primary); }
 .subtitle { margin: 8px 0 0; font-size: 14px; color: var(--text-secondary); }
-.brand-mark { position: relative; flex-shrink: 0; width: 42px; height: 42px; border-radius: 18px 9px 9px 9px; background: var(--brand-primary); }
-.brand-mark.light { background: #2EA69B; }
-.brand-mark::before, .brand-mark::after { content: ''; position: absolute; top: 11px; width: 12px; height: 8px; border: 2px solid #fff; border-bottom: 0; }
-.brand-mark::before { left: 9px; border-radius: 10px 2px 0 2px; transform: rotate(28deg); }
-.brand-mark::after { right: 9px; border-radius: 2px 10px 2px 0; transform: rotate(-28deg); }
-.brand-mark i { position: absolute; left: 20px; top: 19px; width: 2px; height: 13px; border-radius: 2px; background: #fff; }
+.brand-mark { flex-shrink: 0; width: 42px; height: 42px; border-radius: 13px; object-fit: cover; box-shadow: 0 6px 18px rgba(23, 111, 102, .16); }
 .form { margin-top: 36px; }
 .btn { width: 100%; }
 .demo-tip { margin: 10px 0 0; font-size: 12px; color: var(--text-secondary); text-align: center; }

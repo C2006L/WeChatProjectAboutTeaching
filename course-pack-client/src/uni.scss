@@ -3,39 +3,42 @@
  * 语义与取值对齐 course-pack-docs/01-设计/tokens.md（V2 品牌规范）
  * 命名：$模块-语义-状态；页面中禁止硬编码色值
  *
- * V2 品牌体系：
- *   底色三档：页面底 燕麦 #F5F2EA / 普通卡底 暖米白 #FBF9F4 / 主角卡底 实墨绿 #36524D
- *   文字三阶：标题 #2E443F / 正文 #6B7A75 / 弱信息 #9AA5A1
- *   点缀暖橙：#C08352（每页限 1 处强调）
+ * V3 品牌体系：田野手记 · 陪伴生长
+ *   核心色：品牌主绿 #176F66 / 嫩芽绿 #A2CBA9 / 暖阳橘 #F2A06B / 天空蓝 #74B7D3
+ *   底色：纸张米白 #F6F7F2 / 普通卡片 #FFFFFF
+ *   文字：墨绿黑 #253C37
  *   卡片材质：圆角 24rpx、左上角 40rpx 叶片裁角、描边 1px rgba(54,82,77,.08)、
  *            投影 0 2px 8px rgba(54,82,77,.06)；禁止纯白/中性灰描边/灰投影/渐变/玻璃拟态
  *   图标双轨：A 插画轨（assets 入库）+ B 线性轨（1.5px 墨绿 SVG，方砖底交替）
  */
 
 /* ── 底色体系（V2 三档） ── */
-$bg-page: #F5F7F3;
+$bg-page: #F6F7F2;
 $bg-card: #FFFFFF;
-$bg-hero: #176B64;
-$bg-oat: #EDF2EC;
-$bg-oat-deep: #E2F1EE;
+$bg-hero: #176F66;
+$bg-oat: #EEF3EC;
+$bg-oat-deep: #E0EEE8;
 
 /* 线性图标方砖底（B 轨） */
-$tile-m: #FDEBDD;
-$tile-g: #E2F1EE;
+$tile-m: #FFF0E5;
+$tile-g: #E5F0E7;
 
 /* ── 文字三阶（V2） ── */
-$text-primary: #1F3431;
-$text-regular: #52625F;
-$text-secondary: #7B8986;
+$text-primary: #253C37;
+$text-regular: #586A65;
+$text-secondary: #82918D;
 $text-disabled: #C9CDD4;  // 禁用
 $border: rgba(54, 82, 77, 0.08);   // 分隔线/描边（墨绿低透明度，兼容 V1 $border 用法）
 
 /* ── 品牌色（主 / 辅 / 点缀） ── */
-$brand-primary: #238C82;
-$brand-primary-dark: #176B64;
-$brand-primary-light: #E2F1EE;
-$brand-secondary: #EE8B52;
-$brand-secondary-light: #FDEBDD;
+$brand-primary: #176F66;
+$brand-primary-dark: #105D56;
+$brand-primary-light: #E0F1EA;
+$brand-sprout: #A2CBA9;
+$brand-sky: #74B7D3;
+$brand-sky-light: #E7F2F6;
+$brand-secondary: #F2A06B;
+$brand-secondary-light: #FFF0E5;
 $accent-warm: #E9783F;
 $temp-brand-on-hero: #FFFFFF;    // 主角卡上文字基准白
 
@@ -43,7 +46,7 @@ $temp-brand-on-hero: #FFFFFF;    // 主角卡上文字基准白
 $succ: #5D9B78;    // 成功/已完成
 $warn: #D99A62;    // 警告/待处理
 $danger: #C96D68;  // 错误/删除
-$info: #8FB7C5;    // 中性提示
+$info: #74B7D3;    // 中性提示
 
 /* ── 主题分类色（V2 综合主题禁紫） ── */
 $theme-body: #4F8F83;     // 身体与安全

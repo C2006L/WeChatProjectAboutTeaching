@@ -41,8 +41,8 @@ function onTap(item: MineMenuItem) {
 .menu-grid {
   background: $bg-card;
   border: $border-card;
-  border-radius: $radius-card;
-  padding: 28rpx $space-m 4rpx;
+  border-radius: 30rpx 14rpx 30rpx 14rpx;
+  padding: 22rpx $space-m 2rpx;
 }
 
 .grid-title {
@@ -57,11 +57,11 @@ function onTap(item: MineMenuItem) {
 
 .grid-item {
   width: 100%;
-  min-height: 104rpx;
+  min-height: 92rpx;
   display: flex;
   align-items: center;
   gap: $space-s;
-  padding: 16rpx 0;
+  padding: 12rpx 0;
   border-bottom: 1rpx solid $border;
 }
 .grid-item:last-child { border-bottom: 0; }

@@ -3,7 +3,7 @@
     <!-- 左侧固定 Sidebar：燕麦底 -->
     <aside class="sidebar">
       <div class="logo">
-        <span class="logo-badge" aria-hidden="true"><i></i></span>
+        <img class="logo-badge" src="/brand-logo.png" alt="" aria-hidden="true" />
         <span class="logo-copy">
           <span class="logo-text">伴芽小站</span>
           <span class="logo-sub">教育工作台</span>
@@ -239,41 +239,11 @@ function goTodo(path: string) {
   flex-shrink: 0;
 }
 .logo-badge {
-  position: relative;
   width: 34px;
   height: 34px;
-  border-radius: 15px 8px 8px 8px;
-  background: #2EA69B;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-.logo-badge::before,
-.logo-badge::after {
-  content: '';
-  position: absolute;
-  top: 9px;
-  width: 10px;
-  height: 7px;
-  border: 2px solid #fff;
-  border-bottom: 0;
-}
-.logo-badge::before {
-  left: 7px;
-  border-radius: 10px 2px 0 2px;
-  transform: rotate(28deg);
-}
-.logo-badge::after {
-  right: 7px;
-  border-radius: 2px 10px 2px 0;
-  transform: rotate(-28deg);
-}
-.logo-badge i {
-  width: 2px;
-  height: 12px;
-  margin-top: 9px;
-  border-radius: 2px;
-  background: #fff;
+  flex-shrink: 0;
+  border-radius: 10px;
+  object-fit: cover;
 }
 .logo-copy {
   display: flex;

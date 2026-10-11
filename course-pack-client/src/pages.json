@@ -126,13 +126,13 @@
   "globalStyle": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "伴芽小站",
-    "navigationBarBackgroundColor": "#F5F7F3",
-    "backgroundColor": "#F5F7F3"
+    "navigationBarBackgroundColor": "#F6F7F2",
+    "backgroundColor": "#F6F7F2"
   },
   "tabBar": {
     "custom": true,
     "color": "#7B8986",
-    "selectedColor": "#238C82",
+    "selectedColor": "#176F66",
     "backgroundColor": "#FFFFFF",
     "borderStyle": "white",
     "list": [

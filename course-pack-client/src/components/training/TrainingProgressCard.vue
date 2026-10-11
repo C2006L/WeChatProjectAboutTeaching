@@ -45,15 +45,15 @@ const percentDisplay = useCountUp(computed(() => props.percent));
 </script>
 
 <style scoped lang="scss">
-/* 卡片材质 token */
 .progress-card {
-  background: $bg-card;
-  border: $border-card;
-  border-radius: $radius-card;
-  border-top-left-radius: $radius-card-tl;
-  box-shadow: $shadow-card;
-  padding: $space-m;
+  position: relative;
+  overflow: hidden;
+  background: $bg-hero;
+  border-radius: $radius-card-lg;
+  border-top-left-radius: 56rpx;
+  padding: 32rpx;
 }
+.progress-card::after { content: ''; position: absolute; right: 0; bottom: 0; width: 92rpx; height: 12rpx; border-radius: 12rpx 0 0 0; background: $brand-secondary; }
 
 .head {
   display: flex;
@@ -62,14 +62,14 @@ const percentDisplay = useCountUp(computed(() => props.percent));
 }
 
 .title {
-  font-size: $font-size-s;
+  font-size: 30rpx;
   font-weight: $font-weight-bold;
-  color: $text-primary;
+  color: #fff;
 }
 
 .count {
   font-size: $font-size-xs;
-  color: $text-secondary;
+  color: rgba(255,255,255,.7);
 }
 
 .body {
@@ -89,7 +89,7 @@ const percentDisplay = useCountUp(computed(() => props.percent));
   font-family: $font-family-serif;
   font-size: 88rpx;
   font-weight: $font-weight-bold;
-  color: $accent-warm;
+  color: #fff;
   line-height: 1;
 }
 
@@ -97,7 +97,7 @@ const percentDisplay = useCountUp(computed(() => props.percent));
   margin-left: 6rpx;
   font-size: $font-size-s;
   font-weight: $font-weight-bold;
-  color: $accent-warm;
+  color: $brand-secondary;
 }
 
 .bar-area {
@@ -111,14 +111,13 @@ const percentDisplay = useCountUp(computed(() => props.percent));
   align-self: flex-end;
   padding: 10rpx 28rpx;
   border-radius: 26rpx;
-  background: $brand-primary;
-  /* 实底按钮无投影：按压仅缩放 */
-  --press-shadow: none;
+  background: #fff;
+  box-shadow: 0 8rpx 18rpx rgba(8,55,50,.18);
 }
 
 .btn-text {
   font-size: $font-size-xs;
-  color: #FFFFFF;
+  color: $brand-primary-dark;
   font-weight: $font-weight-bold;
 }
 </style>
