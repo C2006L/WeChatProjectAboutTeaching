@@ -17,7 +17,6 @@
       <view class="cover-orbit" /><view class="cover-sun" />
       <view class="cover-head">
         <text class="cover-index">FIELD NOTES · DAY {{ home.stage.day }}</text>
-        <view class="stage-chip" @tap.stop="switchStage"><text>{{ home.stage.recommend }}</text><view class="switch-ico" /></view>
       </view>
       <view class="lesson-block">
         <text class="lesson-title">{{ home.todayRecommend.title }}</text>
@@ -110,7 +109,6 @@ function goEntry(entry: QuickEntry) {
 function goCourseDetail() { if (home.value) uni.navigateTo({ url: `/pages/course/detail?id=${home.value.todayRecommend.id}` }); }
 function goTraining() { uni.switchTab({ url: '/pages/training/index' }); }
 function goPrepare() { uni.navigateTo({ url: '/subpkg/tools/prepare' }); }
-function switchStage() { uni.showToast({ title: '阶段切换（演示）', icon: 'none' }); }
 </script>
 
 <style scoped lang="scss">
@@ -126,14 +124,12 @@ function switchStage() { uni.showToast({ title: '阶段切换（演示）', icon
 .welcome-sentence { margin-top: 5rpx; font-size: 22rpx; font-style: italic; color: $text-secondary; letter-spacing: 1rpx; }
 
 .cover-card { position: relative; min-height: 294rpx; overflow: hidden; padding: 26rpx 32rpx 27rpx; border-radius: 56rpx 22rpx 56rpx 22rpx; background: $bg-hero; box-shadow: 0 12rpx 28rpx rgba(23,111,102,.14); }
-.cover-head { position: relative; z-index: 3; display: flex; align-items: center; justify-content: space-between; gap: 16rpx; }
+.cover-head { position: relative; z-index: 3; display: flex; align-items: center; }
 .cover-index { font-size: 20rpx; font-weight: 700; color: rgba(255,255,255,.58); letter-spacing: 2rpx; }
-.stage-chip { display: flex; align-items: center; gap: 4rpx; padding: 10rpx 14rpx; border: 1rpx solid rgba(255,255,255,.2); border-radius: 24rpx 8rpx 24rpx 24rpx; color: #fff; font-size: 22rpx; }
-.switch-ico { width: 20rpx; height: 20rpx; background: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.8' stroke-linecap='round'%3E%3Cpath d='M7 7h10l-2-2M17 17H7l2 2'/%3E%3C/svg%3E"); }
 .lesson-block { position: relative; z-index: 3; width: 72%; margin-top: 24rpx; display: flex; flex-direction: column; align-items: flex-start; }
 .lesson-title { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; font-size: 34rpx; font-weight: 700; line-height: 1.28; color: #fff; }
 .lesson-meta { margin-top: 5rpx; font-size: 22rpx; color: rgba(255,255,255,.68); }.lesson-action { display: flex; align-items: center; margin-top: 15rpx; padding: 11rpx 18rpx; border-radius: 26rpx 9rpx 26rpx 26rpx; background: #fff; color: $brand-primary; font-size: 24rpx; font-weight: 600; }
-.cover-orbit { position: absolute; right: -76rpx; top: -28rpx; width: 286rpx; height: 286rpx; border: 2rpx solid rgba(255,255,255,.1); border-radius: 50%; }.cover-sun { position: absolute; right: 50rpx; top: 42rpx; width: 54rpx; height: 54rpx; border-radius: 50%; background: $brand-secondary; }
+.cover-orbit { position: absolute; right: -76rpx; top: -28rpx; width: 286rpx; height: 286rpx; border: 2rpx solid rgba(255,255,255,.1); border-radius: 50%; }.cover-sun { position: absolute; right: 38rpx; top: 30rpx; width: 54rpx; height: 54rpx; border-radius: 50%; background: $brand-secondary; }
 .cover-growth { position: absolute; z-index: 2; right: 14rpx; bottom: 8rpx; width: 174rpx; height: 166rpx; opacity: .62; }
 .cover-accent { position: absolute; right: 0; bottom: 0; width: 136rpx; height: 17rpx; border-radius: 17rpx 0 0 0; background: $brand-secondary; }
 
@@ -146,6 +142,6 @@ function switchStage() { uni.showToast({ title: '阶段切换（演示）', icon
 .notes-card { overflow: hidden; border: $border-card; border-radius: 30rpx 14rpx 30rpx 14rpx; background: #fff; }.note-row { min-height: 98rpx; display: flex; align-items: center; gap: 18rpx; padding: 16rpx 22rpx; }.note-time { position: relative; width: 42rpx; align-self: stretch; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 18rpx; font-weight: 700; color: $brand-secondary; }.note-time::after { content: ''; position: absolute; top: 0; bottom: 0; left: 50%; z-index: 0; width: 1rpx; background: rgba(162,203,169,.65); }.note-dot { position: relative; z-index: 1; width: 11rpx; height: 11rpx; margin-top: 6rpx; border: 4rpx solid #fff; border-radius: 50%; background: $brand-secondary; }.note-time text { position: relative; z-index: 1; padding: 3rpx 0; background: #fff; }.note-copy { flex: 1; min-width: 0; }.note-title { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 28rpx; font-weight: 600; color: $text-primary; }.note-meta { display: block; margin-top: 4rpx; font-size: 23rpx; color: $text-secondary; }.empty-row { padding: 28rpx; border: 1rpx dashed rgba(23,111,102,.26); border-radius: 24rpx; text-align: center; font-size: 24rpx; color: $brand-primary; }.skeleton-line { height: 94rpx; margin: 22rpx; border-radius: 8rpx; background: $bg-oat; }
 
 @media (max-width: 350px) {
-  .page { padding-right: 24rpx; padding-left: 24rpx; }.date-text { display: none; }.welcome-greeting { font-size: 31rpx; }.cover-card { min-height: 288rpx; padding-right: 26rpx; padding-left: 26rpx; }.lesson-block { width: 76%; }.lesson-title { font-size: 32rpx; }.cover-growth { right: -8rpx; width: 150rpx; height: 146rpx; }.tool-card { min-height: 122rpx; padding: 16rpx; }.tool-meta { font-size: 19rpx; }.section-note { display: none; }.progress-card { gap: 18rpx; padding: 22rpx; }.progress-score { width: 130rpx; padding-right: 18rpx; }.score-number { font-size: 60rpx; }
+  .page { padding-right: 24rpx; padding-left: 24rpx; }.date-text { display: none; }.welcome-greeting { font-size: 31rpx; }.cover-card { min-height: 288rpx; padding-right: 26rpx; padding-left: 26rpx; }.lesson-block { width: 72%; }.lesson-title { font-size: 32rpx; }.cover-sun { right: 28rpx; top: 28rpx; width: 48rpx; height: 48rpx; }.cover-growth { right: -8rpx; width: 150rpx; height: 146rpx; }.tool-card { min-height: 122rpx; padding: 16rpx; }.tool-meta { font-size: 19rpx; }.section-note { display: none; }.progress-card { gap: 18rpx; padding: 22rpx; }.progress-score { width: 130rpx; padding-right: 18rpx; }.score-number { font-size: 60rpx; }
 }
 </style>

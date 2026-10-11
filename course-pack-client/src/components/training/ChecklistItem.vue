@@ -9,11 +9,12 @@
     <!-- 连续轴由父列表绘制；此处只负责三个状态的成长节点。 -->
     <view class="grow-track">
       <view class="track-node" :class="'nd-' + status">
-        <GrowthMark
-          :stage="status === 'done' ? 'grow' : status === 'current' ? 'sprout' : 'seed'"
-          :tone="status === 'lock' ? 'muted' : 'brand'"
-          compact
-        />
+        <view v-if="status === 'done'" class="state-check" />
+        <view v-else-if="status === 'current'" class="state-sprout">
+          <view class="sprout-stem" />
+          <view class="sprout-leaf leaf-left" />
+          <view class="sprout-leaf leaf-right" />
+        </view>
       </view>
     </view>
 
@@ -37,8 +38,6 @@
 </template>
 
 <script setup lang="ts">
-import GrowthMark from '@/components/common/GrowthMark.vue';
-
 interface Props {
   index: number;
   title: string;
@@ -92,30 +91,47 @@ function onTap() {
 .track-node {
   position: relative;
   z-index: 2;
-  width: 34rpx;
-  height: 38rpx;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
 
   &.nd-done {
-    padding: 4rpx;
-    border-radius: 16rpx 7rpx 16rpx 7rpx;
+    width: 36rpx;
+    height: 36rpx;
+    border-radius: 50%;
     background: $brand-primary-light;
   }
   &.nd-current {
-    padding: 4rpx;
-    border: 2rpx solid $brand-primary;
-    border-radius: 16rpx 7rpx 16rpx 7rpx;
-    background: #FFFFFF;
+    width: 38rpx;
+    height: 38rpx;
+    border: 3rpx solid $brand-secondary;
+    border-radius: 50%;
+    background: $brand-secondary-light;
   }
   &.nd-lock {
-    padding: 5rpx;
-    border: 2rpx solid rgba(37, 60, 55, 0.14);
+    width: 30rpx;
+    height: 30rpx;
+    border: 3rpx solid rgba(37, 60, 55, 0.28);
     border-radius: 50%;
     background: #FFFFFF;
   }
 }
+
+.state-check {
+  width: 15rpx;
+  height: 8rpx;
+  margin-top: -3rpx;
+  border-bottom: 3rpx solid $brand-primary;
+  border-left: 3rpx solid $brand-primary;
+  transform: rotate(-45deg);
+}
+
+.state-sprout { position: relative; width: 22rpx; height: 24rpx; }
+.sprout-stem { position: absolute; left: 10rpx; top: 9rpx; width: 2rpx; height: 14rpx; border-radius: 2rpx; background: $brand-secondary; }
+.sprout-leaf { position: absolute; top: 5rpx; width: 10rpx; height: 7rpx; border: 2rpx solid $brand-secondary; background: transparent; }
+.state-sprout .leaf-left { left: 0; border-radius: 10rpx 2rpx 10rpx 2rpx; transform: rotate(24deg); }
+.state-sprout .leaf-right { right: 0; border-radius: 2rpx 10rpx 2rpx 10rpx; transform: rotate(-24deg); }
 
 /* ── 内容 ── */
 .content {
