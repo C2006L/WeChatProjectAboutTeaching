@@ -40,19 +40,19 @@ async function renderChart() {
   };
   chart.setOption({
     tooltip: { trigger: 'axis' },
-    legend: { data: ['服务教师', '学习次数'], bottom: 0, textStyle: { color: C.textRegular } },
+    legend: { data: ['服务教师', '学习次数'], bottom: 0, textStyle: { color: C.textRegular, fontSize: 13 } },
     grid: { left: 48, right: 24, top: 24, bottom: 48 },
     xAxis: {
       type: 'category',
       data: props.data.months,
       // 轴线/网格线统一墨绿低透明度，禁中性灰
       axisLine: { lineStyle: { color: C.axisLine } },
-      axisLabel: { color: C.textSecondary },
+      axisLabel: { color: C.textSecondary, fontSize: 13 },
     },
     yAxis: {
       type: 'value',
       splitLine: { lineStyle: { color: C.splitLine } },
-      axisLabel: { color: C.textSecondary },
+      axisLabel: { color: C.textSecondary, fontSize: 13 },
     },
     series: [
       {

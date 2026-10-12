@@ -477,4 +477,19 @@ function goTodo(path: string) {
   max-width: 1280px;
   margin: 0 auto;
 }
+@media (max-width: 1100px) {
+  .sidebar { width: 190px; }
+  .logo { padding: 0 16px; }
+  .menu-label { padding-left: 16px; }
+  .header { padding-right: 20px; padding-left: 20px; }
+  .content { padding-right: 20px; padding-left: 20px; }
+  .page-description { display: none; }
+  .header-actions { gap: 12px; }
+}
+@media (max-width: 820px) {
+  .sidebar { width: 174px; }
+  .logo-sub,
+  .user-name { display: none; }
+  .content { padding-right: 14px; padding-left: 14px; }
+}
 </style>

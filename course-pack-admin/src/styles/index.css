@@ -25,11 +25,11 @@
   /* 中性色 */
   --text-primary: #1F3431;
   --text-regular: #52625F;
-  --text-secondary: #7B8986;
+  --text-secondary: #667570;
   --text-disabled: #C9CDD4;
   /* V3：文字补充档（对齐小程序端文字三阶的绿灰 / 弱信息） */
   --text-muted: #647370;
-  --text-weak: #98A39F;
+  --text-weak: #82908C;
 
   /* V3：品牌浅描边与图表坐标轴线 */
   --border-brand: #B9D9D4;

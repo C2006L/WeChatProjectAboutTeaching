@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 import { request } from '@/api/request';
-import { mockLogin } from '@/mock/auth';
 import { ElMessage } from 'element-plus/es/components/message/index';
 
 export interface UserInfo {
@@ -16,6 +15,7 @@ export interface UserInfo {
 }
 
 const USER_KEY = 'adminUser';
+const mockAuthEnabled = import.meta.env.DEV || import.meta.env.VITE_ENABLE_MOCK_AUTH === 'true';
 
 export const useAuthStore = defineStore('auth', () => {
   const token = ref(localStorage.getItem('adminToken') || '');
@@ -53,6 +53,11 @@ export const useAuthStore = defineStore('auth', () => {
       const status = err?.response?.status;
       const unreachable = isHttpError && (status === undefined || status >= 500);
       if (!unreachable) throw e;
+      if (!mockAuthEnabled) {
+        ElMessage.error('登录服务暂不可用，请稍后重试');
+        throw e;
+      }
+      const { mockLogin } = await import('@/mock/auth');
       session = mockLogin(username, password);
       if (!session) {
         ElMessage.error('账号或密码错误');

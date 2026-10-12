@@ -2,9 +2,21 @@
   <div class="page">
     <p class="page-sub">已完成全部必修并通过案例共创认证的种子教师 · 案例数据与「案例管理」实时联动</p>
 
+    <div class="manage-bar card-leaf-sm">
+      <el-input v-model="keyword" class="name-search" clearable placeholder="搜索教师姓名" />
+      <el-select v-model="selectedTeam" class="team-filter" placeholder="所属队伍" clearable>
+        <el-option v-for="team in teamOptions" :key="team" :label="team" :value="team" />
+      </el-select>
+      <el-select v-model="sortOrder" class="date-sort" aria-label="认证时间排序">
+        <el-option label="认证时间：由新到旧" value="newest" />
+        <el-option label="认证时间：由旧到新" value="oldest" />
+      </el-select>
+      <span class="result-count">共 {{ filteredHonors.length }} 位</span>
+    </div>
+
     <!-- 荣誉墙卡片 -->
-    <div class="honor-grid">
-      <div v-for="h in honors" :key="h.id" class="honor-card card-float card-leaf">
+    <div v-if="filteredHonors.length" class="honor-grid">
+      <div v-for="h in filteredHonors" :key="h.id" class="honor-card card-float card-leaf">
         <!-- 认证绶带 -->
         <div class="ribbon">
           <svg viewBox="0 0 24 24" fill="none" class="medal-ico">
@@ -47,14 +59,31 @@
         </div>
       </div>
     </div>
+    <div v-else class="empty-state card-leaf">没有符合当前条件的种子教师</div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import { fetchSeedHonors, type SeedHonorWithCount } from '@/api/seedTeacher';
 
 const honors = ref<SeedHonorWithCount[]>([]);
+const keyword = ref('');
+const selectedTeam = ref('');
+const sortOrder = ref<'newest' | 'oldest'>('newest');
+
+const teamOptions = computed(() => [...new Set(honors.value.map((item) => item.team))]);
+const filteredHonors = computed(() => {
+  const query = keyword.value.trim().toLocaleLowerCase();
+  return honors.value
+    .filter((item) => !query || item.name.toLocaleLowerCase().includes(query))
+    .filter((item) => !selectedTeam.value || item.team === selectedTeam.value)
+    .slice()
+    .sort((a, b) => {
+      const delta = b.certifiedAt.localeCompare(a.certifiedAt);
+      return sortOrder.value === 'newest' ? delta : -delta;
+    });
+});
 
 onMounted(async () => {
   honors.value = await fetchSeedHonors();
@@ -71,6 +100,23 @@ onMounted(async () => {
 .page-sub {
   margin: 0;
   font-size: var(--font-size-s);
+  color: var(--text-secondary);
+}
+.manage-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-warm);
+}
+.name-search { width: 240px; }
+.team-filter { width: 210px; }
+.date-sort { width: 210px; }
+.result-count {
+  margin-left: auto;
+  font-size: 13px;
   color: var(--text-secondary);
 }
 /* 荣誉墙网格 */
@@ -189,7 +235,24 @@ onMounted(async () => {
   color: var(--brand-secondary);
 }
 .stat-label {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text-secondary);
+}
+.empty-state {
+  padding: 64px 24px;
+  border: 1px dashed var(--border-brand);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  text-align: center;
+}
+@media (max-width: 1200px) {
+  .honor-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 760px) {
+  .honor-grid { grid-template-columns: 1fr; }
+  .name-search,
+  .team-filter,
+  .date-sort { width: 100%; }
+  .result-count { margin-left: 0; }
 }
 </style>

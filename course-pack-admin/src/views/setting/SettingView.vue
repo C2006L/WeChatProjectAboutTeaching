@@ -1,14 +1,14 @@
 <template>
   <div class="page">
     <!-- ① 演示账号表 -->
-    <section class="card card-leaf">
+    <section v-if="mockAuthEnabled" class="card card-leaf">
       <div class="card-head">
         <h2 class="card-title">演示账号</h2>
         <p class="card-desc">
-          演示密码统一 <span class="pwd">{{ MOCK_PASSWORD }}</span>，与 README 账号表、后端 DataSeeder 三方同构
+          演示密码统一 <span class="pwd">{{ demoPassword }}</span>，仅用于本地开发与显式启用的演示环境
         </p>
       </div>
-      <el-table :data="demoAccounts" style="width: 100%">
+      <el-table :data="accounts" style="width: 100%">
         <el-table-column prop="username" label="用户名" min-width="120">
           <template #default="{ row }">
             <span class="mono">{{ row.username }}</span>
@@ -117,17 +117,18 @@
 import { reactive, ref, onMounted } from 'vue';
 import { ElMessage } from 'element-plus';
 import {
-  demoAccounts,
-  MOCK_PASSWORD,
   AUDIT_FIELD_LABEL,
   loadPlatformInfo,
   savePlatformInfo,
   DEFAULT_PLATFORM_INFO,
 } from '@/mock/setting';
-import type { PlatformInfo, DemoAccount } from '@/mock/setting';
+import type { PlatformInfo } from '@/mock/setting';
+import type { UserInfo } from '@/store/auth';
 
 /* ── ① 演示账号 ─────────────────────────────── */
-const accounts = ref<DemoAccount[]>(demoAccounts);
+const mockAuthEnabled = import.meta.env.DEV || import.meta.env.VITE_ENABLE_MOCK_AUTH === 'true';
+const accounts = ref<UserInfo[]>([]);
+const demoPassword = ref('');
 
 const ROLE_LABEL: Record<string, string> = {
   ADMIN: '系统管理员',
@@ -186,14 +187,19 @@ function onChangePassword() {
     ElMessage.warning('两次输入的新密码不一致');
     return;
   }
-  ElMessage.info(`演示环境密码固定为 ${MOCK_PASSWORD}，未实际修改`);
+  ElMessage.info(mockAuthEnabled ? `演示环境密码固定为 ${demoPassword.value}，未实际修改` : '当前环境尚未接入密码修改接口');
   pwdForm.current = '';
   pwdForm.next = '';
   pwdForm.confirm = '';
 }
 
-onMounted(() => {
+onMounted(async () => {
   platform.value = loadPlatformInfo();
+  if (mockAuthEnabled) {
+    const { mockAccounts, MOCK_PASSWORD } = await import('@/mock/auth');
+    accounts.value = mockAccounts.map((item) => ({ ...item.user }));
+    demoPassword.value = MOCK_PASSWORD;
+  }
 });
 </script>
 

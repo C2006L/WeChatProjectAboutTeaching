@@ -212,7 +212,7 @@ onMounted(async () => {
   display: flex;
   gap: var(--space-m);
   margin-top: 6px;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text-secondary);
 }
 .res-foot {
@@ -234,5 +234,13 @@ onMounted(async () => {
 .dl-ico {
   width: 14px;
   height: 14px;
+}
+@media (max-width: 1200px) {
+  .res-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .filter-card { flex-wrap: wrap; }
+}
+@media (max-width: 700px) {
+  .res-grid { grid-template-columns: 1fr; }
+  .filter-tab { padding: 0 12px; }
 }
 </style>

@@ -10,7 +10,7 @@
         <span class="section-kicker">项目概况</span>
         <h2>关键数据</h2>
       </div>
-      <span class="data-note">数据更新至今日 09:30</span>
+      <span class="data-note">当前为演示数据 · 统计口径见各项标题</span>
     </div>
     <div class="stat-strip">
       <StatCard
@@ -112,7 +112,7 @@ onMounted(async () => {
   color: var(--text-primary);
 }
 .data-note {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text-secondary);
 }
 .stat-strip {

@@ -2,17 +2,18 @@
   <div class="page">
     <!-- 顶部统计条：管理员视角 -->
     <div class="overview card-leaf">
-      <span class="ov-item"><b>{{ overview.requiredRate }}%</b> 必修完成率</span>
+      <span class="ov-item"><b>{{ overview.requiredRate }}%</b> 平台必修学习项完成率</span>
       <span class="ov-item"><b>{{ overview.doneTeachers }}</b> 已完成教师</span>
       <span class="ov-item"><b>{{ overview.inprogressTeachers }}</b> 进行中教师</span>
       <span class="ov-item"><b>{{ overview.teamCount }}</b> 覆盖队伍</span>
+      <span class="overview-note">平台指标按全部教师的必修学习项汇总；下方课程与教师列表分别展示单门课程完成率和个人必修进度。</span>
     </div>
 
     <!-- 培训课程管理表 -->
     <div class="table-card card-leaf">
       <div class="card-head">
         <h3 class="card-title">培训课程管理</h3>
-        <span class="card-hint">完成率达到 76% 即长成"小树"</span>
+        <span class="card-hint">成长图标仅表示进度阶段，76% 起显示小树，不代表培训完成或认证</span>
       </div>
       <el-table :data="courses" style="width: 100%">
         <el-table-column prop="title" label="课程名" min-width="220" />
@@ -31,7 +32,7 @@
             <span class="finish-num">{{ row.completedCount }}/{{ row.assignedCount }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="完成率" min-width="190">
+        <el-table-column label="该课程教师完成率" min-width="190">
           <template #default="{ row }">
             <GrowthProgress :percent="rateOf(row as TrainingCourseRow)" />
           </template>
@@ -53,7 +54,7 @@
       <el-table v-if="unfinished.length" :data="unfinished" style="width: 100%">
         <el-table-column prop="name" label="教师" width="110" />
         <el-table-column prop="team" label="所属队伍" min-width="150" />
-        <el-table-column label="必修进度" width="110" align="center">
+        <el-table-column label="个人必修进度" width="130" align="center">
           <template #default="{ row }">
             <span class="finish-num">{{ row.completedCount }}/{{ row.requiredCount }}</span>
           </template>
@@ -169,7 +170,8 @@ onMounted(async () => {
 }
 /* 顶部统计条：燕麦底 */
 .overview {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--space-l);
   padding: 16px 20px;
   background: var(--bg-oat);
@@ -177,6 +179,16 @@ onMounted(async () => {
   font-size: var(--font-size-s);
   /* 圆角由全局 .card-leaf 叶片裁角提供（V3） */
   color: var(--text-regular);
+}
+.ov-item {
+  min-width: 0;
+}
+.overview-note {
+  grid-column: 1 / -1;
+  padding-top: 12px;
+  border-top: 1px solid var(--divider-soft);
+  font-size: 13px;
+  color: var(--text-secondary);
 }
 .overview b {
   font-size: var(--font-size-l);
@@ -206,8 +218,11 @@ onMounted(async () => {
   color: var(--text-primary);
 }
 .card-hint {
-  font-size: 12px;
+  max-width: 520px;
+  font-size: 13px;
+  line-height: 1.5;
   color: var(--text-secondary);
+  text-align: right;
 }
 .to-teacher {
   display: inline-flex;
@@ -239,5 +254,13 @@ onMounted(async () => {
   margin-left: 8px;
   font-size: 13px;
   color: var(--text-secondary);
+}
+@media (max-width: 1100px) {
+  .overview { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 760px) {
+  .overview { grid-template-columns: 1fr; gap: 12px; }
+  .card-head { align-items: flex-start; flex-direction: column; gap: 6px; }
+  .card-hint { text-align: left; }
 }
 </style>

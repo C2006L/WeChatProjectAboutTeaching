@@ -49,7 +49,7 @@ async function renderChart() {
       formatter: (p: { name: string; value: number; percent: number }) =>
         `${p.name}<br/>${p.value} 次（${p.percent}%）`,
     },
-    legend: { bottom: 0, textStyle: { color: cssVar('--text-regular', '#4E5969') } },
+    legend: { bottom: 0, textStyle: { color: cssVar('--text-regular', '#4E5969'), fontSize: 13 } },
     series: [
       {
         name: '课程主题',

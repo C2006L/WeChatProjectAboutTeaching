@@ -3,8 +3,8 @@
 export interface WelcomeInfo {
   userName: string;
   date: string;
-  pendingReview: number;   // 今天待审核课程数
-  todoCount: number;       // 全部待办数
+  pendingReview: number;   // 今日新增待审核课程数
+  todoCount: number;       // 当前全部待办数（保留接口字段，入口文案不与分类统计混用）
 }
 
 export interface StatItem {
@@ -85,7 +85,7 @@ export interface TrainingCourseRow {
 
 /** 培训管理顶部统计（管理员视角，禁止教师个人学习进度） */
 export interface TrainingOverview {
-  requiredRate: number;      // 必修完成率 %
+  requiredRate: number;      // 平台全部教师的必修学习项完成率 %
   doneTeachers: number;      // 已完成教师数（必修全通过）
   inprogressTeachers: number;// 进行中教师数
   teamCount: number;         // 覆盖队伍数

@@ -8,13 +8,13 @@
     </svg>
     <div class="welcome-text">
       <span class="eyebrow">今日工作</span>
-      <h3 class="title">{{ props.data.userName }}，今天有 {{ props.data.pendingReview }} 节课程待审核</h3>
+      <h3 class="title">{{ props.data.userName }}，今日新增 {{ props.data.pendingReview }} 节待审课程</h3>
       <p class="sub">{{ props.data.date }} · 优先处理审核与教师反馈</p>
     </div>
     <div class="banner-right">
       <div class="todo-entry" @click="$router.push('/audit')">
         <span class="todo-label">进入审核中心</span>
-        <span class="todo-num">{{ props.data.todoCount }} 项待办</span>
+        <span class="todo-num">查看当前待办</span>
       </div>
       <svg class="sprout" viewBox="0 0 64 64" fill="none" aria-hidden="true">
         <path d="M32 56V28" style="stroke: var(--line-brand)" stroke-width="2.5" stroke-linecap="round" />
@@ -104,7 +104,7 @@ const props = defineProps<Props>();
   color: rgba(255, 255, 255, 0.62);
 }
 .todo-num {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   color: #fff;
   line-height: 1.2;

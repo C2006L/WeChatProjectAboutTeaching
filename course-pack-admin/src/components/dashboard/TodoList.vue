@@ -1,8 +1,8 @@
 <template>
   <div class="todo-list card-leaf">
     <div class="list-head">
-      <h4 class="title">待办事项</h4>
-      <span class="hint">点击进入处理</span>
+      <h4 class="title">当前未处理</h4>
+      <span class="hint">当前存量 · 点击处理</span>
     </div>
     <div
       v-for="item in items"
@@ -46,7 +46,7 @@ defineProps<Props>();
   color: var(--text-primary);
 }
 .hint {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text-secondary);
 }
 .todo-item {

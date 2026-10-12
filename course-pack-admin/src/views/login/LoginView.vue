@@ -7,7 +7,7 @@
       </div>
       <div class="brand-message">
         <span class="kicker">FOR EVERY CLASSROOM</span>
-        <h1>把可靠的课程，<br />送到每一间需要的教室。</h1>
+        <h1><span>把可靠的课程，</span><span>送到每一间需要的教室。</span></h1>
         <p>为支教教师提供课程、培训与现场工具，也让项目团队看见每一份努力如何发生。</p>
       </div>
       <div class="field-scene" aria-hidden="true">
@@ -39,7 +39,9 @@
             <el-button type="primary" size="large" class="btn" :loading="loading" @click="handleLogin">进入工作台</el-button>
           </el-form-item>
         </el-form>
-        <p class="demo-tip">演示管理员：admin01　密码：123456</p>
+        <p v-if="demoCredential" class="demo-tip">
+          本地演示管理员：{{ demoCredential.username }}　密码：{{ demoCredential.password }}
+        </p>
       </div>
     </section>
   </div>
@@ -58,11 +60,20 @@ const router = useRouter();
 const route = useRoute();
 const auth = useAuthStore();
 const loading = ref(false);
+const showDemoCredentials = import.meta.env.DEV || import.meta.env.VITE_ENABLE_MOCK_AUTH === 'true';
+const demoCredential = ref<{ username: string; password: string } | null>(null);
 const form = ref({ username: '', password: '' });
 const rules = ref<FormRules>({
   username: [{ required: true, message: '请输入账号', trigger: 'blur' }],
   password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
 });
+
+if (showDemoCredentials) {
+  import('@/mock/auth').then(({ mockAccounts }) => {
+    const account = mockAccounts.find((item) => item.user.role === 'ADMIN');
+    if (account) demoCredential.value = { username: account.username, password: account.password };
+  });
+}
 
 async function handleLogin() {
   if (!formRef.value) return;
@@ -97,7 +108,8 @@ async function handleLogin() {
 .brand-lockup span { margin-top: 2px; font-size: 11px; color: rgba(255,255,255,.5); letter-spacing: .08em; }
 .brand-message { position: relative; z-index: 2; max-width: 590px; margin-top: 15vh; }
 .brand-message .kicker { font-size: 11px; font-weight: 600; color: #68C7BD; letter-spacing: .16em; }
-.brand-message h1 { margin: 16px 0 0; font-size: clamp(36px, 4vw, 58px); line-height: 1.25; letter-spacing: -.03em; }
+.brand-message h1 { margin: 16px 0 0; font-size: clamp(32px, 3.35vw, 54px); line-height: 1.25; letter-spacing: -.03em; }
+.brand-message h1 span { display: block; white-space: nowrap; }
 .brand-message p { max-width: 520px; margin: 22px 0 0; font-size: 15px; line-height: 1.8; color: rgba(255,255,255,.64); }
 .edition { position: absolute; left: 56px; bottom: 34px; z-index: 2; font-size: 11px; color: rgba(255,255,255,.38); }
 .auth-panel { display: flex; align-items: center; justify-content: center; padding: 48px; }
@@ -115,11 +127,14 @@ async function handleLogin() {
 .hill { position: absolute; left: -8%; right: -8%; bottom: -35%; height: 96%; border-radius: 50% 50% 0 0; }
 .hill-back { bottom: -46%; background: #2A6D65; transform: rotate(-4deg); }
 .hill-front { left: 18%; right: -25%; background: #1D5751; transform: rotate(6deg); }
-.scene-sprout { position: absolute; left: 59%; bottom: 12%; width: 130px; height: 210px; }
-.scene-sprout i { position: absolute; left: 63px; bottom: 0; width: 5px; height: 148px; border-radius: 5px; background: #68C77B; }
-.scene-sprout b, .scene-sprout em { position: absolute; top: 28px; width: 70px; height: 48px; border-radius: 70px 8px 60px 8px; background: #76D183; }
-.scene-sprout b { left: 4px; transform: rotate(28deg); }
-.scene-sprout em { right: 0; transform: rotate(-28deg) scaleX(-1); }
+.scene-sprout { position: absolute; left: 59%; bottom: 10%; width: 150px; height: 218px; }
+.scene-sprout::before, .scene-sprout::after { content: ''; position: absolute; bottom: 0; width: 73px; height: 35px; border: 3px solid rgba(173, 222, 187, .72); border-top: 0; }
+.scene-sprout::before { left: 3px; border-right-width: 1px; border-radius: 6px 0 34px 10px; transform: skewY(8deg); }
+.scene-sprout::after { right: 3px; border-left-width: 1px; border-radius: 0 6px 10px 34px; transform: skewY(-8deg); }
+.scene-sprout i { position: absolute; left: 73px; bottom: 27px; width: 3px; height: 134px; border-radius: 5px; background: #8ED39B; transform: rotate(-2deg); transform-origin: bottom; }
+.scene-sprout b, .scene-sprout em { position: absolute; top: 39px; width: 64px; height: 39px; border: 3px solid #8ED39B; background: transparent; }
+.scene-sprout b { left: 12px; border-radius: 64px 8px 54px 8px; transform: rotate(25deg); }
+.scene-sprout em { right: 8px; border-radius: 8px 64px 8px 54px; transform: rotate(-24deg); }
 @media (max-width: 980px) {
   .login-page { grid-template-columns: 1fr; background: var(--bg-page); }
   .brand-panel { display: none; }

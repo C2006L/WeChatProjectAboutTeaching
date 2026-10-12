@@ -75,13 +75,13 @@ const trendClass = computed(() =>
   color: var(--text-regular);
 }
 .trend {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--succ);
 }
 .trend.down {
   color: var(--warn);
 }
 .arrow {
-  font-size: 12px;
+  font-size: 13px;
 }
 </style>

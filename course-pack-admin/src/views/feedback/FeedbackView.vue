@@ -225,7 +225,7 @@ onMounted(load);
 .item-time {
   display: block;
   margin-top: 2px;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text-secondary);
 }
 /* 状态徽章：待回复暖橙 / 已回复墨绿 */
@@ -333,5 +333,16 @@ onMounted(load);
   display: flex;
   justify-content: flex-end;
   margin-top: var(--space-m);
+}
+@media (max-width: 1100px) {
+  .layout { grid-template-columns: 1fr; }
+  .list-scroll { max-height: 320px; }
+  .detail-panel { min-height: 360px; }
+}
+@media (max-width: 700px) {
+  .filter-bar { flex-wrap: wrap; }
+  .detail-panel { padding: var(--space-m); }
+  .detail-head { align-items: flex-start; flex-direction: column; gap: 8px; }
+  .detail-meta { gap: 6px 18px; }
 }
 </style>
