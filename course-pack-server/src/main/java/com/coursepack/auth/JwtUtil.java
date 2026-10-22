@@ -22,7 +22,11 @@ public class JwtUtil {
 
     private final SecretKey key;
 
-    public JwtUtil(@Value("${jwt.secret:course-pack-jwt-secret-banya-2026-0123456789abcdef}") String secret) {
+    public JwtUtil(@Value("${jwt.secret:}") String secret) {
+        if (secret == null || secret.getBytes(StandardCharsets.UTF_8).length < 32) {
+            // fail-fast：密钥缺失/过短直接拒绝启动，避免弱密钥默认可用
+            throw new IllegalStateException("JWT 密钥未配置或长度不足 32 字节，请在 application-local.yml 或环境变量 JWT_SECRET 中配置");
+        }
         this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 

@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### 本地私有配置（数据库/JWT 凭据，禁止提交） ###
+src/main/resources/application-local.yml
+src/main/resources/application-prod.yml

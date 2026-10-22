@@ -5,12 +5,19 @@ spring:
   application:
     name: course-pack-server
 
+  # ── 本地配置：默认启用 local profile ──
+  # 真实凭据（数据库密码、JWT 密钥等）放在 application-local.yml（已 gitignore）
+  # 部署/其他机器：复制 application-local.example.yml 为 application-local.yml 并填入自己的值，
+  # 或改用环境变量 SPRING_PROFILES_ACTIVE=prod 覆盖 profile。
+  profiles:
+    active: local
+
   # ── MySQL 数据源配置 ──
-  # 注意：请将密码改为你自己的 MySQL 密码
+  # 密码与用户名从 application-local.yml（本地）或环境变量注入，不在版本库中保存
   datasource:
     url: jdbc:mysql://localhost:3306/course_pack?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
-    username: root
-    password: CL20060615
+    username: ${MYSQL_USERNAME:root}
+    password: ${MYSQL_PASSWORD:}
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       maximum-pool-size: 20
@@ -65,5 +72,7 @@ logging:
     com.baomidou.mybatisplus: debug
 
 # ── JWT（批次E 统一认证；HS256 要求 >= 32 字节） ──
+# 密钥从 application-local.yml（本地）或环境变量 JWT_SECRET 注入；
+# 不写回退明文，缺失时启动即在 JwtUtil 处报错，避免弱密钥上生产。
 jwt:
-  secret: course-pack-jwt-secret-banya-2026-0123456789abcdef
+  secret: ${JWT_SECRET:}
