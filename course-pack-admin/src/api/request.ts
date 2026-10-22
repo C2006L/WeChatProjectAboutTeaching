@@ -51,5 +51,5 @@ http.interceptors.response.use(
 );
 
 export function request<T = unknown>(config: AxiosRequestConfig): Promise<T> {
-  return http.request<ApiResult<T>, ApiResult<T>>(config).then((res) => res.data);
+  return http.request(config).then((res) => (res.data as ApiResult<T>).data);
 }
