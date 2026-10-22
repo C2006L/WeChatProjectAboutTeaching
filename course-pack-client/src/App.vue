@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { onLaunch, onShow, onHide } from "@dcloudio/uni-app";
+import { syncFavorites } from "@/utils/favorite";
 
 onLaunch(() => {
   // tabBarStore 是模块级单例：custom-tab-bar 与页面 require 同一模块即可共享，
   // 无需经 getApp().globalData 中转（onLaunch 中 getApp() 返回 undefined，
   // 会在启动阶段抛错且 store 挂载失败）。
+  // 批次H：真实模式下同步服务端收藏状态（mock/未登录静默跳过）
+  void syncFavorites();
 });
 onShow(() => {});
 onHide(() => {});

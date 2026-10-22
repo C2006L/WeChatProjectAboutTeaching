@@ -1,14 +1,15 @@
 /**
  * 首页 api
  * - mock 模式：全量本地数据
- * - 真实模式：首页版面域后端未建（批次H）沿用 mock 基底；
- *   用户名与"最近备课草稿"接真实（GET /api/auth/me、GET /api/tools/prepare/draft，批次G），
+ * - 真实模式：用户名与"最近备课草稿"接真实（GET /api/auth/me、GET /api/tools/prepare/draft，批次G），
+ *   "今日推荐"取课程列表第一门（GET /api/courses，批次H）；
  *   失败静默回退 mock 值，不阻塞首屏渲染。
  */
 import { homeData } from '@/mock/home';
 import type { HomeData } from '@/types/mock';
 import { useMock } from './use-mock';
 import { request } from '@/utils/request';
+import { fetchCourses } from './course';
 
 /** 后端 LessonDraft */
 interface LessonDraftJson {
@@ -56,6 +57,13 @@ export async function fetchHomeData(): Promise<HomeData> {
     }
   } catch {
     /* 草稿接口异常：显示空草稿态 */
+  }
+
+  try {
+    const courses = await fetchCourses();
+    if (courses.length) base.todayRecommend = courses[0];
+  } catch {
+    /* 课程列表异常：保留 mock 今日推荐 */
   }
   return base;
 }
