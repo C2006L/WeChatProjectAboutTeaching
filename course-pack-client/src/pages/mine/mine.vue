@@ -50,7 +50,8 @@ import { onLoad } from '@dcloudio/uni-app';
 import ProfileHeader from '@/components/mine/ProfileHeader.vue';
 import MenuGrid from '@/components/mine/MenuGrid.vue';
 import PageIntro from '@/components/common/PageIntro.vue';
-import { fetchCurrentUser, fetchMineMenus } from '@/api/user';
+import { fetchCurrentUser, fetchMineMenus, wxLogin } from '@/api/user';
+import { useMock } from '@/api/use-mock';
 import type { UserProfile, MineMenuItem } from '@/types/mock';
 import { useTabBarSync } from '@/utils/tabbar';
 import { STORAGE_TOKEN, STORAGE_LOGIN_FLAG } from '@/config';
@@ -67,7 +68,10 @@ const menus = reactive<{ content: MineMenuItem[]; service: MineMenuItem[] }>({
 });
 
 onLoad(async () => {
-  user.value = await fetchCurrentUser();
+  // 已登录才拉取：未登录时请求 /me 只会得到 401（mock 模式无影响）
+  if (logged.value) {
+    user.value = await fetchCurrentUser();
+  }
   const m = await fetchMineMenus();
   menus.content = m.content;
   menus.service = m.service;
@@ -77,12 +81,38 @@ const percent = computed(() =>
   Math.round((user.value.trainingProgress?.completed ?? 0) / (user.value.trainingProgress?.total || 1) * 100),
 );
 
-function onLogin() {
-  // 微信快捷登录（演示）：登录态与 token 持久化，后端就绪后替换为 wx.login + /auth/login
-  uni.setStorageSync(STORAGE_LOGIN_FLAG, '1');
-  uni.setStorageSync(STORAGE_TOKEN, 'mock-token');
-  logged.value = true;
-  uni.showToast({ title: '登录成功', icon: 'none' });
+async function onLogin() {
+  // mock 模式：演示登录（登录态与 token 持久化）
+  if (useMock()) {
+    uni.setStorageSync(STORAGE_LOGIN_FLAG, '1');
+    uni.setStorageSync(STORAGE_TOKEN, 'mock-token');
+    logged.value = true;
+    uni.showToast({ title: '登录成功', icon: 'none' });
+    return;
+  }
+  // 真实模式：wx.login → code → POST /api/auth/wx-login（批次I）
+  try {
+    const { code } = await new Promise<UniApp.LoginRes>((resolve, reject) => {
+      uni.login({
+        provider: 'weixin',
+        success: resolve,
+        fail: (err) => reject(new Error(err?.errMsg || '拉起登录失败')),
+      });
+    });
+    const res = await wxLogin(code);
+    if (res.user?.role && res.user.role !== 'TEACHER') {
+      uni.showToast({ title: '请在浏览器登录伴芽小站工作台使用该账号', icon: 'none' });
+      return;
+    }
+    uni.setStorageSync(STORAGE_LOGIN_FLAG, '1');
+    uni.setStorageSync(STORAGE_TOKEN, res.token);
+    logged.value = true;
+    user.value = await fetchCurrentUser();
+    uni.showToast({ title: '登录成功', icon: 'none' });
+  } catch (err) {
+    const body = err as { message?: string; code?: number };
+    uni.showToast({ title: body?.message || '登录失败，请检查网络或稍后再试', icon: 'none' });
+  }
 }
 
 function onLogout() {
