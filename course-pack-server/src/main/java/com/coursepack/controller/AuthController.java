@@ -5,6 +5,7 @@ import com.coursepack.common.Result;
 import com.coursepack.dto.auth.LoginRequest;
 import com.coursepack.dto.auth.LoginResponse;
 import com.coursepack.dto.auth.UserVO;
+import com.coursepack.dto.auth.WxLoginRequest;
 import com.coursepack.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,6 +37,12 @@ public class AuthController {
     @PostMapping("/login")
     public Result<LoginResponse> login(@Validated @RequestBody LoginRequest req) {
         return Result.success(userService.login(req));
+    }
+
+    @ApiOperation("微信登录（批次I：wx.login code → openid → JWT）")
+    @PostMapping("/wx-login")
+    public Result<LoginResponse> wxLogin(@Validated @RequestBody WxLoginRequest req) {
+        return Result.success(userService.wxLogin(req.getCode()));
     }
 
     @ApiOperation("当前登录人信息")

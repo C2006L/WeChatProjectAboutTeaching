@@ -105,6 +105,16 @@ public class TeacherManagementController {
         return Result.success();
     }
 
+    @ApiOperation("标记种子教师（is_seed=1）")
+    @PostMapping("/{id}/seed")
+    public Result<Void> markSeed(@PathVariable Long id) {
+        User u = teacherOrFail(id);
+        u.setIsSeed(1);
+        userMapper.updateById(u);
+        timelineService.log("TEACHER_SEED_MARKED", "教师 " + u.getName() + " 已被标记为种子教师", AuthContext.userId());
+        return Result.success();
+    }
+
     private User teacherOrFail(Long id) {
         User u = userMapper.selectById(id);
         if (u == null || !UserRole.TEACHER.name().equals(u.getRole())) {

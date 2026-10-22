@@ -20,12 +20,12 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
- * 课程审核中心（仅 AUDITOR）：队列按审核员 audit_field 过滤。
+ * 课程审核中心（AUDITOR + ADMIN）：队列按审核员 audit_field 过滤，管理员看全量。
  */
 @Api(tags = "审核中心-课程审核")
 @RestController
 @RequestMapping("/api/audit")
-@RequireRole(UserRole.AUDITOR)
+@RequireRole({UserRole.AUDITOR, UserRole.ADMIN})
 public class CourseAuditController {
 
     private final CourseAuditService auditService;

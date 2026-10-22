@@ -14,11 +14,13 @@ CREATE TABLE IF NOT EXISTS `users` (
   `is_seed`     TINYINT      NOT NULL DEFAULT 0 COMMENT '是否种子教师 0/1（种子教师=TEACHER+is_seed=1）',
   `audit_field` VARCHAR(10)  NULL COMMENT '审核领域 EDU|PSY|SOC（仅审核员）',
   `reject_reason` VARCHAR(255) NULL COMMENT '驳回原因',
+  `openid`      VARCHAR(64)  NULL COMMENT '微信 openid（批次I；wx 登录绑定标识）',
   `created_at`  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `updated_at`  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `deleted`     TINYINT      NOT NULL DEFAULT 0 COMMENT '逻辑删除 0正常|1删除',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_username` (`username`)
+  UNIQUE KEY `uk_username` (`username`),
+  KEY `idx_openid` (`openid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='统一账号表';
 
 -- 备课草稿（支撑"电脑备课、手机续写"：两端写同一张表）

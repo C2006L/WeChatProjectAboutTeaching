@@ -4,6 +4,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 /**
  * 用户信息（登录后返回；前端据此做角色/状态分流）
  */
@@ -34,4 +36,7 @@ public class UserVO {
 
     /** 驳回原因（仅 REJECTED 时非空） */
     private String rejectReason;
+
+    /** 注册时间（教师管理列表展示） */
+    private LocalDateTime createdAt;
 }

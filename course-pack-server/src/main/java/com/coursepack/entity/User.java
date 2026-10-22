@@ -42,6 +42,9 @@ public class User {
     /** 驳回原因 */
     private String rejectReason;
 
+    /** 微信 openid（批次I；wx 用户绑定标识，普通账号为空） */
+    private String openid;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;

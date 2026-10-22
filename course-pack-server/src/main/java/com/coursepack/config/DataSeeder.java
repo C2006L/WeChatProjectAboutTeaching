@@ -6,10 +6,10 @@ import com.coursepack.entity.CourseAudit;
 import com.coursepack.entity.User;
 import com.coursepack.mapper.CourseAuditMapper;
 import com.coursepack.mapper.UserMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -19,23 +19,26 @@ import java.util.List;
 /**
  * 演示账号种子（幂等：仅缺账号时插入）。密码统一 123456（bcrypt 存储）。
  * 账号表见 README。需先执行 resources/sql/schema.sql 建表。
+ * 另承担轻量 DDL 迁移（users.openid 列，幂等：重复执行忽略 Duplicate column）。
  */
+@Slf4j
 @Component
 @Order(100)
 public class DataSeeder implements CommandLineRunner {
 
-    private static final Logger log = LoggerFactory.getLogger(DataSeeder.class);
-
     private final UserMapper userMapper;
     private final CourseAuditMapper courseAuditMapper;
+    private final JdbcTemplate jdbcTemplate;
 
-    public DataSeeder(UserMapper userMapper, CourseAuditMapper courseAuditMapper) {
+    public DataSeeder(UserMapper userMapper, CourseAuditMapper courseAuditMapper, JdbcTemplate jdbcTemplate) {
         this.userMapper = userMapper;
         this.courseAuditMapper = courseAuditMapper;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
     public void run(String... args) {
+        patchSchema();
         String hash = BCrypt.hashpw("123456", BCrypt.gensalt());
         List<User> seed = Arrays.asList(
                 user("teacher01", "李老师", "TEACHER", "ACTIVE", 0, null, null),
@@ -69,6 +72,21 @@ public class DataSeeder implements CommandLineRunner {
                 courseAuditMapper.insert(a);
             }
             log.info("[seed] 创建课程审核样例 {} 条", audits.size());
+        }
+    }
+
+    /** 轻量 DDL 迁移：老库补列（MySQL 不支持 ADD COLUMN IF NOT EXISTS，按报错信息幂等跳过） */
+    private void patchSchema() {
+        try {
+            jdbcTemplate.execute("ALTER TABLE `users` ADD COLUMN `openid` VARCHAR(64) NULL COMMENT '微信 openid' AFTER `reject_reason`");
+            jdbcTemplate.execute("ALTER TABLE `users` ADD INDEX `idx_openid` (`openid`)");
+            log.info("[seed] 迁移：users 增补 openid 列完成");
+        } catch (Exception e) {
+            if (String.valueOf(e.getMessage()).contains("Duplicate column name 'openid'")) {
+                log.debug("[seed] users.openid 列已存在，跳过迁移");
+            } else {
+                throw e;
+            }
         }
     }
 
