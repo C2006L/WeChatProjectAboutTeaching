@@ -8,13 +8,48 @@
       <div class="brand-message">
         <span class="kicker">FOR EVERY CLASSROOM</span>
         <h1><span>把可靠的课程，</span><span>送到每一间需要的教室。</span></h1>
-        <p>为支教教师提供课程、培训与现场工具，也让项目团队看见每一份努力如何发生。</p>
+        <p><span>为支教教师提供课程、培训与现场工具，</span><span>让项目团队看见每一份努力如何发生。</span></p>
       </div>
       <div class="field-scene" aria-hidden="true">
         <div class="sun"></div>
         <div class="hill hill-back"></div>
         <div class="hill hill-front"></div>
-        <div class="scene-sprout"><i></i><b></b><em></em></div>
+        <div class="growth-sequence">
+          <div class="growth-stage">
+            <svg viewBox="0 0 90 90">
+              <path class="soil" d="M10 69Q45 77 80 69" />
+              <path class="seed" d="M45 33c8 5 10 12 0 22-10-10-8-17 0-22Z" />
+            </svg>
+            <span>种子</span>
+          </div>
+          <div class="growth-stage">
+            <svg viewBox="0 0 90 90">
+              <path class="soil" d="M10 69Q45 77 80 69" />
+              <path d="M45 68c-2-15-1-28 1-39" />
+              <path class="leaf" d="M45 45c-12 0-19-6-19-16 11 0 18 6 19 16Z" />
+            </svg>
+            <span>萌芽</span>
+          </div>
+          <div class="growth-stage">
+            <svg viewBox="0 0 90 90">
+              <path class="soil" d="M10 69Q45 77 80 69" />
+              <path d="M45 68c-2-18-1-33 1-45" />
+              <path class="leaf" d="M45 47c-13 0-21-7-21-18 12 0 20 7 21 18Z" />
+              <path class="leaf" d="M46 38c4-12 12-18 23-17-2 11-10 17-23 17Z" />
+            </svg>
+            <span>抽叶</span>
+          </div>
+          <div class="growth-stage">
+            <svg viewBox="0 0 90 90">
+              <path class="soil" d="M10 69Q45 77 80 69" />
+              <path d="M45 68c-2-20-1-37 1-51" />
+              <path class="leaf" d="M45 49c-14 0-23-7-23-19 13 0 22 7 23 19Z" />
+              <path class="leaf" d="M46 40c4-13 13-20 25-19-2 12-11 19-25 19Z" />
+              <path class="leaf tip" d="M46 28c-7-8-7-16 0-23 8 8 8 16 0 23Z" />
+            </svg>
+            <span>展叶</span>
+          </div>
+        </div>
       </div>
       <span class="edition">伴芽小站 · 项目运营端</span>
     </section>
@@ -110,7 +145,8 @@ async function handleLogin() {
 .brand-message .kicker { font-size: 11px; font-weight: 600; color: #68C7BD; letter-spacing: .16em; }
 .brand-message h1 { margin: 16px 0 0; font-size: clamp(32px, 3.35vw, 54px); line-height: 1.25; letter-spacing: -.03em; }
 .brand-message h1 span { display: block; white-space: nowrap; }
-.brand-message p { max-width: 520px; margin: 22px 0 0; font-size: 15px; line-height: 1.8; color: rgba(255,255,255,.64); }
+.brand-message p { max-width: 560px; margin: 22px 0 0; font-size: 15px; line-height: 1.8; color: rgba(255,255,255,.64); }
+.brand-message p span { display: block; white-space: nowrap; }
 .edition { position: absolute; left: 56px; bottom: 34px; z-index: 2; font-size: 11px; color: rgba(255,255,255,.38); }
 .auth-panel { display: flex; align-items: center; justify-content: center; padding: 48px; }
 .login-card { width: min(400px, 100%); }
@@ -127,14 +163,15 @@ async function handleLogin() {
 .hill { position: absolute; left: -8%; right: -8%; bottom: -35%; height: 96%; border-radius: 50% 50% 0 0; }
 .hill-back { bottom: -46%; background: #2A6D65; transform: rotate(-4deg); }
 .hill-front { left: 18%; right: -25%; background: #1D5751; transform: rotate(6deg); }
-.scene-sprout { position: absolute; left: 59%; bottom: 10%; width: 150px; height: 218px; }
-.scene-sprout::before, .scene-sprout::after { content: ''; position: absolute; bottom: 0; width: 73px; height: 35px; border: 3px solid rgba(173, 222, 187, .72); border-top: 0; }
-.scene-sprout::before { left: 3px; border-right-width: 1px; border-radius: 6px 0 34px 10px; transform: skewY(8deg); }
-.scene-sprout::after { right: 3px; border-left-width: 1px; border-radius: 0 6px 10px 34px; transform: skewY(-8deg); }
-.scene-sprout i { position: absolute; left: 73px; bottom: 27px; width: 3px; height: 134px; border-radius: 5px; background: #8ED39B; transform: rotate(-2deg); transform-origin: bottom; }
-.scene-sprout b, .scene-sprout em { position: absolute; top: 39px; width: 64px; height: 39px; border: 3px solid #8ED39B; background: transparent; }
-.scene-sprout b { left: 12px; border-radius: 64px 8px 54px 8px; transform: rotate(25deg); }
-.scene-sprout em { right: 8px; border-radius: 8px 64px 8px 54px; transform: rotate(-24deg); }
+.growth-sequence { position: absolute; z-index: 1; left: 23%; right: 6%; bottom: 4%; display: grid; grid-template-columns: repeat(4, minmax(70px, 1fr)); gap: clamp(10px, 2vw, 28px); }
+.growth-stage { display: flex; min-width: 0; flex-direction: column; align-items: center; gap: 2px; color: rgba(157, 214, 172, .82); }
+.growth-stage svg { width: clamp(72px, 8vw, 112px); height: clamp(72px, 8vw, 112px); overflow: visible; }
+.growth-stage svg path { fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.growth-stage svg .soil { color: rgba(179, 218, 205, .48); stroke-width: 2.2; }
+.growth-stage svg .seed { fill: #C99658; stroke: none; }
+.growth-stage svg .leaf { fill: rgba(116, 190, 148, .16); }
+.growth-stage svg .tip { fill: rgba(166, 207, 121, .28); }
+.growth-stage > span { font-size: 11px; color: rgba(218, 236, 226, .56); letter-spacing: .08em; }
 @media (max-width: 980px) {
   .login-page { grid-template-columns: 1fr; background: var(--bg-page); }
   .brand-panel { display: none; }
