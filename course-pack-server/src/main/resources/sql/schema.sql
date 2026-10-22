@@ -67,3 +67,49 @@ CREATE TABLE IF NOT EXISTS `course_audit` (
   PRIMARY KEY (`id`),
   KEY `idx_status_field` (`status`, `audit_field`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='课程审核';
+
+-- 生命教育课程（批次H：课程域主表；管理端 CRUD + 小程序端浏览共用）
+CREATE TABLE IF NOT EXISTS `courses` (
+  `id`            BIGINT       NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `title`         VARCHAR(128) NOT NULL COMMENT '课程标题',
+  `theme`         VARCHAR(20)  NOT NULL COMMENT '主题 body|family|respect|growth|general',
+  `grade`         VARCHAR(20)  NOT NULL COMMENT '学段 小学1-3年级|小学4-6年级',
+  `duration`      INT          NOT NULL COMMENT '时长（分钟）',
+  `version`       VARCHAR(10)  NOT NULL COMMENT '版本 精简版|标准版',
+  `summary`       VARCHAR(255) NOT NULL COMMENT '一句话简介',
+  `objectives_json` TEXT     NULL COMMENT '教学目标 JSON string[]',
+  `values_json`     TEXT     NULL COMMENT '价值总结 JSON string[]',
+  `steps_json`      TEXT     NULL COMMENT '教学流程 JSON [{index,title,desc,duration}]',
+  `sensitive_qa_json` TEXT   NULL COMMENT '敏感问题ID JSON number[]',
+  `cover`         VARCHAR(20)  NULL COMMENT '封面色（可空，前端按主题兜底）',
+  `status`        TINYINT      NOT NULL DEFAULT 1 COMMENT '0 下架 | 1 上架',
+  `created_at`    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at`    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `deleted`       TINYINT      NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `idx_theme_grade` (`theme`, `grade`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='生命教育课程';
+
+-- 课程材料（教案/课件/教具/视频；数量统计与下载列表的数据源）
+CREATE TABLE IF NOT EXISTS `course_materials` (
+  `id`         BIGINT       NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `course_id`  BIGINT       NOT NULL COMMENT '关联课程 courses.id',
+  `type`       VARCHAR(10)  NOT NULL COMMENT 'plan|slides|toolkit|video',
+  `name`       VARCHAR(128) NOT NULL COMMENT '材料名',
+  `url`        VARCHAR(512) NULL COMMENT '下载地址（未上传时为空）',
+  `size`       VARCHAR(20)  NULL COMMENT '展示用大小',
+  `created_at` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `deleted`    TINYINT      NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `idx_course` (`course_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='课程材料';
+
+-- 课程收藏（教师收藏课程；toggle 语义）
+CREATE TABLE IF NOT EXISTS `favorites` (
+  `id`         BIGINT   NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `user_id`    BIGINT   NOT NULL COMMENT '教师 users.id',
+  `course_id`  BIGINT   NOT NULL COMMENT '课程 courses.id',
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_user_course` (`user_id`, `course_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='课程收藏';
