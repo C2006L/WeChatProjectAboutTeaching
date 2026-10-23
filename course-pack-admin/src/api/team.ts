@@ -1,9 +1,11 @@
 /**
- * 支教队伍 api（mock 优先）
- * 后端就绪后映射：
- *  GET /api/admin/teams → fetchTeams
+ * 支教队伍 api（批次J）
+ * - mock 模式：走本地 teams
+ * - 真实模式：GET /api/admin/teams（成员必修进度服务端实时聚合，user 关联行走 teacher_training）
  */
 import { teams } from '@/mock/seed';
+import { useMock } from './use-mock';
+import { request } from './request';
 import type { TeamDetailRow } from '@/types/dashboard';
 
 const delay = (ms = 160) => new Promise((r) => setTimeout(r, ms));
@@ -16,6 +18,9 @@ export function teamCompletion(t: TeamDetailRow): number {
 }
 
 export async function fetchTeams(): Promise<TeamDetailRow[]> {
-  await delay();
-  return teams;
+  if (useMock()) {
+    await delay();
+    return teams;
+  }
+  return request<TeamDetailRow[]>({ url: '/admin/teams' });
 }
