@@ -1,16 +1,17 @@
 /**
- * 我的提问工单 api（mock 实现，storage 持久化）
- * 链路：教师在「去提问」提交 → 本地工单置 PENDING；
- *       Web 管理端「问答与反馈」回复后状态变 REPLIED（后端在线时经接口同步）。
- * 后端就绪后映射：
- *   GET  /api/feedback/tickets          → fetchMyTickets
- *   POST /api/feedback/tickets          → submitTicket
+ * 我的提问工单 api（批次J）
+ * - mock 模式：storage 持久化（本地 seed 初始化）
+ * - 真实模式：
+ *   GET  /api/feedback/tickets → fetchMyTickets（最新在前）
+ *   POST /api/feedback/tickets → submitTicket（PENDING）
  */
 import { STORAGE_TICKETS } from '@/config';
 import { ticketSeed } from '@/mock/feedback';
 import type { FeedbackTicket } from '@/types/mock';
+import { useMock } from './use-mock';
+import { request } from '@/utils/request';
 
-/** 读取本地工单（首次访问用 seed 初始化） */
+/** 读取本地工单（mock 模式：首次访问用 seed 初始化） */
 function readAll(): FeedbackTicket[] {
   const raw = uni.getStorageSync(STORAGE_TICKETS);
   if (raw) {
@@ -36,9 +37,31 @@ function nowText(): string {
   return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
 }
 
+/** 后端 TicketVO */
+interface TicketVOJson {
+  id: number;
+  teacher?: string;
+  time: string;
+  status: string;
+  title: string;
+  content: string;
+  category?: string;
+}
+
 /** 我的提问列表（最新在前） */
 export async function fetchMyTickets(): Promise<FeedbackTicket[]> {
-  return readAll().sort((a, b) => (a.time < b.time ? 1 : -1));
+  if (useMock()) {
+    return readAll().sort((a, b) => (a.time < b.time ? 1 : -1));
+  }
+  const vos = await request<TicketVOJson[]>({ url: '/feedback/tickets' });
+  return (vos || []).map((t) => ({
+    id: t.id,
+    title: t.title,
+    content: t.content,
+    category: t.category || '其他',
+    status: t.status === 'REPLIED' ? 'REPLIED' : 'PENDING',
+    time: t.time,
+  }));
 }
 
 /** 提交提问（成功后工单为 PENDING） */
@@ -47,16 +70,31 @@ export async function submitTicket(payload: {
   content: string;
   category: string;
 }): Promise<FeedbackTicket> {
-  const list = readAll();
-  const ticket: FeedbackTicket = {
-    id: (list.reduce((max, t) => Math.max(max, t.id), 0) || 0) + 1,
-    title: payload.title,
-    content: payload.content,
-    category: payload.category,
+  if (useMock()) {
+    const list = readAll();
+    const ticket: FeedbackTicket = {
+      id: (list.reduce((max, t) => Math.max(max, t.id), 0) || 0) + 1,
+      title: payload.title,
+      content: payload.content,
+      category: payload.category,
+      status: 'PENDING',
+      time: nowText(),
+    };
+    list.push(ticket);
+    writeAll(list);
+    return ticket;
+  }
+  const vo = await request<TicketVOJson>({
+    url: '/feedback/tickets',
+    method: 'POST',
+    data: { title: payload.title, content: payload.content, category: payload.category },
+  });
+  return {
+    id: vo.id,
+    title: vo.title,
+    content: vo.content,
+    category: vo.category || '其他',
     status: 'PENDING',
-    time: nowText(),
+    time: vo.time,
   };
-  list.push(ticket);
-  writeAll(list);
-  return ticket;
 }
