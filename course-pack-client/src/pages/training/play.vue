@@ -88,7 +88,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { onLoad } from '@dcloudio/uni-app';
-import { fetchTrainingById } from '@/api/training';
+import { fetchTrainingById, reportProgress } from '@/api/training';
 import type { Training } from '@/types/mock';
 
 const tabs = [
@@ -109,8 +109,15 @@ onLoad(async (options) => {
   }
 });
 
-function onPlayTap() {
+async function onPlayTap() {
   uni.showToast({ title: '视频资源即将上线', icon: 'none' });
+  // 批次J：真实模式下点击播放占位时模拟推进 20%，progress 只增不减
+  const t = training.value;
+  if (t && t.progress < 100) {
+    const next = Math.min(t.progress + 20, 100);
+    await reportProgress(t.id, next);
+    t.progress = next;
+  }
 }
 
 function onDownload(name: string) {

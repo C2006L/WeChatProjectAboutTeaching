@@ -115,9 +115,8 @@ export async function markSeedTeacher(id: number): Promise<void> {
 }
 
 /**
- * 未完成必修教师名单
- * 依赖培训域数据（teacherTraining），后端培训域未建（批次J），
- * 真实模式暂返回空列表，页面走 EmptyState。
+ * 未完成必修教师名单（批次J 起接真实 /api/admin/training/overview）；
+ * 包含全部账号状态（与教师管理口径一致）。
  */
 export async function fetchUnfinishedRequired(): Promise<TeacherUnfinishedRow[]> {
   if (useMock()) {
@@ -141,5 +140,8 @@ export async function fetchUnfinishedRequired(): Promise<TeacherUnfinishedRow[]>
         };
       });
   }
-  return [];
+  const ov = await request<{
+    unfinished: TeacherUnfinishedRow[];
+  }>({ url: '/admin/training/overview' });
+  return ov?.unfinished || [];
 }
