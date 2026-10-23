@@ -208,6 +208,7 @@ CREATE TABLE IF NOT EXISTS `team_members` (
   `name`       VARCHAR(32) NOT NULL,
   `role`       VARCHAR(8)  NOT NULL DEFAULT '成员' COMMENT '队长|成员',
   `sort`       INT NOT NULL DEFAULT 0,
+  `seed_done`  INT         NULL COMMENT '种子演示必修完成数（userId 非空时忽略）',
   PRIMARY KEY (`id`),
   KEY `idx_team` (`team_id`, `sort`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='队伍成员';

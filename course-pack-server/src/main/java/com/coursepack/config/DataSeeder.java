@@ -88,6 +88,16 @@ public class DataSeeder implements CommandLineRunner {
                 throw e;
             }
         }
+        try {
+            jdbcTemplate.execute("ALTER TABLE `team_members` ADD COLUMN `seed_done` INT NULL COMMENT '种子演示必修完成数（userId 非空时忽略）'");
+            log.info("[seed] 迁移：team_members 增补 seed_done 列完成");
+        } catch (Exception e) {
+            if (String.valueOf(e.getMessage()).contains("Duplicate column name 'seed_done'")) {
+                log.debug("[seed] team_members.seed_done 列已存在，跳过迁移");
+            } else {
+                throw e;
+            }
+        }
     }
 
     private CourseAudit audit(Long courseId, String title, String field, String applicant, int progress) {
