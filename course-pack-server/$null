@@ -1,0 +1,2 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+ERROR 3854 (HY000) at line 1: Cannot convert string '\xFE\xAD\x01' from binary to utf8mb4
