@@ -113,3 +113,123 @@ CREATE TABLE IF NOT EXISTS `favorites` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_user_course` (`user_id`, `course_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='课程收藏';
+
+-- ===== 批次J：培训 / 问答 / 案例 / 队伍 / 资源 =====
+
+-- 培训课程（必修+选修，8 门，与前端 mock 同构）
+CREATE TABLE IF NOT EXISTS `trainings` (
+  `id`           BIGINT      NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `title`        VARCHAR(64) NOT NULL COMMENT '培训标题',
+  `kind`         VARCHAR(16) NOT NULL DEFAULT 'required' COMMENT 'required 必修 | elective 选修',
+  `duration`     INT         NOT NULL DEFAULT 30 COMMENT '时长（分钟）',
+  `introduction` VARCHAR(512)         DEFAULT NULL COMMENT '导语',
+  `video_url`    VARCHAR(255)         DEFAULT '' COMMENT '视频地址（空=占位）',
+  `outline_json` JSON                 DEFAULT NULL COMMENT '大纲（list<String>）',
+  `materials_json` JSON               DEFAULT NULL COMMENT '附件材料（list<{name,type}>）',
+  `sort`         INT         NOT NULL DEFAULT 0 COMMENT '展示序',
+  PRIMARY KEY (`id`),
+  KEY `idx_kind` (`kind`, `sort`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='培训课程';
+
+-- 教师培训学习进度（每教师每课程一行，progress 0-100）
+CREATE TABLE IF NOT EXISTS `teacher_training` (
+  `id`           BIGINT NOT NULL AUTO_INCREMENT,
+  `user_id`      BIGINT NOT NULL COMMENT '教师 users.id',
+  `training_id`  BIGINT NOT NULL COMMENT '培训课程 trainings.id',
+  `progress`     INT    NOT NULL DEFAULT 0,
+  `updated_at`   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_user_training` (`user_id`, `training_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='教师培训进度';
+
+-- 问答工单（教师提问 → 管理员回复，列表流）
+CREATE TABLE IF NOT EXISTS `feedback_tickets` (
+  `id`           BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `user_id`      BIGINT NOT NULL COMMENT '提问教师 users.id',
+  `title`        VARCHAR(64) NOT NULL COMMENT '工单标题',
+  `content`      VARCHAR(1024) NOT NULL COMMENT '问题描述',
+  `category`     VARCHAR(32) NOT NULL DEFAULT '其他' COMMENT '身体与安全|人际关系|成长变化|其他',
+  `status`       VARCHAR(16) NOT NULL DEFAULT 'PENDING' COMMENT 'PENDING | REPLIED',
+  `reply_content` VARCHAR(1024) DEFAULT NULL COMMENT '管理员回复',
+  `reply_at`     DATETIME DEFAULT NULL,
+  `created_at`   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `idx_user` (`user_id`),
+  KEY `idx_status_created` (`status`, `created_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='问答工单';
+
+-- 教学案例（复用四环节审核流转）
+CREATE TABLE IF NOT EXISTS `teaching_cases` (
+  `id`           BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `uploader_id`  BIGINT NOT NULL COMMENT '上传教师 users.id',
+  `title`        VARCHAR(96) NOT NULL,
+  `grade`        VARCHAR(16) NOT NULL COMMENT '小学1-3年级|小学4-6年级',
+  `theme`        VARCHAR(16) NOT NULL COMMENT '主题中文标签',
+  `course_title` VARCHAR(96)         DEFAULT NULL COMMENT '关联课程',
+  `summary`      VARCHAR(256)        DEFAULT NULL,
+  `content`      TEXT                DEFAULT NULL COMMENT '案例正文',
+  `reflection`   TEXT                DEFAULT NULL COMMENT '教学反思',
+  `status`       VARCHAR(16) NOT NULL DEFAULT 'PENDING' COMMENT 'DRAFT|PENDING|APPROVED|REJECTED',
+  `featured`     TINYINT(1)  NOT NULL DEFAULT 0,
+  `created_at`   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at`   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `idx_uploader` (`uploader_id`, `status`),
+  KEY `idx_status` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='教学案例';
+
+-- 教学案例审核记录（四环节：education/psychology/sociology/principal）
+CREATE TABLE IF NOT EXISTS `teaching_case_reviews` (
+  `id`          BIGINT NOT NULL AUTO_INCREMENT,
+  `case_id`     BIGINT NOT NULL COMMENT '案例 teaching_cases.id',
+  `stage`       VARCHAR(16) NOT NULL COMMENT 'EDUCATION|PSYCHOLOGY|SOCIOLOGY|PRINCIPAL',
+  `comment`     VARCHAR(512)         DEFAULT NULL,
+  `reviewer`    VARCHAR(64)          DEFAULT NULL COMMENT '审核人展示名',
+  `reviewed_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_case_stage` (`case_id`, `stage`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='教学案例审核记录';
+
+-- 支教队伍
+CREATE TABLE IF NOT EXISTS `teams` (
+  `id`      BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `name`    VARCHAR(64) NOT NULL,
+  `org`     VARCHAR(64) NOT NULL COMMENT '所属高校',
+  `area`    VARCHAR(64) NOT NULL COMMENT '服务地',
+  `usage_count` INT NOT NULL DEFAULT 0 COMMENT '资源使用次数',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='支教队伍';
+
+-- 队伍成员（必修进度为展示聚合）
+CREATE TABLE IF NOT EXISTS `team_members` (
+  `id`         BIGINT NOT NULL AUTO_INCREMENT,
+  `team_id`    BIGINT NOT NULL COMMENT '队伍 teams.id',
+  `user_id`    BIGINT          DEFAULT NULL COMMENT '关联用户（可空=种子演示行）',
+  `name`       VARCHAR(32) NOT NULL,
+  `role`       VARCHAR(8)  NOT NULL DEFAULT '成员' COMMENT '队长|成员',
+  `sort`       INT NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `idx_team` (`team_id`, `sort`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='队伍成员';
+
+-- 资源库条目（模板/量表，admin 侧维护）
+CREATE TABLE IF NOT EXISTS `resources` (
+  `id`         BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `title`      VARCHAR(96) NOT NULL,
+  `kind`       VARCHAR(16) NOT NULL COMMENT '教案模板|PPT模板|评估量表|绘本清单',
+  `downloads`  INT NOT NULL DEFAULT 0 COMMENT '下载次数',
+  `size`       VARCHAR(16) NOT NULL DEFAULT '',
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `idx_kind` (`kind`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='资源库';
+
+-- 种子教师荣誉（认证记录，聚合案例数据）
+CREATE TABLE IF NOT EXISTS `seed_honors` (
+  `id`           BIGINT NOT NULL AUTO_INCREMENT,
+  `user_id`      BIGINT NOT NULL COMMENT '用户 users.id',
+  `certified_at` DATE NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_user` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='种子教师荣誉';
